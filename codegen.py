@@ -81,14 +81,19 @@ class NSMenuItem(object):
         self.shortcut = shortcut
     
     def generate(self, varname, menuname):
-        tmpl = """NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:%%action%% keyEquivalent:@"%%key%%"];
-        %%settarget%%
-        %%setkeymask%%
-        """
+        if self.name == "-":
+            tmpl = "[%%menuname%% addItem:[NSMenuItem separatorItem]];\n"
+        else:
+            tmpl = """NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:%%action%% keyEquivalent:@"%%key%%"];
+            %%settarget%%
+            %%setkeymask%%
+            """
         name = self.name
         if self.action:
             action = "@selector(%s)" % self.action.selector
-            if self.action.target:
+            if self.action.target == 'NSApp':
+                target = 'NSApp'
+            elif self.action.target:
                 target = "[owner %s]" % self.action.target
             else:
                 target = 'owner'
@@ -120,6 +125,9 @@ class NSMenu(NSMenuItem):
         item = NSMenuItem(*args)
         self.add(item)
         return item
+    
+    def addSeparator(self):
+        return self.addItem("-")
     
     def addMenu(self, *args):
         menu = NSMenu(*args)

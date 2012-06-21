@@ -1,0 +1,16 @@
+ownerclass = 'AppDelegate'
+result = NSMenu("Apple")
+fileMenu = result.addMenu("File")
+editMenu = result.addMenu("Edit")
+windowMenu = result.addMenu("Window")
+helpMenu = result.addMenu("Help")
+
+fileMenu.addItem("About MyApp")
+fileMenu.addSeparator()
+fileMenu.addItem("Services")
+fileMenu.addSeparator()
+fileMenu.addItem("Hide MyApp", Action('NSApp', 'hide:'), 'cmd+h')
+fileMenu.addItem("Hide Others", Action('NSApp', 'hideOtherApplications:'), 'cmd+alt+h')
+fileMenu.addItem("Hide Others", Action('NSApp', 'unhideAllApplications:'))
+fileMenu.addSeparator()
+fileMenu.addItem("Quit MyApp", Action('NSApp', 'terminate:'), 'cmd+q')

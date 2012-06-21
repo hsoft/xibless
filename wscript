@@ -15,7 +15,7 @@ def configure(conf):
     conf.env.ARCH_COCOA = ['i386', 'x86_64']
 
 def build(ctx):
-    codegen.generate('foomenu.py', 'foomenu.h')
+    codegen.generate('MainMenu.py', 'MainMenu.h')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
