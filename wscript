@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import plistlib
+import codegen
 
 top = '.'
 out = 'build'
@@ -14,6 +15,7 @@ def configure(conf):
     conf.env.ARCH_COCOA = ['i386', 'x86_64']
 
 def build(ctx):
+    codegen.generate('foomenu.py', 'foomenu.h')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
@@ -24,7 +26,7 @@ def build(ctx):
     ctx.program(
         features      = 'c cprogram',
         target        = appnode.find_node("Contents").find_node("MacOS").make_node(executablename),
-        source        = 'main.m',
+        source        = 'main.m AppDelegate.m',
         use           = 'COCOA',
     )
 

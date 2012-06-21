@@ -1,4 +1,6 @@
 #import <Cocoa/Cocoa.h>
+#import "AppDelegate.h"
+#import "foomenu.h"
 
 void populateApplicationMenu(NSMenu *menu)
 {
@@ -55,6 +57,8 @@ void populateApplicationMenu(NSMenu *menu)
 int main(int argc, char *argv[])
 {
     [NSApplication sharedApplication];
+    AppDelegate *appDelegate = [[AppDelegate alloc] init];
+    [NSApp setDelegate:appDelegate];
     NSMenu * mainMenu = [[[NSMenu alloc] initWithTitle:@"MainMenu"] autorelease];
     
     NSMenuItem * item;
@@ -65,7 +69,6 @@ int main(int argc, char *argv[])
     // except for the application menu, whose title is ignored at runtime.
     item = [mainMenu addItemWithTitle:@"Apple" action:NULL keyEquivalent:@""];
     submenu = [[[NSMenu alloc] initWithTitle:@"Apple"] autorelease];
-    [NSApp performSelector:@selector(setAppleMenu:) withObject:submenu];
     populateApplicationMenu(submenu);
     [mainMenu setSubmenu:submenu forItem:item];
     
@@ -95,10 +98,9 @@ int main(int argc, char *argv[])
     // [self populateHelpMenu:submenu];
     [mainMenu setSubmenu:submenu forItem:item];
     
-    /*item = [mainMenu addItemWithTitle:@"Debug" action:NULL keyEquivalent:@""];
-    submenu = [[[NSMenu alloc] initWithTitle:NSLocalizedString(@"Debug", @"The Debug menu")] autorelease];
-    [self populateDebugMenu:submenu];
-    [mainMenu setSubmenu:submenu forItem:item];*/
+    item = [mainMenu addItemWithTitle:@"" action:NULL keyEquivalent:@""];
+    submenu = createfoomenu(appDelegate);
+    [mainMenu setSubmenu:submenu forItem:item];
     [NSApp setMainMenu:mainMenu];
     [NSApp run];
     return 0;
