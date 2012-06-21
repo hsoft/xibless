@@ -1,6 +1,6 @@
 import os.path
 import importlib
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 try:
     execfile
@@ -34,7 +34,11 @@ def tmpl_replace(tmpl, **replacements):
     return result
 
 def generate(module_path, dest):
+    owner = KeyValueId(None, 'owner')
+    NSApp = KeyValueId(None, 'NSApp')
     module_globals = {
+        'owner': owner,
+        'NSApp': NSApp,
         'NSMenu': NSMenu,
         'Action': Action,
     }
@@ -49,7 +53,50 @@ def generate(module_path, dest):
     fp = open(dest, 'wt')
     fp.write(tmpl_replace(UNIT_TMPL, **vars()))
     fp.close()
+
+
+class KeyValueId(object):
+    # When we set an KeyValueId attribute in our source file, there no convenient way of saying,
+    # at the codegen phase "this is exactly when this value was set, so I'll insert code to assign
+    # this value here." What we can do, however, is having a dictionary of all keys a certain value
+    # was assigned to and when we create the code for that value, we insert assignments right after.
+    VALUE2KEYS = defaultdict(set)
+    def __init__(self, parent, name):
+        self._parent = parent
+        self._name = name
+        self._children = {}
     
+    def __getattr__(self, name):
+        if name.startswith('_'):
+            return object.__getattribute__(self, name)
+        if name in self._children:
+            result = self._children[name]
+        else:
+            result = KeyValueId(self, name)
+            self._children[name] = result
+        return result
+    
+    def __setattr__(self, name, value):
+        if name.startswith('_'):
+            object.__setattr__(self, name, value)
+            return
+        key = getattr(self, name)
+        KeyValueId.VALUE2KEYS[value].add(key)
+    
+    # the methods below aren't actually private, it's just that we prepend them with underscores to
+    # avoid name clashes.
+    def _dotted_accessor(self):
+        if self._parent:
+            return '%s.%s' % (self._parent._dotted_accessor(), self._name)
+        else:
+            return self._name
+    
+    def _objc_accessor(self):
+        if self._parent:
+            return '[%s %s]' % (self._parent._objc_accessor(), self._name)
+        else:
+            return self._name
+
 Action = namedtuple('Action', 'target selector')
 
 class KeyShortcut(object):
@@ -72,15 +119,33 @@ class KeyShortcut(object):
         self.key = list(elements)[0]
         
 
-class NSMenuItem(object):
+class GeneratedItem(object):
+    def generateAssignments(self, varname):
+        if self not in KeyValueId.VALUE2KEYS:
+            return ""
+        assignments = []
+        for key in KeyValueId.VALUE2KEYS[self]:
+            parentAccessor = key._parent._objc_accessor()
+            setmethod = 'set' + key._name[0].upper() + key._name[1:]
+            assignment = "[%s %s: %s];" % (parentAccessor, setmethod, varname)
+            assignments.append(assignment)
+        return '\n'.join(assignments)
+    
+    def generate(self, varname, *args, **kwargs):
+        result = self.generateInit(varname, *args, **kwargs)
+        result += self.generateAssignments(varname)
+        return result
+
+class NSMenuItem(GeneratedItem):
     def __init__(self, name, action=None, shortcut=None):
+        GeneratedItem.__init__(self)
         self.name = name
         self.action = action
         if shortcut and not isinstance(shortcut, KeyShortcut):
             shortcut = KeyShortcut(shortcut)
         self.shortcut = shortcut
     
-    def generate(self, varname, menuname):
+    def generateInit(self, varname, menuname):
         if self.name == "-":
             tmpl = "[%%menuname%% addItem:[NSMenuItem separatorItem]];\n"
         else:
@@ -91,12 +156,10 @@ class NSMenuItem(object):
         name = self.name
         if self.action:
             action = "@selector(%s)" % self.action.selector
-            if self.action.target == 'NSApp':
-                target = 'NSApp'
-            elif self.action.target:
-                target = "[owner %s]" % self.action.target
+            if self.action.target:
+                target = self.action.target._objc_accessor()
             else:
-                target = 'owner'
+                target = 'nil'
             settarget = "[%s setTarget:%s];" % (varname, target)
         else:
             action = "nil"
@@ -134,7 +197,7 @@ class NSMenu(NSMenuItem):
         self.add(menu)
         return menu
     
-    def generate(self, varname, menuname=None):
+    def generateInit(self, varname, menuname=None):
         if menuname:
             tmpl = """NSMenuItem *_tmpitem = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@""];
             NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
