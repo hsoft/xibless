@@ -36,9 +36,11 @@ def tmpl_replace(tmpl, **replacements):
 def generate(module_path, dest):
     owner = KeyValueId(None, 'owner')
     NSApp = KeyValueId(None, 'NSApp')
+    const = KeyValueId(None, 'const', fakeParent=True)
     module_globals = {
         'owner': owner,
         'NSApp': NSApp,
+        'const': const,
         'NSMenu': NSMenu,
         'Action': Action,
     }
@@ -61,9 +63,13 @@ class KeyValueId(object):
     # this value here." What we can do, however, is having a dictionary of all keys a certain value
     # was assigned to and when we create the code for that value, we insert assignments right after.
     VALUE2KEYS = defaultdict(set)
-    def __init__(self, parent, name):
+    def __init__(self, parent, name, fakeParent=False):
         self._parent = parent
         self._name = name
+        # set fakeParent to True when you want to ignore this KeyValueId in accessors. You can use
+        # this for stuff like "const.NSOnState" where we want the accessor to be "NSOnState", not
+        # [const NSOnState];
+        self._fakeParent = fakeParent
         self._children = {}
     
     def __getattr__(self, name):
@@ -85,15 +91,15 @@ class KeyValueId(object):
     
     # the methods below aren't actually private, it's just that we prepend them with underscores to
     # avoid name clashes.
-    def _dotted_accessor(self):
-        if self._parent:
-            return '%s.%s' % (self._parent._dotted_accessor(), self._name)
+    def _dottedAccessor(self):
+        if self._parent and not self._parent._fakeParent:
+            return '%s.%s' % (self._parent._dottedAccessor(), self._name)
         else:
             return self._name
     
-    def _objc_accessor(self):
-        if self._parent:
-            return '[%s %s]' % (self._parent._objc_accessor(), self._name)
+    def _objcAccessor(self):
+        if self._parent and not self._parent._fakeParent:
+            return '[%s %s]' % (self._parent._objcAccessor(), self._name)
         else:
             return self._name
 
@@ -125,7 +131,7 @@ class GeneratedItem(object):
             return ""
         assignments = []
         for key in KeyValueId.VALUE2KEYS[self]:
-            parentAccessor = key._parent._objc_accessor()
+            parentAccessor = key._parent._objcAccessor()
             setmethod = 'set' + key._name[0].upper() + key._name[1:]
             assignment = "[%s %s: %s];" % (parentAccessor, setmethod, varname)
             assignments.append(assignment)
@@ -137,13 +143,14 @@ class GeneratedItem(object):
         return result
 
 class NSMenuItem(GeneratedItem):
-    def __init__(self, name, action=None, shortcut=None):
+    def __init__(self, name, action=None, shortcut=None, tag=None):
         GeneratedItem.__init__(self)
         self.name = name
         self.action = action
         if shortcut and not isinstance(shortcut, KeyShortcut):
             shortcut = KeyShortcut(shortcut)
         self.shortcut = shortcut
+        self.tag = tag
     
     def generateInit(self, varname, menuname):
         if self.name == "-":
@@ -152,27 +159,28 @@ class NSMenuItem(GeneratedItem):
             tmpl = """NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:%%action%% keyEquivalent:@"%%key%%"];
             %%settarget%%
             %%setkeymask%%
+            %%settag%%
             """
         name = self.name
+        settarget = setkeymask = settag = ""
         if self.action:
             action = "@selector(%s)" % self.action.selector
             if self.action.target:
-                target = self.action.target._objc_accessor()
+                target = self.action.target._objcAccessor()
             else:
                 target = 'nil'
             settarget = "[%s setTarget:%s];" % (varname, target)
         else:
             action = "nil"
-            settarget = ""
         if self.shortcut:
             key = self.shortcut.key
             if self.shortcut.flags:
                 setkeymask = "[%s setKeyEquivalentModifierMask:%s];" % (varname, self.shortcut.flags)
-            else:
-                setkeymask = ""
         else:
             key = "nil"
-            setkeymask = ""
+        if self.tag is not None:
+            tag = self.tag._objcAccessor()
+            settag = "[%s setTag:%s];" % (varname, tag)
         return tmpl_replace(**vars())
     
 
@@ -184,16 +192,16 @@ class NSMenu(NSMenuItem):
     def add(self, menu_or_item):
         self.items.append(menu_or_item)
     
-    def addItem(self, *args):
-        item = NSMenuItem(*args)
+    def addItem(self, *args, **kwargs):
+        item = NSMenuItem(*args, **kwargs)
         self.add(item)
         return item
     
     def addSeparator(self):
         return self.addItem("-")
     
-    def addMenu(self, *args):
-        menu = NSMenu(*args)
+    def addMenu(self, *args, **kwargs):
+        menu = NSMenu(*args, **kwargs)
         self.add(menu)
         return menu
     
