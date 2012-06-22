@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import plistlib
-import codegen
+import xibless
 
 top = '.'
 out = 'build'
@@ -15,7 +15,7 @@ def configure(conf):
     conf.env.ARCH_COCOA = ['i386', 'x86_64']
 
 def build(ctx):
-    codegen.generate('MainMenu.py', 'MainMenu.h')
+    xibless.generate('MainMenu.py', 'MainMenu.h')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
