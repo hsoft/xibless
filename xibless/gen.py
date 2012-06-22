@@ -1,6 +1,6 @@
 import os.path
 
-from .base import tmpl_replace, KeyValueId, Action
+from .base import CodeTemplate, KeyValueId, Action
 from .menu import NSMenu
 from .window import NSWindow
 
@@ -37,11 +37,13 @@ def generate(module_path, dest):
     module_locals = {}
     execfile(module_path, module_globals, module_locals)
     assert 'result' in module_locals
-    name = os.path.splitext(os.path.basename(dest))[0]
+    tmpl = CodeTemplate(UNIT_TMPL)
+    tmpl.name = os.path.splitext(os.path.basename(dest))[0]
     result = module_locals['result']
-    ownerclass = module_locals.get('ownerclass', 'id')
-    classname = result.__class__.__name__
-    contents = result.generate('result')
+    tmpl.ownerclass = module_locals.get('ownerclass', 'id')
+    tmpl.classname = result.__class__.__name__
+    result.varname = 'result'
+    tmpl.contents = result.generate()
     fp = open(dest, 'wt')
-    fp.write(tmpl_replace(UNIT_TMPL, **vars()))
+    fp.write(tmpl.render())
     fp.close()

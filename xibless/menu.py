@@ -1,4 +1,4 @@
-from .base import GeneratedItem, KeyShortcut, tmpl_replace
+from .base import GeneratedItem, KeyShortcut
 
 class NSMenuItem(GeneratedItem):
     def __init__(self, name, action=None, shortcut=None, tag=None):
@@ -10,36 +10,33 @@ class NSMenuItem(GeneratedItem):
         self.shortcut = shortcut
         self.tag = tag
     
-    def generateInit(self, varname, menuname):
+    def generateInit(self, menuname):
         if self.name == "-":
-            tmpl = "[%%menuname%% addItem:[NSMenuItem separatorItem]];\n"
+            tmpl = self.template("[%%menuname%% addItem:[NSMenuItem separatorItem]];\n")
         else:
-            tmpl = """NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:%%action%% keyEquivalent:@"%%key%%"];
-            %%settarget%%
-            %%setkeymask%%
-            %%settag%%
-            """
-        name = self.name
-        settarget = setkeymask = settag = ""
+            tmpl = self.template("""
+                NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@"%%key%%"];
+                %%linkaction%%
+                %%setkeymask%%
+                %%settag%%
+            """)
+        tmpl.name = self.name
+        tmpl.menuname = menuname
+        tmpl.settarget = tmpl.setkeymask = tmpl.settag = ""
         if self.action:
-            action = "@selector(%s)" % self.action.selector
-            if self.action.target:
-                target = self.action.target._objcAccessor()
-            else:
-                target = 'nil'
-            settarget = "[%s setTarget:%s];" % (varname, target)
+            tmpl.linkaction = self.action.generate(self.varname)
         else:
-            action = "nil"
+            tmpl.linkaction = ''
         if self.shortcut:
-            key = self.shortcut.key
+            tmpl.key = self.shortcut.key
             if self.shortcut.flags:
-                setkeymask = "[%s setKeyEquivalentModifierMask:%s];" % (varname, self.shortcut.flags)
+                tmpl.setkeymask = "[%s setKeyEquivalentModifierMask:%s];" % (self.varname, self.shortcut.flags)
         else:
-            key = "nil"
+            tmpl.key = "nil"
         if self.tag is not None:
             tag = self.tag._objcAccessor()
-            settag = "[%s setTag:%s];" % (varname, tag)
-        return tmpl_replace(**vars())
+            tmpl.settag = "[%s setTag:%s];" % (self.varname, tag)
+        return tmpl.render()
     
 
 class NSMenu(NSMenuItem):
@@ -63,24 +60,28 @@ class NSMenu(NSMenuItem):
         self.add(menu)
         return menu
     
-    def generateInit(self, varname, menuname=None):
+    def generateInit(self, menuname=None):
         if menuname:
-            tmpl = """NSMenuItem *_tmpitem = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@""];
-            NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
-            [%%menuname%% setSubmenu:%%varname%% forItem:_tmpitem];
-            %%subitemscode%%
-            """
+            tmpl = self.template("""
+                NSMenuItem *_tmpitem = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@""];
+                NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
+                [%%menuname%% setSubmenu:%%varname%% forItem:_tmpitem];
+                %%subitemscode%%
+            """)
         else:
-            tmpl = """NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
-            %%subitemscode%%
-            """
-        name = self.name
+            tmpl = self.template("""
+                NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
+                %%subitemscode%%
+            """)
+        tmpl.name = self.name
+        tmpl.menuname = menuname
         subitemscode = []
         for item in self.items:
             assert isinstance(item, NSMenuItem)
-            code = item.generate(varname+'_sub', varname)
+            item.varname = self.varname + '_sub'
+            code = item.generate(self.varname)
             # We wrap it in a block to avoid naming clashes.
             subitemscode.append('{' + code + '}')
-        subitemscode = '\n'.join(subitemscode)
-        return tmpl_replace(**vars())
+        tmpl.subitemscode = '\n'.join(subitemscode)
+        return tmpl.render()
     

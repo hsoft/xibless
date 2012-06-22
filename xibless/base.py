@@ -1,18 +1,27 @@
-import os.path
-import importlib
-from collections import namedtuple, defaultdict
+from collections import defaultdict
 
-def tmpl_replace(tmpl, **replacements):
-    # Because we generate code and that code is likely to contain "{}" braces, it's better if we
-    # use more explicit placeholders than the typecal format() method. These placeholders are
-    # %%name%%.
-    result = tmpl
-    for placeholder, replacement in replacements.items():
-        wrapped_placeholder = '%%{}%%'.format(placeholder)
-        if wrapped_placeholder not in result:
-            continue
-        result = result.replace(wrapped_placeholder, replacement)
-    return result
+class CodeTemplate(object):
+    def __init__(self, template):
+        self._template = template
+        self._replacements = {}
+    
+    def __setattr__(self, key, value):
+        if key in ['_template', '_replacements']:
+            return object.__setattr__(self, key, value)
+        self._replacements[key] = value
+    
+    def render(self):
+        # Because we generate code and that code is likely to contain "{}" braces, it's better if we
+        # use more explicit placeholders than the typecal format() method. These placeholders are
+        # %%name%%.
+        result = self._template
+        replacements = self._replacements
+        for placeholder, replacement in replacements.items():
+            wrapped_placeholder = '%%{}%%'.format(placeholder)
+            if wrapped_placeholder not in result:
+                continue
+            result = result.replace(wrapped_placeholder, replacement)
+        return result
 
 class KeyValueId(object):
     # When we set an KeyValueId attribute in our source file, there no convenient way of saying,
@@ -60,7 +69,23 @@ class KeyValueId(object):
         else:
             return self._name
 
-Action = namedtuple('Action', 'target selector')
+class Action(object):
+    def __init__(self, target, selector):
+        self.target = target
+        self.selector = selector
+    
+    def generate(self, sender):
+        tmpl = CodeTemplate("""[%%sender%% setTarget:%%target%%];
+        [%%sender%% setAction:%%selector%%];
+        """)
+        tmpl.sender = sender
+        tmpl.selector = "@selector(%s)" % self.selector
+        if self.target:
+            tmpl.target = self.target._objcAccessor()
+        else:
+            tmpl.target = 'nil'
+        return tmpl.render()
+    
 
 class KeyShortcut(object):
     def __init__(self, shortcutStr):
@@ -83,19 +108,24 @@ class KeyShortcut(object):
         
 
 class GeneratedItem(object):
-    def generateAssignments(self, varname):
+    def template(self, tmpl):
+        result = CodeTemplate(tmpl)
+        result.varname = self.varname
+        return result
+    
+    def generateAssignments(self):
         if self not in KeyValueId.VALUE2KEYS:
             return ""
         assignments = []
         for key in KeyValueId.VALUE2KEYS[self]:
             parentAccessor = key._parent._objcAccessor()
             setmethod = 'set' + key._name[0].upper() + key._name[1:]
-            assignment = "[%s %s: %s];" % (parentAccessor, setmethod, varname)
+            assignment = "[%s %s: %s];" % (parentAccessor, setmethod, self.varname)
             assignments.append(assignment)
         return '\n'.join(assignments)
     
-    def generate(self, varname, *args, **kwargs):
-        result = self.generateInit(varname, *args, **kwargs)
-        result += self.generateAssignments(varname)
+    def generate(self, *args, **kwargs):
+        result = self.generateInit(*args, **kwargs)
+        result += self.generateAssignments()
         return result
     
