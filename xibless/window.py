@@ -2,6 +2,7 @@ from .base import GeneratedItem
 
 class NSWindow(GeneratedItem):
     def __init__(self, rect, title):
+        GeneratedItem.__init__(self)
         self.rect = rect
         self.title = title
     
@@ -16,5 +17,8 @@ class NSWindow(GeneratedItem):
         tmpl.title = self.title
         return tmpl.render()
     
-    # def generateAddToSubviews(self, subview):
-        # tmpl = """[
+    def generateAddSubview(self, subview):
+        tmpl = self.template("[[%%varname%% contentView] addSubview:%%subview%%];\n")
+        tmpl.subview = subview.varname
+        return tmpl.render()
+    

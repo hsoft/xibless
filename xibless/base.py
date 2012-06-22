@@ -108,6 +108,12 @@ class KeyShortcut(object):
         
 
 class GeneratedItem(object):
+    CREATION_ORDER_COUNTER = 0
+    def __init__(self):
+        self.creationOrder = GeneratedItem.CREATION_ORDER_COUNTER
+        GeneratedItem.CREATION_ORDER_COUNTER += 1
+        self.generated = False
+    
     def template(self, tmpl):
         result = CodeTemplate(tmpl)
         result.varname = self.varname
@@ -127,5 +133,6 @@ class GeneratedItem(object):
     def generate(self, *args, **kwargs):
         result = self.generateInit(*args, **kwargs)
         result += self.generateAssignments()
+        self.generated = True
         return result
     
