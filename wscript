@@ -16,6 +16,7 @@ def configure(conf):
 
 def build(ctx):
     xibless.generate('MainMenu.py', 'MainMenu.h')
+    xibless.generate('MainWindow.py', 'MainWindow.h')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']

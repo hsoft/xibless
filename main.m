@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
 #import "MainMenu.h"
+#import "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +10,8 @@ int main(int argc, char *argv[])
     [NSApp setDelegate:appDelegate];
     NSMenu * mainMenu = createMainMenu(appDelegate);
     [NSApp setMainMenu:mainMenu];
+    NSWindow *window = createMainWindow(appDelegate);
+    [window orderFront:nil];
     [NSApp run];
     return 0;
 }

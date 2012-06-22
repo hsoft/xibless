@@ -2,6 +2,7 @@ import os.path
 
 from .base import tmpl_replace, KeyValueId, Action
 from .menu import NSMenu
+from .window import NSWindow
 
 try:
     execfile
@@ -16,7 +17,6 @@ UNIT_TMPL = """
 
 %%classname%%* create%%name%%(%%ownerclass%% *owner)
 {
-%%classname%% *result;
 %%contents%%
 return result;
 }
@@ -32,6 +32,7 @@ def generate(module_path, dest):
         'const': const,
         'NSMenu': NSMenu,
         'Action': Action,
+        'NSWindow': NSWindow,
     }
     module_locals = {}
     execfile(module_path, module_globals, module_locals)

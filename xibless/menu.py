@@ -71,7 +71,7 @@ class NSMenu(NSMenuItem):
             %%subitemscode%%
             """
         else:
-            tmpl = """%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
+            tmpl = """NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
             %%subitemscode%%
             """
         name = self.name
