@@ -4,6 +4,7 @@ from .base import CodeTemplate, KeyValueId, Action, GeneratedItem
 from .menu import NSMenu
 from .window import NSWindow
 from .button import NSButton
+from .font import NSFont, FontFamily, FontSize, FontTrait
 
 try:
     execfile
@@ -35,6 +36,10 @@ def generate(module_path, dest):
         'Action': Action,
         'NSWindow': NSWindow,
         'NSButton': NSButton,
+        'NSFont': NSFont,
+        'FontFamily': FontFamily,
+        'FontSize': FontSize,
+        'FontTrait': FontTrait,
     }
     module_locals = {}
     execfile(module_path, module_globals, module_locals)

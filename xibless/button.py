@@ -7,17 +7,23 @@ class NSButton(GeneratedItem):
         self.rect = rect
         self.title = title
         self.action = action
+        self.font = None
     
     def generateInit(self):
         tmpl = self.template("""NSButton *%%varname%% = [[NSButton alloc] initWithFrame:NSMakeRect(%%rect%%)];
         [%%varname%% setTitle:@"%%title%%"];
         [%%varname%% setButtonType:NSMomentaryLightButton];
         [%%varname%% setBezelStyle:NSRoundedBezelStyle];
+        %%setfont%%
         %%linkaction%%
         %%addtoparent%%
         """)
         tmpl.rect = "%d, %d, %d, %d" % self.rect
         tmpl.title = self.title
+        if self.font:
+            tmpl.setfont = "[%s setFont:%s];\n" % (self.varname, self.font.varname)
+        else:
+            tmpl.setfont = ''
         if self.action:
             tmpl.linkaction = self.action.generate(self.varname)
         else:
