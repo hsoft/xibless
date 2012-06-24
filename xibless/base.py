@@ -109,6 +109,8 @@ class KeyShortcut(object):
 
 class GeneratedItem(object):
     CREATION_ORDER_COUNTER = 0
+    OBJC_CLASS = None
+    
     def __init__(self):
         self.creationOrder = GeneratedItem.CREATION_ORDER_COUNTER
         GeneratedItem.CREATION_ORDER_COUNTER += 1

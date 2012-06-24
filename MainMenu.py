@@ -1,5 +1,5 @@
 ownerclass = 'AppDelegate'
-result = NSMenu("Apple")
+result = Menu("Apple")
 fileMenu = result.addMenu("File")
 editMenu = result.addMenu("Edit")
 windowMenu = result.addMenu("Window")

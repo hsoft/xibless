@@ -54,7 +54,8 @@ TRAIT2CONST = {
     FontTrait.Italic: 'NSItalicFontMask',
 }
 
-class NSFont(GeneratedItem):
+class Font(GeneratedItem):
+    OBJC_CLASS = 'NSFont'
     
     def __init__(self, family, size, traits=None):
         # family and size can be a "real" value (str and float) or one of the constants.

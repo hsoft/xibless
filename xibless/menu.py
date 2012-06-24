@@ -1,6 +1,8 @@
 from .base import GeneratedItem, KeyShortcut
 
-class NSMenuItem(GeneratedItem):
+class MenuItem(GeneratedItem):
+    OBJC_CLASS = 'NSMenuItem'
+    
     def __init__(self, name, action=None, shortcut=None, tag=None):
         GeneratedItem.__init__(self)
         self.name = name
@@ -39,16 +41,18 @@ class NSMenuItem(GeneratedItem):
         return tmpl.render()
     
 
-class NSMenu(NSMenuItem):
+class Menu(MenuItem):
+    OBJC_CLASS = 'NSMenu'
+    
     def __init__(self, name):
-        NSMenuItem.__init__(self, name, None, None)
+        MenuItem.__init__(self, name, None, None)
         self.items = []
     
     def add(self, menu_or_item):
         self.items.append(menu_or_item)
     
     def addItem(self, *args, **kwargs):
-        item = NSMenuItem(*args, **kwargs)
+        item = MenuItem(*args, **kwargs)
         self.add(item)
         return item
     
@@ -56,7 +60,7 @@ class NSMenu(NSMenuItem):
         return self.addItem("-")
     
     def addMenu(self, *args, **kwargs):
-        menu = NSMenu(*args, **kwargs)
+        menu = Menu(*args, **kwargs)
         self.add(menu)
         return menu
     
@@ -77,7 +81,7 @@ class NSMenu(NSMenuItem):
         tmpl.menuname = menuname
         subitemscode = []
         for item in self.items:
-            assert isinstance(item, NSMenuItem)
+            assert isinstance(item, MenuItem)
             item.varname = self.varname + '_sub'
             code = item.generate(self.varname)
             # We wrap it in a block to avoid naming clashes.

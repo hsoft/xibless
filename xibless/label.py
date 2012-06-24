@@ -1,6 +1,8 @@
 from .base import GeneratedItem
 
 class Label(GeneratedItem):
+    OBJC_CLASS = 'NSTextField'
+    
     def __init__(self, parent, rect, text):
         GeneratedItem.__init__(self)
         self.parent = parent

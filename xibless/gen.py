@@ -1,11 +1,11 @@
 import os.path
 
 from .base import CodeTemplate, KeyValueId, Action, GeneratedItem
-from .menu import NSMenu
-from .window import NSWindow
-from .button import NSButton
+from .menu import Menu
+from .window import Window
+from .button import Button
 from .label import Label
-from .font import NSFont, FontFamily, FontSize, FontTrait
+from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
     execfile
@@ -33,12 +33,12 @@ def generate(module_path, dest):
         'owner': owner,
         'NSApp': NSApp,
         'const': const,
-        'NSMenu': NSMenu,
+        'Menu': Menu,
         'Action': Action,
-        'NSWindow': NSWindow,
-        'NSButton': NSButton,
+        'Window': Window,
+        'Button': Button,
         'Label': Label,
-        'NSFont': NSFont,
+        'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,
         'FontTrait': FontTrait,
@@ -62,7 +62,7 @@ def generate(module_path, dest):
         codePieces.append(item.generate())
     result = module_locals['result']
     tmpl.ownerclass = module_locals.get('ownerclass', 'id')
-    tmpl.classname = result.__class__.__name__
+    tmpl.classname = result.OBJC_CLASS
     tmpl.contents = '\n'.join(codePieces)
     fp = open(dest, 'wt')
     fp.write(tmpl.render())

@@ -1,6 +1,8 @@
 from .base import GeneratedItem
 
-class NSWindow(GeneratedItem):
+class Window(GeneratedItem):
+    OBJC_CLASS = 'NSWindow'
+    
     def __init__(self, rect, title):
         GeneratedItem.__init__(self)
         self.rect = rect

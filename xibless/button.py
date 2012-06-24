@@ -1,6 +1,8 @@
 from .base import GeneratedItem
 
-class NSButton(GeneratedItem):
+class Button(GeneratedItem):
+    OBJC_CLASS = 'NSButton'
+    
     def __init__(self, parent, rect, title, action=None):
         GeneratedItem.__init__(self)
         self.parent = parent
