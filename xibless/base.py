@@ -113,6 +113,8 @@ class GeneratedItem(object):
         self.creationOrder = GeneratedItem.CREATION_ORDER_COUNTER
         GeneratedItem.CREATION_ORDER_COUNTER += 1
         self.generated = False
+        # In case we are never assigned to a top level variable and thus never given a varname
+        self.varname = "_tmp%d" % self.creationOrder
     
     #--- Virtual
     def generateInit(self):
