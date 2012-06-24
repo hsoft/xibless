@@ -4,6 +4,7 @@ from .base import CodeTemplate, KeyValueId, Action, GeneratedItem
 from .menu import NSMenu
 from .window import NSWindow
 from .button import NSButton
+from .label import Label
 from .font import NSFont, FontFamily, FontSize, FontTrait
 
 try:
@@ -36,6 +37,7 @@ def generate(module_path, dest):
         'Action': Action,
         'NSWindow': NSWindow,
         'NSButton': NSButton,
+        'Label': Label,
         'NSFont': NSFont,
         'FontFamily': FontFamily,
         'FontSize': FontSize,

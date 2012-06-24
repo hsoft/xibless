@@ -145,7 +145,8 @@ class GeneratedItem(object):
     def generate(self, *args, **kwargs):
         result = ''
         for dependency in self.dependencies():
-            result += dependency.generate()
+            if isinstance(dependency, GeneratedItem):
+                result += dependency.generate()
         result += self.generateInit(*args, **kwargs)
         result += self.generateAssignments()
         self.generated = True
