@@ -9,6 +9,9 @@ class NSButton(GeneratedItem):
         self.action = action
         self.font = None
     
+    def dependencies(self):
+        return [self.font]
+    
     def generateInit(self):
         tmpl = self.template("""NSButton *%%varname%% = [[NSButton alloc] initWithFrame:NSMakeRect(%%rect%%)];
         [%%varname%% setTitle:@"%%title%%"];

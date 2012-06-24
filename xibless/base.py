@@ -114,6 +114,16 @@ class GeneratedItem(object):
         GeneratedItem.CREATION_ORDER_COUNTER += 1
         self.generated = False
     
+    #--- Virtual
+    def generateInit(self):
+        # Return a string containing the code to create an initialize the item.
+        raise NotImplementedError()
+    
+    def dependencies(self):
+        # Return a list of items on which self depends. We'll make sure that they're generated first.
+        return []
+    
+    #--- Public
     def template(self, tmpl):
         result = CodeTemplate(tmpl)
         result.varname = self.varname
@@ -131,7 +141,10 @@ class GeneratedItem(object):
         return '\n'.join(assignments)
     
     def generate(self, *args, **kwargs):
-        result = self.generateInit(*args, **kwargs)
+        result = ''
+        for dependency in self.dependencies():
+            result += dependency.generate()
+        result += self.generateInit(*args, **kwargs)
         result += self.generateAssignments()
         self.generated = True
         return result
