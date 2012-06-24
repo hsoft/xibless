@@ -18,9 +18,9 @@ except NameError:
 UNIT_TMPL = """
 #import <Cocoa/Cocoa.h>
 
-%%classname%%* create%%name%%(%%ownerclass%% *owner)
+$classname$* create$name$($ownerclass$ *owner)
 {
-%%contents%%
+$contents$
 return result;
 }
 """

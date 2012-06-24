@@ -13,14 +13,21 @@ class CodeTemplate(object):
     def render(self):
         # Because we generate code and that code is likely to contain "{}" braces, it's better if we
         # use more explicit placeholders than the typecal format() method. These placeholders are
-        # %%name%%.
+        # $name$.
         result = self._template
         replacements = self._replacements
-        for placeholder, replacement in replacements.items():
-            wrapped_placeholder = '%%{}%%'.format(placeholder)
-            if wrapped_placeholder not in result:
-                continue
-            result = result.replace(wrapped_placeholder, replacement)
+        performed_replacement = True
+        while performed_replacement:
+            # We run replacements multiple times because it's possible that one of our replacement
+            # strings contain replacement placeholders. We want to perform replacements on those
+            # strings too.
+            performed_replacement = False
+            for placeholder, replacement in replacements.items():
+                wrapped_placeholder = '${}$'.format(placeholder)
+                if wrapped_placeholder not in result:
+                    continue
+                performed_replacement = True
+                result = result.replace(wrapped_placeholder, replacement)
         return result
 
 class KeyValueId(object):
@@ -75,8 +82,8 @@ class Action(object):
         self.selector = selector
     
     def generate(self, sender):
-        tmpl = CodeTemplate("""[%%sender%% setTarget:%%target%%];
-        [%%sender%% setAction:%%selector%%];
+        tmpl = CodeTemplate("""[$sender$ setTarget:$target$];
+        [$sender$ setAction:$selector$];
         """)
         tmpl.sender = sender
         tmpl.selector = "@selector(%s)" % self.selector
@@ -109,7 +116,7 @@ class KeyShortcut(object):
 
 class GeneratedItem(object):
     CREATION_ORDER_COUNTER = 0
-    OBJC_CLASS = None
+    OBJC_CLASS = 'NSObject'
     
     def __init__(self):
         self.creationOrder = GeneratedItem.CREATION_ORDER_COUNTER
@@ -120,7 +127,7 @@ class GeneratedItem(object):
     
     #--- Virtual
     def generateInit(self):
-        # Return a string containing the code to create an initialize the item.
+        # Return a CodeTemplate containing the code to create an initialize the item.
         raise NotImplementedError()
     
     def dependencies(self):
@@ -149,7 +156,7 @@ class GeneratedItem(object):
         for dependency in self.dependencies():
             if isinstance(dependency, GeneratedItem):
                 result += dependency.generate()
-        result += self.generateInit(*args, **kwargs)
+        result += self.generateInit(*args, **kwargs).render()
         result += self.generateAssignments()
         self.generated = True
         return result

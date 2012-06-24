@@ -1,12 +1,10 @@
-from .base import GeneratedItem
+from .view import View
 
-class Label(GeneratedItem):
+class Label(View):
     OBJC_CLASS = 'NSTextField'
     
     def __init__(self, parent, rect, text):
-        GeneratedItem.__init__(self)
-        self.parent = parent
-        self.rect = rect
+        View.__init__(self, parent, rect)
         self.text = text
         self.font = None
     
@@ -14,21 +12,20 @@ class Label(GeneratedItem):
         return [self.font]
     
     def generateInit(self):
-        tmpl = self.template("""NSTextField *%%varname%% = [[NSTextField alloc] initWithFrame:NSMakeRect(%%rect%%)];
-        [%%varname%% setStringValue:@"%%text%%"];
-        [%%varname%% setEditable:NO];
-        [%%varname%% setSelectable:NO];
-        [%%varname%% setDrawsBackground:NO];
-        [%%varname%% setBordered:NO];
-        %%setfont%%
-        %%addtoparent%%
+        tmpl = View.generateInit(self)
+        tmplsetup = self.template("""
+            [$varname$ setStringValue:@"$text$"];
+            [$varname$ setEditable:NO];
+            [$varname$ setSelectable:NO];
+            [$varname$ setDrawsBackground:NO];
+            [$varname$ setBordered:NO];
+            $setfont$
         """)
-        tmpl.rect = "%d, %d, %d, %d" % self.rect
-        tmpl.text = self.text
+        tmplsetup.text = self.text
         if self.font:
-            tmpl.setfont = "[%s setFont:%s];\n" % (self.varname, self.font.varname)
+            tmplsetup.setfont = "[$varname$ setFont:%s];\n" % self.font.varname
         else:
-            tmpl.setfont = ''
-        tmpl.addtoparent = self.parent.generateAddSubview(self)
-        return tmpl.render()
+            tmplsetup.setfont = ''
+        tmpl.viewsetup = tmplsetup.render()
+        return tmpl
     

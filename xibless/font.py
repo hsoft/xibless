@@ -69,11 +69,11 @@ class Font(GeneratedItem):
     
     def generateInit(self):
         # We use code blocks to avoid tmp variable name clashes.
-        tmpl = self.template("""NSFont *%%varname%%;
+        tmpl = self.template("""NSFont *$varname$;
         {
-            CGFloat _fontSize = %%sizeinit%%;
-            %%varname%% = [NSFont %%fontinit%%];
-            %%traits%%
+            CGFloat _fontSize = $sizeinit$;
+            $varname$ = [NSFont $fontinit$];
+            $traits$
         }
         """)
         if self.family in FAMILY2METHOD:
@@ -90,5 +90,5 @@ class Font(GeneratedItem):
         for trait in self.traits:
             traits += "[[NSFontManager sharedFontManager] convertFont:%s toHaveTrait:%s];\n" % (self.varname, TRAIT2CONST[trait])
         tmpl.traits = traits
-        return tmpl.render()
+        return tmpl
     

@@ -1,12 +1,10 @@
-from .base import GeneratedItem
+from .view import View
 
-class Button(GeneratedItem):
+class Button(View):
     OBJC_CLASS = 'NSButton'
     
     def __init__(self, parent, rect, title, action=None):
-        GeneratedItem.__init__(self)
-        self.parent = parent
-        self.rect = rect
+        View.__init__(self, parent, rect)
         self.title = title
         self.action = action
         self.font = None
@@ -15,24 +13,23 @@ class Button(GeneratedItem):
         return [self.font]
     
     def generateInit(self):
-        tmpl = self.template("""NSButton *%%varname%% = [[NSButton alloc] initWithFrame:NSMakeRect(%%rect%%)];
-        [%%varname%% setTitle:@"%%title%%"];
-        [%%varname%% setButtonType:NSMomentaryLightButton];
-        [%%varname%% setBezelStyle:NSRoundedBezelStyle];
-        %%setfont%%
-        %%linkaction%%
-        %%addtoparent%%
+        tmpl = View.generateInit(self)
+        tmplsetup = self.template("""
+            [$varname$ setTitle:@"$title$"];
+            [$varname$ setButtonType:NSMomentaryLightButton];
+            [$varname$ setBezelStyle:NSRoundedBezelStyle];
+            $setfont$
+            $linkaction$
         """)
-        tmpl.rect = "%d, %d, %d, %d" % self.rect
-        tmpl.title = self.title
+        tmplsetup.title = self.title
         if self.font:
-            tmpl.setfont = "[%s setFont:%s];\n" % (self.varname, self.font.varname)
+            tmplsetup.setfont = "[$varname$ setFont:%s];\n" % self.font.varname
         else:
-            tmpl.setfont = ''
+            tmplsetup.setfont = ''
         if self.action:
-            tmpl.linkaction = self.action.generate(self.varname)
+            tmplsetup.linkaction = self.action.generate(self.varname)
         else:
-            tmpl.linkaction = ''
-        tmpl.addtoparent = self.parent.generateAddSubview(self)
-        return tmpl.render()
+            tmplsetup.linkaction = ''
+        tmpl.viewsetup = tmplsetup.render()
+        return tmpl
     

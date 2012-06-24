@@ -14,13 +14,13 @@ class MenuItem(GeneratedItem):
     
     def generateInit(self, menuname):
         if self.name == "-":
-            tmpl = self.template("[%%menuname%% addItem:[NSMenuItem separatorItem]];\n")
+            tmpl = self.template("[$menuname$ addItem:[NSMenuItem separatorItem]];\n")
         else:
             tmpl = self.template("""
-                NSMenuItem *%%varname%% = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@"%%key%%"];
-                %%linkaction%%
-                %%setkeymask%%
-                %%settag%%
+                NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:@"$name$" action:nil keyEquivalent:@"$key$"];
+                $linkaction$
+                $setkeymask$
+                $settag$
             """)
         tmpl.name = self.name
         tmpl.menuname = menuname
@@ -32,13 +32,13 @@ class MenuItem(GeneratedItem):
         if self.shortcut:
             tmpl.key = self.shortcut.key
             if self.shortcut.flags:
-                tmpl.setkeymask = "[%s setKeyEquivalentModifierMask:%s];" % (self.varname, self.shortcut.flags)
+                tmpl.setkeymask = "[$varname$ setKeyEquivalentModifierMask:%s];" % self.shortcut.flags
         else:
             tmpl.key = "nil"
         if self.tag is not None:
             tag = self.tag._objcAccessor()
-            tmpl.settag = "[%s setTag:%s];" % (self.varname, tag)
-        return tmpl.render()
+            tmpl.settag = "[$varname$ setTag:%s];" % tag
+        return tmpl
     
 
 class Menu(MenuItem):
@@ -67,15 +67,15 @@ class Menu(MenuItem):
     def generateInit(self, menuname=None):
         if menuname:
             tmpl = self.template("""
-                NSMenuItem *_tmpitem = [%%menuname%% addItemWithTitle:@"%%name%%" action:nil keyEquivalent:@""];
-                NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
-                [%%menuname%% setSubmenu:%%varname%% forItem:_tmpitem];
-                %%subitemscode%%
+                NSMenuItem *_tmpitem = [$menuname$ addItemWithTitle:@"$name$" action:nil keyEquivalent:@""];
+                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
+                [$menuname$ setSubmenu:$varname$ forItem:_tmpitem];
+                $subitemscode$
             """)
         else:
             tmpl = self.template("""
-                NSMenu *%%varname%% = [[[NSMenu alloc] initWithTitle:@"%%name%%"] autorelease];
-                %%subitemscode%%
+                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
+                $subitemscode$
             """)
         tmpl.name = self.name
         tmpl.menuname = menuname
@@ -87,5 +87,5 @@ class Menu(MenuItem):
             # We wrap it in a block to avoid naming clashes.
             subitemscode.append('{' + code + '}')
         tmpl.subitemscode = '\n'.join(subitemscode)
-        return tmpl.render()
+        return tmpl
     
