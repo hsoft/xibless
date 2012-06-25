@@ -1,24 +1,19 @@
-from .base import GeneratedItem
+from .view import View
 
-class Window(GeneratedItem):
+class Window(View):
     OBJC_CLASS = 'NSWindow'
     
     def __init__(self, rect, title):
-        GeneratedItem.__init__(self)
-        self.rect = rect
+        View.__init__(self, None, rect)
         self.title = title
     
     def generateInit(self):
-        tmpl = GeneratedItem.generateInit(self)
+        tmpl = View.generateInit(self)
         tmpl.allocinit = """
-            NSWindow *$varname$ = [[NSWindow alloc] initWithContentRect:NSMakeRect($rect$)
-                styleMask:$style$ backing:NSBackingStoreBuffered defer:NO];
+            NSWindow *$varname$ = [[NSWindow alloc] initWithContentRect:$rect$ styleMask:$style$
+                backing:NSBackingStoreBuffered defer:NO];
         """
-        tmpl.rect = "%d, %d, %d, %d" % self.rect
         tmpl.style = "NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask"
         self.properties['title'] = self.title
         return tmpl
-    
-    def generateAddSubview(self, subview):
-        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
     

@@ -11,9 +11,12 @@ class View(GeneratedItem):
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
-        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:NSMakeRect($rect$)];"
-        tmpl.viewsetup = ''
-        tmpl.rect = "%d, %d, %d, %d" % self.rect
-        tmpl.addtoparent = self.parent.generateAddSubview(self)
+        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:$rect$];"
+        tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % self.rect
+        if self.parent is not None:
+            tmpl.addtoparent = self.parent.generateAddSubview(self)
         return tmpl
+    
+    def generateAddSubview(self, subview):
+        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
     

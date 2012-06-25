@@ -1,3 +1,4 @@
+import re
 from collections import defaultdict
 
 try:
@@ -24,18 +25,15 @@ class CodeTemplate(object):
         # $name$.
         result = self._template
         replacements = self._replacements
-        performed_replacement = True
-        while performed_replacement:
+        placeholders = re.findall(r"\$\w+?\$", result)
+        while placeholders:
             # We run replacements multiple times because it's possible that one of our replacement
             # strings contain replacement placeholders. We want to perform replacements on those
             # strings too.
-            performed_replacement = False
-            for placeholder, replacement in replacements.items():
-                wrapped_placeholder = '${}$'.format(placeholder)
-                if wrapped_placeholder not in result:
-                    continue
-                performed_replacement = True
-                result = result.replace(wrapped_placeholder, replacement)
+            for placeholder in placeholders:
+                replacement = replacements.get(placeholder[1:-1], '')
+                result = result.replace(placeholder, replacement)
+            placeholders = re.findall(r"\$\w+?\$", result)
         return result
 
 class KeyValueId(object):
