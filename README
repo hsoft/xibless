@@ -2,7 +2,7 @@
 xibless - Get rid of XIBs and XCode
 ===================================
 
-``Xibless`` is a library that generates Objective-C code that builds Cocoa UIs. The goal of this library
+``xibless`` is a library that generates Objective-C code that builds Cocoa UIs. The goal of this library
 is to replace XIBs in XCode and, if you want, get rid of XCode altogether.
 
 With ``xibless``, instead of designing UIs with a WYSIWYG editor, you build them in a Python script,
@@ -26,10 +26,13 @@ similarly to what you do when you build Qt UIs without the Designer. For example
     button.setAnchor(Pack.UpperRight)
 
 would generate Objective-C code that build a form with a name field, a text label and a button. The
-second part of the script place the widgets on the form appropriately.
+second part of the script places the widgets on the form appropriately.
 
 **Although xibless is written in Python, the Objective-C code it generates has no Python dependency,
 so this tool is suitable for any Cocoa developer.**
+
+``xibless`` runs on Python 2.7 and up. This means that if you're on OS X 10.7 or newer, you can use
+the built-in Python. Otherwise, you'll have to install a more recent version of Python.
 
 Why xibless?
 ------------
@@ -37,8 +40,8 @@ Why xibless?
 For many people XCode and its integrated interface builder work fine and to be fair, XCode is a
 nice tool. However, it has shortcomings, mostly just annoyances, but still, after a while,
 annoyances become... annoying. For example, when a XIB UI reaches a certain level of complexity, you
-never know, when doing minor updates, if you mistakenly messed something else. Because every
-modification, however minor it is, changes a big part of the XIB file, so you can't tell in the diff
+never know, when doing minor updates, if you mistakenly messed up something else. Because every
+modification, however minor it is, changes a big part of the XIB file, you can't tell in the diff
 if the modification you've made was exclusively the one you wanted to make. There's also XIB
 localization, with its one-xib-copy-per-localization, which is less than optimal but hard to work
 around. Anyway, I'm not going to try to convince you. If you don't already want to get rid of XCode
