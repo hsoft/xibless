@@ -87,3 +87,5 @@ could wildly change before v1.0.
 
 Also, the number of rough edges at the moment are incalculable. There are no error message for
 invalid UI scripts, so it might be very hard, for now, to figure out why your scripts don't work.
+
+Oh, yes, and memory leaks, there's tons of them.
