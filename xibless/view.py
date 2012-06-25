@@ -11,11 +11,12 @@ class Pack(object):
     LowerLeft = 3
     LowerRight = 4
 
-    # Sides
+    # Sides / Align
     Left = 5
     Right = 6
     Above = 7
     Below = 8
+    Middle = 9
     
     @staticmethod
     def oppositeSide(side):
@@ -72,20 +73,30 @@ class View(GeneratedItem):
             y = ph - margin - h
         self.x, self.y = x, y
     
-    def packRelativeTo(self, other, side):
+    def packRelativeTo(self, other, side, align):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
         margin = self.INTER_VIEW_MARGIN
+        
         if side in (Pack.Above, Pack.Below):
-            x = ox
+            if align == Pack.Left:
+                x = ox
+            elif align == Pack.Right:
+                x = ox + ow - w
+            else:
+                x = ox + ((ow - w) / 2)
         elif side == Pack.Left:
             x = ox - margin - w
         else:
             x = ox + ow + margin
         if side in (Pack.Left, Pack.Right):
-            # Align the widget "Y-middles" instead of "Y-lows"
-            y = oy + ((oh-h) / 2)
+            if align == Pack.Below:
+                y = oy
+            elif align == Pack.Above:
+                y = oy + oh - h
+            else:
+                y = oy + ((oh - h) / 2)
         elif side == Pack.Above:
             y = oy + oh + margin
         else:

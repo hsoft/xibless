@@ -14,10 +14,11 @@ owner.helloLabel = helloLabel
 
 # Layout
 nameLabel.packToCorner(Pack.UpperLeft)
-nameField.packRelativeTo(nameLabel, Pack.Right)
+nameField.packRelativeTo(nameLabel, Pack.Right, Pack.Middle)
 nameField.fill(Pack.Right)
-helloLabel.packRelativeTo(nameLabel, Pack.Below)
+helloLabel.packRelativeTo(nameLabel, Pack.Below, Pack.Left)
 helloLabel.fill(Pack.Right)
-button.packRelativeTo(helloLabel, Pack.Below)
+button.packRelativeTo(helloLabel, Pack.Below, Pack.Right)
 nameField.setAnchor(Pack.UpperLeft, growX=True)
 helloLabel.setAnchor(Pack.UpperLeft, growX=True)
+button.setAnchor(Pack.UpperRight)
