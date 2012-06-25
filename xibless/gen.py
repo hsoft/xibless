@@ -1,6 +1,7 @@
 import os.path
 
 from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp, const
+from .view import Pack
 from .menu import Menu
 from .window import Window
 from .button import Button
@@ -41,6 +42,7 @@ def generate(module_path, dest):
         'FontFamily': FontFamily,
         'FontSize': FontSize,
         'FontTrait': FontTrait,
+        'Pack': Pack,
     }
     module_locals = {}
     execfile(module_path, module_globals, module_locals)
