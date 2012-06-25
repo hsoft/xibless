@@ -3,6 +3,9 @@ from .view import View
 class Label(View):
     OBJC_CLASS = 'NSTextField'
     
+    LAYOUT_DELTA_X = -3
+    LAYOUT_DELTA_W = 6
+    
     def __init__(self, parent, rect, text):
         View.__init__(self, parent, rect)
         self.text = text

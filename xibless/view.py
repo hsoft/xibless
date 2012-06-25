@@ -16,6 +16,16 @@ class Pack(object):
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
     
+    # About coordinates: The coordinates below are "Layout coordinates". They will be slightly
+    # adjusted at generation time.
+    # According to http://www.cocoabuilder.com/archive/cocoa/192607-interface-builder-layout-versus-frame.html
+    # the difference between "Frame Rectangle" and "Layout Rectangle" are hardcoded in IB, so we
+    # need to maintain our own hardcoded constants for each supported widget.
+    LAYOUT_DELTA_X = 0
+    LAYOUT_DELTA_Y = 0
+    LAYOUT_DELTA_W = 0
+    LAYOUT_DELTA_H = 0
+    
     def __init__(self, parent, rect):
         GeneratedItem.__init__(self)
         self.parent = parent
@@ -37,12 +47,36 @@ class View(GeneratedItem):
             y = ph - margin - h
         self.rect = (x, y, w, h)
     
+    def packRelativeTo(self, other, side):
+        assert other.parent is self.parent
+        ox, oy, ow, oh = other.rect
+        x, y, w, h = self.rect
+        margin = 8
+        if side in (Pack.Above, Pack.Under):
+            x = ox
+        elif side == Pack.Left:
+            x = ox - margin - w
+        else:
+            x = ox + ow + margin
+        if side in (Pack.Left, Pack.Right):
+            y = oy
+        elif side == Pack.Above:
+            y = oy + oh + margin
+        else:
+            y = oy - margin - h
+        self.rect = (x, y, w, h)
+    
     #--- Generate
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
         tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:$rect$];"
-        tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % self.rect
+        x, y, w, h = self.rect
+        x += self.LAYOUT_DELTA_X
+        y += self.LAYOUT_DELTA_Y
+        w += self.LAYOUT_DELTA_W
+        h += self.LAYOUT_DELTA_H
+        tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % (x, y, w, h)
         if self.parent is not None:
             tmpl.addtoparent = self.parent.generateAddSubview(self)
         return tmpl

@@ -4,6 +4,11 @@ from .view import View
 class Button(View):
     OBJC_CLASS = 'NSButton'
     
+    LAYOUT_DELTA_X = -6
+    LAYOUT_DELTA_Y = -8
+    LAYOUT_DELTA_W = 12
+    LAYOUT_DELTA_H = 12
+    
     def __init__(self, parent, rect, title, action=None):
         View.__init__(self, parent, rect)
         self.title = title
