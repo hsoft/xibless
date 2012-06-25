@@ -15,8 +15,9 @@ def configure(conf):
     conf.env.ARCH_COCOA = ['i386', 'x86_64']
 
 def build(ctx):
-    xibless.generate('MainMenu.py', 'MainMenu.h')
-    xibless.generate('MainWindow.py', 'MainWindow.h')
+    ctx.srcnode.make_node('autogen').mkdir()
+    xibless.generate('MainMenu.py', 'autogen/MainMenu.h')
+    xibless.generate('MainWindow.py', 'autogen/MainWindow.h')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
@@ -28,6 +29,7 @@ def build(ctx):
         features      = 'c cprogram',
         target        = appnode.find_node("Contents").find_node("MacOS").make_node(executablename),
         source        = 'main.m AppDelegate.m',
+        includes      = 'autogen',
         use           = 'COCOA',
     )
 

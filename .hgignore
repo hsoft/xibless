@@ -5,3 +5,5 @@ __pycache__
 *.pyc
 .waf*
 .lock-waf*
+*.egg-info
+demos/*/autogen

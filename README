@@ -1,0 +1,83 @@
+===================================
+xibless - Get rid of XIBs and XCode
+===================================
+
+``Xibless`` is a library that generates Objective-C code that builds Cocoa UIs. The goal of this library
+is to replace XIBs in XCode and, if you want, get rid of XCode altogether.
+
+With ``xibless``, instead of designing UIs with a WYSIWYG editor, you build them in a Python script,
+similarly to what you do when you build Qt UIs without the Designer. For example, a script like this::
+
+    result = Window(200, 200, 330, 110, "Tell me your name!")
+    nameLabel = Label(result, text="Name:")
+    nameField = TextField(result, text="")
+    helloLabel = Label(result, text="")
+    button = Button(result, title="Say Hello")
+
+    nameLabel.width = 45
+    nameLabel.packToCorner(Pack.UpperLeft)
+    nameField.packRelativeTo(nameLabel, Pack.Right, Pack.Middle)
+    nameField.fill(Pack.Right)
+    helloLabel.packRelativeTo(nameLabel, Pack.Below, Pack.Left)
+    helloLabel.fill(Pack.Right)
+    button.packRelativeTo(helloLabel, Pack.Below, Pack.Right)
+    nameField.setAnchor(Pack.UpperLeft, growX=True)
+    helloLabel.setAnchor(Pack.UpperLeft, growX=True)
+    button.setAnchor(Pack.UpperRight)
+
+would generate Objective-C code that build a form with a name field, a text label and a button. The
+second part of the script place the widgets on the form appropriately.
+
+**Although xibless is written in Python, the Objective-C code it generates has no Python dependency,
+so this tool is suitable for any Cocoa developer.**
+
+Why xibless?
+------------
+
+For many people XCode and its integrated interface builder work fine and to be fair, XCode is a
+nice tool. However, it has shortcomings, mostly just annoyances, but still, after a while,
+annoyances become... annoying. For example, when a XIB UI reaches a certain level of complexity, you
+never know, when doing minor updates, if you mistakenly messed something else. Because every
+modification, however minor it is, changes a big part of the XIB file, so you can't tell in the diff
+if the modification you've made was exclusively the one you wanted to make. There's also XIB
+localization, with its one-xib-copy-per-localization, which is less than optimal but hard to work
+around. Anyway, I'm not going to try to convince you. If you don't already want to get rid of XCode
+and/or XIBs, you probably don't need ``xibless``.
+
+Installation
+------------
+
+You can install ``xibless`` through pip::
+
+    pip install xibless
+
+or by downloading the source package and running::
+
+    python setup.py install
+
+
+Usage
+-----
+
+``xibless`` can be used either from the command line or through Python. To use it from the command
+line, you type::
+
+    xibless <source> <dest>
+
+``source`` is the path of the Python module you wrote that describes the UI you want to build.
+``dest`` is the path you want your resulting Objective-C file to be written at. To use ``xibless``
+directly from Python, the usage is similar::
+
+    import xibless
+    xibless.generate(source, dest)
+
+Now, all this does is that it generates UI code. ``xibless`` hasn't, yet, any integrates solution
+to let you easily build an XCode-less program. However, what you can do is to look at the ``demos``
+folder and base yourself on those demos (which are completely XCode-less) to build your own project.
+
+API Documentation
+-----------------
+
+``xibless`` is in very early development and there's no API documentation yet. For now, you'll have
+to figure that API from the demos and by digging directly in the source. Also, not that this API
+could wildly change before v1.0.
