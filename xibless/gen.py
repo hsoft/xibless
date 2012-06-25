@@ -2,7 +2,7 @@ import os.path
 
 from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp, const
 from .view import Pack
-from .menu import Menu
+from .menu import Menu, MainMenu
 from .window import Window
 from .button import Button
 from .label import Label
@@ -33,6 +33,7 @@ def generate(module_path, dest):
         'NSApp': NSApp,
         'const': const,
         'Menu': Menu,
+        'MainMenu': MainMenu,
         'Action': Action,
         'Window': Window,
         'Button': Button,
