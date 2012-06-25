@@ -5,6 +5,7 @@ from .menu import Menu
 from .window import Window
 from .button import Button
 from .label import Label
+from .textfield import TextField
 from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
@@ -35,6 +36,7 @@ def generate(module_path, dest):
         'Window': Window,
         'Button': Button,
         'Label': Label,
+        'TextField': TextField,
         'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,
