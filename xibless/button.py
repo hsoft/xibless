@@ -1,4 +1,5 @@
 from .base import const
+from .font import Font, FontFamily, FontSize
 from .view import View
 
 class Button(View):
@@ -9,11 +10,13 @@ class Button(View):
     LAYOUT_DELTA_W = 12
     LAYOUT_DELTA_H = 12
     
-    def __init__(self, parent, title, width, height=20, action=None):
-        View.__init__(self, parent, width, height)
+    DEFAULT_FONT = Font(FontFamily.System, FontSize.RegularControl)
+    
+    def __init__(self, parent, title, action=None):
+        View.__init__(self, parent, 80, 20)
         self.title = title
         self.action = action
-        self.font = None
+        self.font = self.DEFAULT_FONT
     
     def dependencies(self):
         return [self.font]

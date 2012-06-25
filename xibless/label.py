@@ -1,4 +1,5 @@
 from .view import View
+from .font import Font, FontFamily, FontSize
 
 class Label(View):
     OBJC_CLASS = 'NSTextField'
@@ -6,10 +7,12 @@ class Label(View):
     LAYOUT_DELTA_X = -3
     LAYOUT_DELTA_W = 6
     
-    def __init__(self, parent, text, width, height=17):
-        View.__init__(self, parent, width, height)
+    DEFAULT_FONT = Font(FontFamily.Label, FontSize.RegularControl)
+    
+    def __init__(self, parent, text):
+        View.__init__(self, parent, 100, 17)
         self.text = text
-        self.font = None
+        self.font = self.DEFAULT_FONT
     
     def dependencies(self):
         return [self.font]

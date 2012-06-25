@@ -172,7 +172,7 @@ class GeneratedItem(object):
     def generate(self, *args, **kwargs):
         result = ''
         for dependency in self.dependencies():
-            if isinstance(dependency, GeneratedItem):
+            if isinstance(dependency, GeneratedItem) and not dependency.generated:
                 result += dependency.generate()
         inittmpl = self.generateInit(*args, **kwargs)
         setprop = ''

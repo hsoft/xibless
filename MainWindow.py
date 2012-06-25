@@ -2,11 +2,11 @@ ownerclass = 'AppDelegate'
 
 # Init
 result = Window(200, 200, 330, 130, "Tell me your name!")
-nameLabel = Label(result, text="Name:", width=45)
-nameField = TextField(result, text="", width=100)
-helloLabel = Label(result, text="", width=100)
-button = Button(result, title="Say Hello", width=100, action=Action(owner, 'sayHello'))
-button.font = Font(FontFamily.System, FontSize.RegularControl)
+nameLabel = Label(result, text="Name:")
+nameLabel.width = 45
+nameField = TextField(result, text="")
+helloLabel = Label(result, text="")
+button = Button(result, title="Say Hello", action=Action(owner, 'sayHello'))
 
 # Owner Assignments
 owner.nameField = nameField

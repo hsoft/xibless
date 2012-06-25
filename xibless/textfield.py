@@ -1,12 +1,15 @@
 from .view import View
+from .font import Font, FontFamily, FontSize
 
 class TextField(View):
     OBJC_CLASS = 'NSTextField'
     
-    def __init__(self, parent, text, width, height=22):
-        View.__init__(self, parent, width, height)
+    DEFAULT_FONT = Font(FontFamily.Label, FontSize.RegularControl)
+    
+    def __init__(self, parent, text):
+        View.__init__(self, parent, 100, 22)
         self.text = text
-        self.font = None
+        self.font = self.DEFAULT_FONT
     
     def dependencies(self):
         return [self.font]
@@ -17,7 +20,5 @@ class TextField(View):
         self.properties['font'] = self.font
         self.properties['editable'] = True
         self.properties['selectable'] = True
-        # self.properties['drawsBackground'] = False
-        # self.properties['bordered'] = False
         return tmpl
     
