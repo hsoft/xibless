@@ -17,5 +17,7 @@ class Window(View):
         """
         tmpl.style = "NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask"
         self.properties['title'] = self.title
+        # Windows don't have autoresizingMask and because it's set in View, we have to remove it.
+        del self.properties['autoresizingMask']
         return tmpl
     

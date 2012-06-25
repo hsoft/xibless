@@ -1,4 +1,6 @@
-from .base import GeneratedItem
+from collections import namedtuple
+
+from .base import GeneratedItem, Literal
 
 class Pack(object):
     # Corners
@@ -12,6 +14,8 @@ class Pack(object):
     Right = 6
     Above = 7
     Under = 8
+
+Anchor = namedtuple('Anchor', 'corner growX growY')
 
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
@@ -33,6 +37,7 @@ class View(GeneratedItem):
         self.height = height
         self.x = 0
         self.y = 0
+        self.anchor = Anchor(Pack.UpperLeft, False, False)
     
     #--- Pack
     def packToCorner(self, corner):
@@ -69,6 +74,9 @@ class View(GeneratedItem):
             y = oy - margin - h
         self.x, self.y = x, y
     
+    def setAnchor(self, corner, growX=False, growY=False):
+        self.anchor = Anchor(corner, growX, growY)
+    
     #--- Generate
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
@@ -80,6 +88,28 @@ class View(GeneratedItem):
         w += self.LAYOUT_DELTA_W
         h += self.LAYOUT_DELTA_H
         tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % (x, y, w, h)
+        if self.anchor.growX and self.anchor.growY:
+            resizeMask = 'NSViewWidthSizable|NSViewHeightSizable'
+        elif self.anchor.growX:
+            if self.anchor.corner in (Pack.LowerLeft, Pack.LowerRight):
+                resizeMask = 'NSViewWidthSizable|NSViewMaxYMargin'
+            else:
+                resizeMask = 'NSViewWidthSizable|NSViewMinYMargin'
+        elif self.anchor.growY:
+            if self.anchor.corner in (Pack.UpperLeft, Pack.LowerLeft):
+                resizeMask = 'NSViewHeightSizable|NSViewMaxXMargin'
+            else:
+                resizeMask = 'NSViewHeightSizable|NSViewMinXMargin'
+        else:
+            if self.anchor.corner == Pack.LowerLeft:
+                resizeMask = 'NSViewMaxXMargin|NSViewMaxYMargin'
+            elif self.anchor.corner == Pack.UpperRight:
+                resizeMask = 'NSViewMinXMargin|NSViewMinYMargin'
+            elif self.anchor.corner == Pack.LowerRight:
+                resizeMask = 'NSViewMinXMargin|NSViewMaxYMargin'
+            else:
+                resizeMask = 'NSViewMaxXMargin|NSViewMinYMargin'
+        self.properties['autoresizingMask'] = Literal(resizeMask)
         if self.parent is not None:
             tmpl.addtoparent = self.parent.generateAddSubview(self)
         return tmpl
