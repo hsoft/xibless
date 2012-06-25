@@ -58,7 +58,7 @@ or by downloading the source package and running::
 
     python setup.py install
 
-To build the demos in the ``demos`` folder, ``cd`` into it and type:
+To build the demos in the ``demos`` folder, ``cd`` into it and type::
 
     ./waf configure
     ./waf
