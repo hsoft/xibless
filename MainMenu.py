@@ -6,7 +6,6 @@ windowMenu = result.addMenu("Window")
 helpMenu = result.addMenu("Help")
 
 fileMenu.addItem("About MyApp")
-fileMenu.addItem("test", Action(owner, 'fooAction'))
 fileMenu.addSeparator()
 NSApp.servicesMenu = fileMenu.addMenu("Services")
 fileMenu.addSeparator()
