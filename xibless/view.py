@@ -1,3 +1,5 @@
+from __future__ import division
+
 from collections import namedtuple, defaultdict
 
 from .base import GeneratedItem, Literal
@@ -82,7 +84,8 @@ class View(GeneratedItem):
         else:
             x = ox + ow + margin
         if side in (Pack.Left, Pack.Right):
-            y = oy
+            # Align the widget "Y-middles" instead of "Y-lows"
+            y = oy + ((oh-h) / 2)
         elif side == Pack.Above:
             y = oy + oh + margin
         else:
