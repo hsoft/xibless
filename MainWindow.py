@@ -1,12 +1,23 @@
 ownerclass = 'AppDelegate'
-result = Window(200, 200, 350, 200, "This is a title")
-button = Button(result, title="Hello!", width=100, action=Action(owner, 'fooAction'))
+
+# Init
+result = Window(200, 200, 330, 130, "Tell me your name!")
+nameLabel = Label(result, text="Name:", width=45)
+nameField = TextField(result, text="", width=100)
+helloLabel = Label(result, text="", width=100)
+button = Button(result, title="Say Hello", width=100, action=Action(owner, 'sayHello'))
 button.font = Font(FontFamily.System, FontSize.RegularControl)
-label = Label(result, text="This is a label", width=150)
-textfield = TextField(result, text="This is a textfield", width=150)
-textfield.packToCorner(Pack.UpperLeft)
-button.packRelativeTo(textfield, Pack.Right)
-label.packToCorner(Pack.LowerRight)
-label.setAnchor(Pack.LowerRight)
-textfield.setAnchor(Pack.UpperLeft, growX=True)
-button.setAnchor(Pack.UpperRight)
+
+# Owner Assignments
+owner.nameField = nameField
+owner.helloLabel = helloLabel
+
+# Layout
+nameLabel.packToCorner(Pack.UpperLeft)
+nameField.packRelativeTo(nameLabel, Pack.Right)
+nameField.fill(Pack.Right)
+helloLabel.packRelativeTo(nameLabel, Pack.Below)
+helloLabel.fill(Pack.Right)
+button.packRelativeTo(helloLabel, Pack.Below)
+nameField.setAnchor(Pack.UpperLeft, growX=True)
+helloLabel.setAnchor(Pack.UpperLeft, growX=True)

@@ -1,8 +1,14 @@
 #import "AppDelegate.h"
 
 @implementation AppDelegate
-- (void)fooAction
+
+@synthesize nameField;
+@synthesize helloLabel;
+
+- (void)sayHello
 {
-    NSLog(@"hello there!");
+    NSString *name = [nameField stringValue];
+    NSString *msg = [NSString stringWithFormat:@"Hello %@!", name];
+    [helloLabel setStringValue:msg];
 }
 @end

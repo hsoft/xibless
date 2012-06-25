@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 from .base import GeneratedItem, Literal
 
@@ -13,13 +13,26 @@ class Pack(object):
     Left = 5
     Right = 6
     Above = 7
-    Under = 8
+    Below = 8
+    
+    @staticmethod
+    def oppositeSide(side):
+        if side == Pack.Left:
+            return Pack.Right
+        elif side == Pack.Right:
+            return Pack.Left
+        elif side == Pack.Above:
+            return Pack.Below
+        elif side == Pack.Below:
+            return Pack.Above
 
 Anchor = namedtuple('Anchor', 'corner growX growY')
 
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
     
+    BORDER_MARGIN = 20
+    INTER_VIEW_MARGIN = 8
     # About coordinates: The coordinates below are "Layout coordinates". They will be slightly
     # adjusted at generation time.
     # According to http://www.cocoabuilder.com/archive/cocoa/192607-interface-builder-layout-versus-frame.html
@@ -38,13 +51,15 @@ class View(GeneratedItem):
         self.x = 0
         self.y = 0
         self.anchor = Anchor(Pack.UpperLeft, False, False)
+        # a mapping PackingSide: {views} which is used in fill() to know how much we can fill
+        self.neighbors = defaultdict(set)
     
     #--- Pack
     def packToCorner(self, corner):
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
-        margin = 20
+        margin = self.BORDER_MARGIN
         if corner in (Pack.LowerLeft, Pack.UpperLeft):
             x = margin
         else:            
@@ -59,8 +74,8 @@ class View(GeneratedItem):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
-        margin = 8
-        if side in (Pack.Above, Pack.Under):
+        margin = self.INTER_VIEW_MARGIN
+        if side in (Pack.Above, Pack.Below):
             x = ox
         elif side == Pack.Left:
             x = ox - margin - w
@@ -73,9 +88,36 @@ class View(GeneratedItem):
         else:
             y = oy - margin - h
         self.x, self.y = x, y
+        self.neighbors[Pack.oppositeSide(side)].add(other)
+        other.neighbors[side].add(self)
     
     def setAnchor(self, corner, growX=False, growY=False):
         self.anchor = Anchor(corner, growX, growY)
+    
+    def fill(self, side):
+        assert self.parent is not None
+        px, py, pw, ph = self.parent.rect
+        x, y, w, h = self.rect
+        neighbors = self.neighbors[side]
+        margin = self.BORDER_MARGIN
+        if side == Pack.Right:
+            nx = max([(n.x + n.width) for n in neighbors] + [x+w])
+            goal = pw - margin
+            growby = goal - nx
+            w += growby
+            for n in neighbors:
+                n.x += growby
+        elif side == Pack.Left:
+            nx = min([n.x for n in neighbors] + [x])
+            goal = margin
+            growby = nx - goal
+            w += growby
+            x -= growby
+            for n in neighbors:
+                n.x -= growby
+        else:
+            raise Exception("Vertical fill not supported yet")
+        self.x, self.y, self.width, self.height = x, y, w, h
     
     #--- Generate
     def generateInit(self):
