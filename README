@@ -74,16 +74,16 @@ directly from Python, the usage is similar::
     import xibless
     xibless.generate(source, dest)
 
-Now, all this does is that it generates UI code. ``xibless`` hasn't, yet, any integrates solution
-to let you easily build an XCode-less program. However, what you can do is to look at the ``demos``
+Now, all this does is that it generates UI code. ``xibless`` hasn't, yet, any integrated solution
+to let you easily build a XCode-less program. However, what you can do is to look at the ``demos``
 folder and base yourself on those demos (which are completely XCode-less) to build your own project.
 
 Early Development
 -----------------
 
 ``xibless`` is in very early development and there's no API documentation yet. For now, you'll have
-to figure that API from the demos and by digging directly in the source. Also, not that this API
+to figure that API from the demos and by digging directly in the source. Also, note that this API
 could wildly change before v1.0.
 
 Also, the number of rough edges at the moment are incalculable. There are no error message for
-invalid UI scripts, so it might be very hard, for now, to figure out why your script don't work.
+invalid UI scripts, so it might be very hard, for now, to figure out why your scripts don't work.
