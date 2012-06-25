@@ -26,10 +26,13 @@ class View(GeneratedItem):
     LAYOUT_DELTA_W = 0
     LAYOUT_DELTA_H = 0
     
-    def __init__(self, parent, rect):
+    def __init__(self, parent, width, height):
         GeneratedItem.__init__(self)
         self.parent = parent
-        self.rect = rect
+        self.width = width
+        self.height = height
+        self.x = 0
+        self.y = 0
     
     #--- Pack
     def packToCorner(self, corner):
@@ -45,7 +48,7 @@ class View(GeneratedItem):
             y = margin
         else:            
             y = ph - margin - h
-        self.rect = (x, y, w, h)
+        self.x, self.y = x, y
     
     def packRelativeTo(self, other, side):
         assert other.parent is self.parent
@@ -64,14 +67,14 @@ class View(GeneratedItem):
             y = oy + oh + margin
         else:
             y = oy - margin - h
-        self.rect = (x, y, w, h)
+        self.x, self.y = x, y
     
     #--- Generate
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
         tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:$rect$];"
-        x, y, w, h = self.rect
+        x, y, w, h = self.x, self.y, self.width, self.height
         x += self.LAYOUT_DELTA_X
         y += self.LAYOUT_DELTA_Y
         w += self.LAYOUT_DELTA_W
@@ -84,3 +87,6 @@ class View(GeneratedItem):
     def generateAddSubview(self, subview):
         return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
     
+    @property
+    def rect(self):
+        return self.x, self.y, self.width, self.height

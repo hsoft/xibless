@@ -3,8 +3,8 @@ from .view import View
 class TextField(View):
     OBJC_CLASS = 'NSTextField'
     
-    def __init__(self, parent, rect, text):
-        View.__init__(self, parent, rect)
+    def __init__(self, parent, text, width, height=22):
+        View.__init__(self, parent, width, height)
         self.text = text
         self.font = None
     

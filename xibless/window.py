@@ -3,8 +3,10 @@ from .view import View
 class Window(View):
     OBJC_CLASS = 'NSWindow'
     
-    def __init__(self, rect, title):
-        View.__init__(self, None, rect)
+    def __init__(self, x, y, width, height, title):
+        View.__init__(self, None, width, height)
+        self.x = x
+        self.y = y
         self.title = title
     
     def generateInit(self):

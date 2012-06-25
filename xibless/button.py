@@ -9,8 +9,8 @@ class Button(View):
     LAYOUT_DELTA_W = 12
     LAYOUT_DELTA_H = 12
     
-    def __init__(self, parent, rect, title, action=None):
-        View.__init__(self, parent, rect)
+    def __init__(self, parent, title, width, height=20, action=None):
+        View.__init__(self, parent, width, height)
         self.title = title
         self.action = action
         self.font = None

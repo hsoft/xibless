@@ -6,8 +6,8 @@ class Label(View):
     LAYOUT_DELTA_X = -3
     LAYOUT_DELTA_W = 6
     
-    def __init__(self, parent, rect, text):
-        View.__init__(self, parent, rect)
+    def __init__(self, parent, text, width, height=17):
+        View.__init__(self, parent, width, height)
         self.text = text
         self.font = None
     
