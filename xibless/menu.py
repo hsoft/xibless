@@ -1,4 +1,4 @@
-from .base import GeneratedItem, KeyShortcut
+from .base import GeneratedItem, KeyShortcut, Literal
 
 class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'
@@ -13,18 +13,15 @@ class MenuItem(GeneratedItem):
         self.tag = tag
     
     def generateInit(self, menuname):
+        tmpl = GeneratedItem.generateInit(self)
         if self.name == "-":
-            tmpl = self.template("[$menuname$ addItem:[NSMenuItem separatorItem]];\n")
+            tmpl.allocinit = "[$menuname$ addItem:[NSMenuItem separatorItem]];\n"
+            tmpl.setup = ""
         else:
-            tmpl = self.template("""
-                NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:@"$name$" action:nil keyEquivalent:@"$key$"];
-                $linkaction$
-                $setkeymask$
-                $settag$
-            """)
+            tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:@\"$name$\" action:nil keyEquivalent:@\"$key$\"];"
+            tmpl.setup = "$linkaction$"
         tmpl.name = self.name
         tmpl.menuname = menuname
-        tmpl.settarget = tmpl.setkeymask = tmpl.settag = ""
         if self.action:
             tmpl.linkaction = self.action.generate(self.varname)
         else:
@@ -32,20 +29,19 @@ class MenuItem(GeneratedItem):
         if self.shortcut:
             tmpl.key = self.shortcut.key
             if self.shortcut.flags:
-                tmpl.setkeymask = "[$varname$ setKeyEquivalentModifierMask:%s];" % self.shortcut.flags
+                self.properties['keyEquivalentModifierMask'] = Literal(self.shortcut.flags)
         else:
             tmpl.key = "nil"
-        if self.tag is not None:
-            tag = self.tag._objcAccessor()
-            tmpl.settag = "[$varname$ setTag:%s];" % tag
+        self.properties['tag'] = self.tag
         return tmpl
     
 
-class Menu(MenuItem):
+class Menu(GeneratedItem):
     OBJC_CLASS = 'NSMenu'
     
     def __init__(self, name):
-        MenuItem.__init__(self, name, None, None)
+        GeneratedItem.__init__(self)
+        self.name = name
         self.items = []
     
     def add(self, menu_or_item):
@@ -65,27 +61,26 @@ class Menu(MenuItem):
         return menu
     
     def generateInit(self, menuname=None):
+        tmpl = GeneratedItem.generateInit(self)
         if menuname:
-            tmpl = self.template("""
+            tmpl.allocinit = """
                 NSMenuItem *_tmpitem = [$menuname$ addItemWithTitle:@"$name$" action:nil keyEquivalent:@""];
                 NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
                 [$menuname$ setSubmenu:$varname$ forItem:_tmpitem];
-                $subitemscode$
-            """)
+            """
         else:
-            tmpl = self.template("""
+            tmpl.allocinit = """
                 NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
-                $subitemscode$
-            """)
+            """
         tmpl.name = self.name
         tmpl.menuname = menuname
         subitemscode = []
         for item in self.items:
-            assert isinstance(item, MenuItem)
+            assert isinstance(item, (Menu, MenuItem))
             item.varname = self.varname + '_sub'
             code = item.generate(self.varname)
             # We wrap it in a block to avoid naming clashes.
             subitemscode.append('{' + code + '}')
-        tmpl.subitemscode = '\n'.join(subitemscode)
+        tmpl.setup = '\n'.join(subitemscode)
         return tmpl
     

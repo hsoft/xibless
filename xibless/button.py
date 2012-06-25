@@ -1,3 +1,4 @@
+from .base import const
 from .view import View
 
 class Button(View):
@@ -14,22 +15,14 @@ class Button(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        tmplsetup = self.template("""
-            [$varname$ setTitle:@"$title$"];
-            [$varname$ setButtonType:NSMomentaryLightButton];
-            [$varname$ setBezelStyle:NSRoundedBezelStyle];
-            $setfont$
-            $linkaction$
-        """)
-        tmplsetup.title = self.title
-        if self.font:
-            tmplsetup.setfont = "[$varname$ setFont:%s];\n" % self.font.varname
-        else:
-            tmplsetup.setfont = ''
+        self.properties['title'] = self.title
+        self.properties['font'] = self.font
+        self.properties['buttonType'] = const.NSMomentaryLightButton
+        self.properties['bezelStyle'] = const.NSRoundedBezelStyle
+        tmpl.viewsetup = "$linkaction$\n"
         if self.action:
-            tmplsetup.linkaction = self.action.generate(self.varname)
+            tmpl.linkaction = self.action.generate(self.varname)
         else:
-            tmplsetup.linkaction = ''
-        tmpl.viewsetup = tmplsetup.render()
+            tmpl.linkaction = ''
         return tmpl
     

@@ -9,18 +9,16 @@ class Window(GeneratedItem):
         self.title = title
     
     def generateInit(self):
-        tmpl = self.template("""
+        tmpl = GeneratedItem.generateInit(self)
+        tmpl.allocinit = """
             NSWindow *$varname$ = [[NSWindow alloc] initWithContentRect:NSMakeRect($rect$)
                 styleMask:$style$ backing:NSBackingStoreBuffered defer:NO];
-            [$varname$ setTitle:@"$title$"];
-        """)
+        """
         tmpl.rect = "%d, %d, %d, %d" % self.rect
         tmpl.style = "NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask"
-        tmpl.title = self.title
+        self.properties['title'] = self.title
         return tmpl
     
     def generateAddSubview(self, subview):
-        tmpl = self.template("[[$varname$ contentView] addSubview:$subview$];\n")
-        tmpl.subview = subview.varname
-        return tmpl.render()
+        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
     

@@ -13,19 +13,11 @@ class Label(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        tmplsetup = self.template("""
-            [$varname$ setStringValue:@"$text$"];
-            [$varname$ setEditable:NO];
-            [$varname$ setSelectable:NO];
-            [$varname$ setDrawsBackground:NO];
-            [$varname$ setBordered:NO];
-            $setfont$
-        """)
-        tmplsetup.text = self.text
-        if self.font:
-            tmplsetup.setfont = "[$varname$ setFont:%s];\n" % self.font.varname
-        else:
-            tmplsetup.setfont = ''
-        tmpl.viewsetup = tmplsetup.render()
+        self.properties['stringValue'] = self.text
+        self.properties['font'] = self.font
+        self.properties['editable'] = False
+        self.properties['selectable'] = False
+        self.properties['drawsBackground'] = False
+        self.properties['bordered'] = False
         return tmpl
     

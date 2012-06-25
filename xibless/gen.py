@@ -1,6 +1,6 @@
 import os.path
 
-from .base import CodeTemplate, KeyValueId, Action, GeneratedItem
+from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp, const
 from .menu import Menu
 from .window import Window
 from .button import Button
@@ -26,9 +26,6 @@ return result;
 """
 
 def generate(module_path, dest):
-    owner = KeyValueId(None, 'owner')
-    NSApp = KeyValueId(None, 'NSApp')
-    const = KeyValueId(None, 'const', fakeParent=True)
     module_globals = {
         'owner': owner,
         'NSApp': NSApp,
