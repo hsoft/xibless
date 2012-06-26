@@ -3,8 +3,8 @@ UI Scripts Basics
 =================
 
 A ``xibless`` UI script is a Python script that describes a UI to build through Objective-C code
-that ``xibless`` is going to generate from that script. It creates objects like :ref:`Window` or
-:ref:`Button`, sets their properties and place them in their superview.
+that ``xibless`` is going to generate from that script. It creates objects like :class:`Window` or
+:class:`Button`, sets their properties and place them in their superview.
 
 When a UI script is generated, it creates an Objective-C unit with one function that takes one
 argument, the "File Owner", and returns the script's ``result`` (see next section). Here's an
@@ -18,7 +18,7 @@ Namespace and special variables
 -------------------------------
 
 Every class described in the :doc:`api` section are directly in the script namespace. Therefore,
-if you want to create a :ref:`Label`, you do it thus::
+if you want to create a :class:`Label`, you do it thus::
 
     label = Label(parent, text="hello!")
 
