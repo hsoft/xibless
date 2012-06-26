@@ -20,13 +20,12 @@ setup(
     author='Virgil Dupras',
     author_email='hsoft@hardcoded.net',
     packages=['xibless'],
-    scripts=[],
-    install_requires=[],
     url='http://hg.hardcoded.net/xibless/',
     license='BSD',
     description="Generate Objective-C code that builds Cocoa UIs. Replaces XCode's XIBs",
     long_description=LONG_DESC,
     classifiers=CLASSIFIERS,
+    include_package_data=True,
     entry_points = {
         'console_scripts': [
             'xibless = xibless:main',

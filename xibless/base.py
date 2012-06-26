@@ -86,17 +86,22 @@ class KeyValueId(object):
     
     # the methods below aren't actually private, it's just that we prepend them with underscores to
     # avoid name clashes.
-    def _dottedAccessor(self):
+    def _objcAccessor(self):
         if self._parent and not self._parent._fakeParent:
-            return '%s.%s' % (self._parent._dottedAccessor(), self._name)
+            if self.__parent._name == 'nil':
+                return 'nil'
+            else:
+                return '[%s %s]' % (self._parent._objcAccessor(), self._name)
         else:
             return self._name
     
-    def _objcAccessor(self):
-        if self._parent and not self._parent._fakeParent:
-            return '[%s %s]' % (self._parent._objcAccessor(), self._name)
-        else:
-            return self._name
+    def _clear(self):
+        for child in self._children.values():
+            child._clear()
+        self._children.clear()
+        for keys in KeyValueId.VALUE2KEYS.values():
+            keys.discard(self)
+    
 
 owner = KeyValueId(None, 'owner')
 NSApp = KeyValueId(None, 'NSApp')
