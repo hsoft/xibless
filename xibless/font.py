@@ -79,16 +79,15 @@ class Font(GeneratedItem):
         if self.family in FAMILY2METHOD:
             tmpl.fontinit = "%s:_fontSize" % FAMILY2METHOD[self.family]
         else:
-            tmpl.fontinit = "fontWithName:%s size:_fontSize" % self.family
+            tmpl.fontinit = "fontWithName:@\"%s\" size:_fontSize" % self.family
         if self.size in SIZE2METHOD:
             tmpl.sizeinit = "[NSFont %s]" % SIZE2METHOD[self.size]
         elif self.size in SIZE2CONTROLCONST:
             tmpl.sizeinit = "[NSFont systemFontSizeForControlSize:%s]" % SIZE2CONTROLCONST[self.size]
         else:
             tmpl.sizeinit = str(self.size)
-        traitsetup = ""
-        for trait in self.traits:
-            traitsetup += "[[NSFontManager sharedFontManager] convertFont:%s toHaveTrait:%s];\n" % (self.varname, TRAIT2CONST[trait])
-        tmpl.setup = traitsetup
+        if self.traits:
+            traits = '|'.join(TRAIT2CONST[trait] for trait in self.traits)
+            tmpl.setup = "$varname$ = [[NSFontManager sharedFontManager] convertFont:$varname$ toHaveTrait:%s];\n" % traits
         return tmpl
     
