@@ -13,10 +13,11 @@ CLASSIFIERS = [
 ]
 
 LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
+VERSION = '0.1.0'
 
 setup(
     name='xibless',
-    version='0.1.0',
+    version=VERSION,
     author='Virgil Dupras',
     author_email='hsoft@hardcoded.net',
     packages=['xibless'],
@@ -30,5 +31,10 @@ setup(
         'console_scripts': [
             'xibless = xibless:main',
         ],
+    },
+    command_options={
+       'build_sphinx': {
+           'version': ('setup.py', VERSION),
+           'release': ('setup.py', VERSION)}
     },
 )
