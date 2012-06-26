@@ -9,6 +9,22 @@ except NameError: # python 3
 def upFirstLetter(s):
     return s[0].upper() + s[1:]
 
+def convertValueToObjc(value):
+    if isinstance(value, GeneratedItem):
+        return value.varname
+    elif isinstance(value, KeyValueId):
+        return value._objcAccessor()
+    elif isinstance(value, Literal):
+        return value.value
+    elif isinstance(value, basestring):
+        return '@"%s"' % value
+    elif isinstance(value, bool):
+        return 'YES' if value else 'NO'
+    elif isinstance(value, (int, float)):
+        return str(value)
+    else:
+        raise TypeError("Can't figure out the property's type")
+
 class CodeTemplate(object):
     def __init__(self, template):
         self._template = template
@@ -179,20 +195,7 @@ class GeneratedItem(object):
         for key, value in self.properties.items():
             if value is None:
                 continue
-            if isinstance(value, GeneratedItem):
-                value = value.varname
-            elif isinstance(value, KeyValueId):
-                value = value._objcAccessor()
-            elif isinstance(value, Literal):
-                value = value.value
-            elif isinstance(value, basestring):
-                value = '@"%s"' % value
-            elif isinstance(value, bool):
-                value = 'YES' if value else 'NO'
-            elif isinstance(value, (int, float)):
-                value = str(value)
-            else:
-                raise TypeError("Can't figure out the property's type")
+            value = convertValueToObjc(value)
             setprop += '[$varname$ set%s:%s];\n' % (upFirstLetter(key), value)
         inittmpl.setprop = setprop
         result += inittmpl.render()

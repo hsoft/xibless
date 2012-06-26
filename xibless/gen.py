@@ -7,6 +7,7 @@ from .window import Window
 from .button import Button, Checkbox
 from .label import Label
 from .textfield import TextField
+from .popup import Popup
 from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
@@ -40,6 +41,7 @@ def generate(module_path, dest):
         'Checkbox': Checkbox,
         'Label': Label,
         'TextField': TextField,
+        'Popup': Popup,
         'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,
