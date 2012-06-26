@@ -4,7 +4,7 @@ from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp,
 from .view import Pack
 from .menu import Menu, MainMenu
 from .window import Window
-from .button import Button
+from .button import Button, Checkbox
 from .label import Label
 from .textfield import TextField
 from .font import Font, FontFamily, FontSize, FontTrait
@@ -37,6 +37,7 @@ def generate(module_path, dest):
         'Action': Action,
         'Window': Window,
         'Button': Button,
+        'Checkbox': Checkbox,
         'Label': Label,
         'TextField': TextField,
         'Font': Font,

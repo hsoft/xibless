@@ -14,6 +14,9 @@ class Button(View):
     
     def __init__(self, parent, title, action=None):
         View.__init__(self, parent, 80, 20)
+        self.buttonType = const.NSMomentaryLightButton
+        self.bezelStyle = const.NSRoundedBezelStyle
+        self.state = None
         self.title = title
         self.action = action
         self.font = self.DEFAULT_FONT
@@ -25,12 +28,20 @@ class Button(View):
         tmpl = View.generateInit(self)
         self.properties['title'] = self.title
         self.properties['font'] = self.font
-        self.properties['buttonType'] = const.NSMomentaryLightButton
-        self.properties['bezelStyle'] = const.NSRoundedBezelStyle
+        self.properties['buttonType'] = self.buttonType
+        self.properties['bezelStyle'] = self.bezelStyle
+        if self.state is not None:
+            self.properties['state'] = self.state
         tmpl.viewsetup = "$linkaction$\n"
         if self.action:
             tmpl.linkaction = self.action.generate(self.varname)
         else:
             tmpl.linkaction = ''
         return tmpl
+    
+
+class Checkbox(Button):
+    def __init__(self, parent, title):
+        Button.__init__(self, parent, title)
+        self.buttonType = const.NSSwitchButton
     

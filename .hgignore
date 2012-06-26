@@ -1,7 +1,8 @@
 syntax: glob
 
-build
 __pycache__
+build
+dist
 *.pyc
 .waf*
 .lock-waf*

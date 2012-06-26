@@ -1,0 +1,48 @@
+#! /usr/bin/env python
+
+import plistlib
+import xibless
+
+top = '.'
+out = 'build'
+
+def options(opt):
+    opt.load('compiler_c')
+
+def configure(conf):
+    conf.load('compiler_c')
+    conf.env.FRAMEWORK_COCOA = 'Cocoa'
+    conf.env.ARCH_COCOA = ['i386', 'x86_64']
+
+def build(ctx):
+    ctx.srcnode.make_node('autogen').mkdir()
+    xibless.generate('MainMenu.py', 'autogen/MainMenu.h')
+    xibless.generate('MainWindow.py', 'autogen/MainWindow.h')
+    infoplist = ctx.srcnode.find_node("Info.plist")
+    info = plistlib.readPlist(infoplist.abspath())
+    appname = info['CFBundleName']
+    executablename = info['CFBundleExecutable']
+    appfilename = appname + ".app"
+    appnode = ctx.bldnode.make_node(appfilename)
+    create_app_skeleton(ctx, appnode, infoplist)
+    ctx.program(
+        features      = 'c cprogram',
+        target        = appnode.find_node("Contents").find_node("MacOS").make_node(executablename),
+        source        = 'main.m',
+        includes      = 'autogen',
+        use           = 'COCOA',
+    )
+
+def create_app_skeleton(ctx, dest, info_plist_path):
+    contents = dest.make_node("Contents")
+    contents.make_node("MacOS").mkdir()
+    ctx(rule="cp ${SRC} ${TGT}", source=info_plist_path, target=contents.make_node("Info.plist"))
+    open(contents.make_node("PkgInfo").abspath(), 'wt').write("APPLxxxx")
+    
+
+from waflib import TaskGen
+@TaskGen.extension('.m')
+def m_hook(self, node):
+    """Alias .m files to be compiled the same as .c files, gcc will do the right thing."""
+    return self.create_compiled_task('c', node)
+
