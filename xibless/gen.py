@@ -11,6 +11,7 @@ from .button import Button, Checkbox
 from .label import Label
 from .textfield import TextField
 from .popup import Popup
+from .combo import Combobox
 from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
@@ -48,6 +49,7 @@ def generate(modulePath, dest, ownerless=False):
         'Label': Label,
         'TextField': TextField,
         'Popup': Popup,
+        'Combobox': Combobox,
         'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,
