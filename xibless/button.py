@@ -41,6 +41,11 @@ class Button(View):
     
 
 class Checkbox(Button):
+    LAYOUT_DELTA_X = -2
+    LAYOUT_DELTA_Y = -2
+    LAYOUT_DELTA_W = 4
+    LAYOUT_DELTA_H = 4
+    
     def __init__(self, parent, title):
         Button.__init__(self, parent, title)
         self.buttonType = const.NSSwitchButton
