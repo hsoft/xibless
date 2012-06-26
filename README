@@ -34,63 +34,8 @@ so this tool is suitable for any Cocoa developer.**
 ``xibless`` runs on Python 2.7 and up. This means that if you're on OS X 10.7 or newer, you can use
 the built-in Python. Otherwise, you'll have to install a more recent version of Python.
 
-Why xibless?
-------------
-
-For many people XCode and its integrated interface builder work fine and to be fair, XCode is a
-nice tool. However, it has shortcomings, mostly just annoyances, but still, after a while,
-annoyances become... annoying. For example, when a XIB UI reaches a certain level of complexity, you
-never know, when doing minor updates, if you mistakenly messed up something else. Because every
-modification, however minor it is, changes a big part of the XIB file, you can't tell in the diff
-if the modification you've made was exclusively the one you wanted to make. There's also XIB
-localization, with its one-xib-copy-per-localization, which is less than optimal but hard to work
-around. Anyway, I'm not going to try to convince you. If you don't already want to get rid of XCode
-and/or XIBs, you probably don't need ``xibless``.
-
-Installation
-------------
-
-You can install ``xibless`` through pip::
-
-    pip install xibless
-
-or by downloading the source package and running::
-
-    python setup.py install
-
-To build the demos in the ``demos`` folder, ``cd`` into it and type::
-
-    ../waf configure
-    ../waf
-
-The resulting app will be in the ``build`` folder.
-
-Usage
------
-
-``xibless`` can be used either from the command line or through Python. To use it from the command
-line, you type::
-
-    xibless compile <source> <dest>
-
-``source`` is the path of the Python module you wrote that describes the UI you want to build.
-``dest`` is the path you want your resulting Objective-C file to be written at. To use ``xibless``
-directly from Python, the usage is similar::
-
-    import xibless
-    xibless.generate(source, dest)
-
-The command line ``xibless`` command also has a ``run`` command letting you quicky see what your
-script looks like as a real UI. If you run::
-
-    xibless run <source>
-
-the source script will be compiled and wrapped around a "RunUI" app which will simply display the
-window.
-
-Now, all this does is that it generates UI code. ``xibless`` hasn't, yet, any integrated solution
-to let you easily build a XCode-less program. However, what you can do is to look at the ``demos``
-folder and base yourself on those demos (which are completely XCode-less) to build your own project.
+Please refer to the `Documentation <http://packages.python.org/xibless/>`_ for installation and
+usage instructions.
 
 Early Development
 -----------------

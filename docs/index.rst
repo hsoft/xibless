@@ -1,22 +1,50 @@
-.. xibless documentation master file, created by
-   sphinx-quickstart on Tue Jun 26 12:13:25 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to xibless's documentation!
+xibless - Get rid of XIBs and XCode
 ===================================
+
+``xibless`` is a library that generates Objective-C code that builds Cocoa UIs. The goal of this library
+is to replace XIBs in XCode and, if you want, get rid of XCode altogether.
+
+With ``xibless``, instead of designing UIs with a WYSIWYG editor, you build them in a Python script,
+similarly to what you do when you build Qt UIs without the Designer. For example, a script like this::
+
+    result = Window(200, 200, 330, 110, "Tell me your name!")
+    nameLabel = Label(result, text="Name:")
+    nameField = TextField(result, text="")
+    helloLabel = Label(result, text="")
+    button = Button(result, title="Say Hello")
+
+    nameLabel.width = 45
+    nameLabel.packToCorner(Pack.UpperLeft)
+    nameField.packRelativeTo(nameLabel, Pack.Right, Pack.Middle)
+    nameField.fill(Pack.Right)
+    helloLabel.packRelativeTo(nameLabel, Pack.Below, Pack.Left)
+    helloLabel.fill(Pack.Right)
+    button.packRelativeTo(helloLabel, Pack.Below, Pack.Right)
+    nameField.setAnchor(Pack.UpperLeft, growX=True)
+    helloLabel.setAnchor(Pack.UpperLeft, growX=True)
+    button.setAnchor(Pack.UpperRight)
+
+would generate Objective-C code that looks like this:
+
+.. image:: images/helloworld.png
+
+The first part of the script creates the widgets and the second part place them in the window.
+
+**Although xibless is written in Python, the Objective-C code it generates has no Python dependency,
+so this tool is suitable for any Cocoa developer.**
+
+``xibless`` runs on Python 2.7 and up. This means that if you're on OS X 10.7 or newer, you can use
+the built-in Python. Otherwise, you'll have to install a more recent version of Python.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   
+   install
+   why_xibless
+   usage
+   early_development
+   basics
+   layout
+   api

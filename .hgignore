@@ -8,4 +8,4 @@ dist
 .lock-waf*
 *.egg-info
 demos/*/autogen
-docs/_*
+docs/_build
