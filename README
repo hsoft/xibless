@@ -34,8 +34,8 @@ so this tool is suitable for any Cocoa developer.**
 ``xibless`` runs on Python 2.7 and up. This means that if you're on OS X 10.7 or newer, you can use
 the built-in Python. Otherwise, you'll have to install a more recent version of Python.
 
-Please refer to the `Documentation <http://packages.python.org/xibless/>`_ for installation and
-usage instructions.
+**Please refer to the `Documentation <http://packages.python.org/xibless/>`_ for installation and
+usage instructions.**
 
 Early Development
 -----------------
