@@ -17,7 +17,7 @@ example of what its signature might look like:
 Namespace and special variables
 -------------------------------
 
-Every class described in the :doc:`api` section are directly in the script namespace. Therefore,
+Every class described in the :doc:`api/index` section are directly in the script namespace. Therefore,
 if you want to create a :class:`Label`, you do it thus::
 
     label = Label(parent, text="hello!")

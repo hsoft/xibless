@@ -47,4 +47,4 @@ Contents:
    early_development
    basics
    layout
-   api
+   api/index
