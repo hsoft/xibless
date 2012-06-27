@@ -12,12 +12,13 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   button
-   combo
-   font
-   label
-   menu
-   popup
-   textfield
    view
    window
+   action
+   font
+   menu
+   button
+   label
+   textfield
+   popup
+   combo

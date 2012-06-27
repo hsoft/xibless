@@ -6,6 +6,10 @@ but to be subclassed.
 
 .. class:: View(parent, width, height)
 
+    :param parent: A :class:`View` instance. See :attr:`parent`.
+    :param width: Numeric. See :attr:`width`.
+    :param height: Numeric. See :attr:`height`.
+
     The ``View`` isn't mean't to be instatiated directly, but every subclass still has to call this
     contructor. Every view has a parent, which in Cocoa is called superview. ``x`` and ``y`` are
     usually set by layout methods, so we don't care about them (they're initialized to ``0``).
@@ -35,29 +39,35 @@ but to be subclassed.
         *Numeric*. The height of the view. Equivalent to ``[self frame].size.height]``.
 
     .. method:: packToCorner(corner)
+        
+        :param corner: A :ref:`corner-constants`.
 
-        Send the view to a specified corner of its super view. ``corner`` is one of the
-        :ref:`corner-constants`. It doesn't care if there's already something in there, so if you
-        send two views in the same corner, they're going to overlap. To place views relatively to
-        each other, use :meth:`packRelativeTo`
+        Send the view to a specified corner of its super view. It doesn't care if there's already
+        something in there, so if you send two views in the same corner, they're going to overlap.
+        To place views relatively to each other, use :meth:`packRelativeTo`
 
     .. method:: packRelativeTo(other, side, align)
 
+        :param other: A :class:`View` instance.
+        :param side: A :ref:`side-constants`.
+        :param align: A :ref:`side-constants`.
+        
         Sends the view at the side of another view, specified by ``other``. The way the view is
-        placed next to the other is specified by ``side`` and ``align``, which are both
-        :ref:`side-constants`. ``side`` tells at which side of ``other`` we want our view to be.
-        For example, if it's ``Pack.Below``, our view is going to be placed under ``other``.
-        ``align`` tells how our view, if it's not the same size as ``other``, is going to be
-        aligned. If we countinue our "below" example and align our view with ``Pack.Right``, our
-        view's right side is going to be aligned with ``other``'s right side. As you probably
-        guessed, ``align`` has to be of a different orientation than ``side``. It doesn't make any
-        sense to ``side`` at ``Pack.Below`` and ``align`` at ``Pack.Above``.
+        placed next to the other is specified by ``side`` and ``align``. ``side`` tells at which
+        side of ``other`` we want our view to be. For example, if it's ``Pack.Below``, our view is
+        going to be placed under ``other``. ``align`` tells how our view, if it's not the same size
+        as ``other``, is going to be aligned. If we countinue our "below" example and align our view
+        with ``Pack.Right``, our view's right side is going to be aligned with ``other``'s right
+        side. As you probably guessed, ``align`` has to be of a different orientation than ``side``.
+        It doesn't make any sense to ``side`` at ``Pack.Below`` and ``align`` at ``Pack.Above``.
     
     .. method:: fill(side)
         
-        Makes the view grow in a direction specified by ``size`` (a :ref:`side-constants`) until
-        it reaches its superview's bounds (respecting the margins, of course). The nice thing about
-        ``fill`` is that if you used :meth:`packRelativeTo` to pack views at the view's side you're
+        :param side: A :ref:`side-constants`.
+        
+        Makes the view grow in a direction specified by ``size`` until it reaches its superview's
+        bounds (respecting the margins, of course). The nice thing about ``fill`` is that if you
+        used :meth:`packRelativeTo` to pack views at the view's side you're
         trying to fill, these views are going to count in the filling process. For example, if you
         have a button packed at your right and you're filling to the right, the gain in width will
         be decerased by the button's width and margin and the button will be moved to the right to

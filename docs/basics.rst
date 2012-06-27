@@ -54,11 +54,18 @@ Other than class references, there's also a few special variables to keep in min
     
     ownerclass = 'AppDelegate'
 
-5. ``const``. This identifier is used when you want to set a property to one of Cocoa's constants,
-   such as ``NSOnState``. Don't use strings for such values because during code generation, they'll
-   be wrapper in ``@""``.
+5. ``const``. See :ref:`literal-consts` below.
 
-.. code-block:: python
+.. _literal-consts:
+
+Literal Constants
+-----------------
+
+Some widget attributes require literal constants from the Cocoa framework. For example,
+``NSButton.state`` is either ``NSOnState``, ``NSOffState`` or ``NSMixedState``. You can't use
+strings to set these values because they will be wrapped around ``@""`` during code generation. When
+you need these types of values, use the ``const`` identifier which is present in the UI script
+namespace. For example::
 
     findMenu.addItem("Find...", Action(None, 'performFindPanelAction:'), 'cmd+f', tag=const.NSFindPanelActionShowFindPanel)
 
