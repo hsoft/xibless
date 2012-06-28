@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 0.2.0 -- 2012/06/28
+---------------------------
+
+* Added Sphinx documentation
+* Added the ``xibless run`` command for quick UI previews.
+* Added Combobox and Popup.
+
 Version 0.1.0 -- 2012/06/25
 ---------------------------
 
