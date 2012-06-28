@@ -24,8 +24,9 @@ except NameError:
 
 UNIT_TMPL = """
 #import <Cocoa/Cocoa.h>
+$ownerimport$
 
-$classname$* create$name$($ownerclass$ *owner)
+$classname$* create$name$($ownerdecl$)
 {
 $contents$
 return result;
@@ -63,9 +64,17 @@ def generate(modulePath, dest, ownerless=False):
     if ownerless:
         owner._clear()
         owner._name = 'nil'
-        tmpl.ownerclass = 'id'
+        ownerclass = 'id'
+        ownerimport = None
     else:
-        tmpl.ownerclass = module_locals.get('ownerclass', 'id')
+        ownerclass = module_locals.get('ownerclass', 'id')
+        ownerimport = module_locals.get('ownerimport')
+    if ownerclass == 'id':
+        tmpl.ownerdecl = "id owner"
+    else:
+        tmpl.ownerdecl = "%s *owner" % ownerclass
+    if ownerimport:
+        tmpl.ownerimport = "#import \"%s\"" % ownerimport
     tmpl.name = os.path.splitext(os.path.basename(dest))[0]
     toGenerate = []
     for key, value in module_locals.items():

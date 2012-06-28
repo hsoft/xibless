@@ -48,10 +48,12 @@ Other than class references, there's also a few special variables to keep in min
     menu.addItem("Quit", action=Action(NSApp, 'terminate:'), shortcut='cmd+q')
 
 4. ``ownerclass``. If you want to send an ``owner``, you have to set the ``ownerclass`` variable
-   in your script to the name of the class the owner is going to be.
+   in your script to the name of the class the owner is going to be. If you do that, you also have
+   to set ``ownerimport`` to the name of the unit to import to have ``ownerclass`` definition.
 
 .. code-block:: python
     
+    ownerimport = 'AppDelegate.h'
     ownerclass = 'AppDelegate'
 
 5. ``const``. See :ref:`literal-consts` below.
