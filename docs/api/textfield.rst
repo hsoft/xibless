@@ -26,3 +26,21 @@ that is, uneditable, unselectable, borderless and backgroundless.
     
     :param parent: A :class:`View` instance. See :attr:`View.parent`.
     :param text: String. See :attr:`TextField.text`.
+
+Combobox
+--------
+
+The ``Combobox`` is a :class:`TextField` subclass that represents Cocoa's ``NSComboBox``.
+
+.. class:: Combobox(parent[, items=None])
+
+    :param parent: A :class:`View` instance. See :attr:`View.parent`.
+    :param items: A list of strings. See :attr:`items`
+    
+    .. attribute:: items
+        
+        A list of strings setermining the items that will be present in the combobox's dropdown.
+    
+    .. attribute:: autoCompletes
+        
+        A boolean telling whether the combobox autocompletes. Equivalent to ``[self completes]``.

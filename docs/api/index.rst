@@ -20,4 +20,3 @@ Contents:
    button
    textfield
    popup
-   combo
