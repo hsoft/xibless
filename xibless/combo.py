@@ -1,4 +1,4 @@
-from .base import convertValueToObjc
+from .base import stringArray
 from .textfield import TextField
 
 class Combobox(TextField):
@@ -18,7 +18,7 @@ class Combobox(TextField):
     def generateInit(self):
         tmpl = TextField.generateInit(self)
         if self.items:
-            array = "[NSArray arrayWithObjects:%s,nil]" % ','.join(convertValueToObjc(item) for item in self.items)
+            array = stringArray(self.items)
             tmpl.viewsetup = "[$varname$ addItemsWithObjectValues:%s];\n" % array
         self.properties['completes'] = self.autoComplete
         return tmpl

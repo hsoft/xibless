@@ -1,5 +1,5 @@
 # Init
-result = Window(200, 200, 250, 200, "All Supported Widgets")
+result = Window(200, 200, 250, 300, "All Supported Widgets")
 label = Label(result, text="Label")
 label.font = Font("Verdana", 12, [FontTrait.Bold, FontTrait.Italic])
 textfield = TextField(result, text="TextField")
@@ -8,6 +8,9 @@ checkbox = Checkbox(result, title="Checkbox")
 popup = Popup(result, items=["One", "Two", "Three"])
 combobox = Combobox(result, items=["One", "Two", "Three"])
 combobox.autoComplete = True
+radioButtons = RadioButtons(result, items=["One", "Two", "Three", "Four"], columns=2)
+radioButtons.width = 150
+radioButtons.height = 50
 
 label.packToCorner(Pack.UpperLeft)
 label.fill(Pack.Right)
@@ -16,3 +19,4 @@ button.packRelativeTo(textfield, side=Pack.Below, align=Pack.Left)
 checkbox.packRelativeTo(button, side=Pack.Below, align=Pack.Left)
 popup.packRelativeTo(checkbox, side=Pack.Below, align=Pack.Left)
 combobox.packRelativeTo(popup, side=Pack.Below, align=Pack.Left)
+radioButtons.packRelativeTo(combobox, side=Pack.Below, align=Pack.Left)

@@ -12,6 +12,7 @@ from .label import Label
 from .textfield import TextField
 from .popup import Popup
 from .combo import Combobox
+from .radio import RadioButtons
 from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
@@ -51,6 +52,7 @@ def generate(modulePath, dest, ownerless=False):
         'TextField': TextField,
         'Popup': Popup,
         'Combobox': Combobox,
+        'RadioButtons': RadioButtons,
         'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,

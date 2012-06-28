@@ -39,7 +39,7 @@ The ``Combobox`` is a :class:`TextField` subclass that represents Cocoa's ``NSCo
     
     .. attribute:: items
         
-        A list of strings setermining the items that will be present in the combobox's dropdown.
+        A list of strings determining the items that will be present in the combobox's dropdown.
     
     .. attribute:: autoCompletes
         

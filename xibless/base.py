@@ -9,6 +9,9 @@ except NameError: # python 3
 def upFirstLetter(s):
     return s[0].upper() + s[1:]
 
+def stringArray(strings):
+    return "[NSArray arrayWithObjects:%s,nil]" % ','.join(('@"%s"' % s) for s in strings)
+
 def convertValueToObjc(value):
     if isinstance(value, GeneratedItem):
         return value.varname
@@ -47,7 +50,7 @@ class CodeTemplate(object):
             # strings contain replacement placeholders. We want to perform replacements on those
             # strings too.
             for placeholder in placeholders:
-                replacement = replacements.get(placeholder[1:-1], '')
+                replacement = str(replacements.get(placeholder[1:-1], ''))
                 result = result.replace(placeholder, replacement)
             placeholders = re.findall(r"\$\w+?\$", result)
         return result

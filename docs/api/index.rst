@@ -20,3 +20,4 @@ Contents:
    button
    textfield
    popup
+   radio
