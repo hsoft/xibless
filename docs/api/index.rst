@@ -18,7 +18,6 @@ Contents:
    font
    menu
    button
-   label
    textfield
    popup
    combo
