@@ -14,6 +14,7 @@ from .popup import Popup
 from .combo import Combobox
 from .radio import RadioButtons
 from .tabview import TabView
+from .table import TableView
 from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
@@ -55,6 +56,7 @@ def generate(modulePath, dest, ownerless=False):
         'Combobox': Combobox,
         'RadioButtons': RadioButtons,
         'TabView': TabView,
+        'TableView': TableView,
         'Font': Font,
         'FontFamily': FontFamily,
         'FontSize': FontSize,

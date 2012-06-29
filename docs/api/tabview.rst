@@ -34,7 +34,7 @@ TabViewItem
 -----------
 
 The ``TabViewItem`` is created by :meth:`TabView.addTab` and represents a ``NSTabViewItem``. You
-shouldn't create it directly, but you can set it's attributes (except :attr:`TabViewItem.view` which
+shouldn't create it directly, but you can set its attributes (except :attr:`TabViewItem.view` which
 is read-only).
 
 .. class:: TabViewItem(tabview, label[, identifier=None])

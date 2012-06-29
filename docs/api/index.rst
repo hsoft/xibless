@@ -22,3 +22,4 @@ Contents:
    popup
    radio
    tabview
+   table

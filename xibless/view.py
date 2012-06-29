@@ -178,11 +178,14 @@ class View(GeneratedItem):
                 resizeMask = 'NSViewMaxXMargin|NSViewMinYMargin'
         self.properties['autoresizingMask'] = Literal(resizeMask)
         if self.parent is not None:
-            tmpl.addtoparent = self.parent.generateAddSubview(self)
+            tmpl.addtoparent = self.generateAddToParent()
         return tmpl
     
+    def generateAddToParent(self):
+        return self.parent.generateAddSubview(self)
+    
     def generateAddSubview(self, subview):
-        return "[%s addSubview:%s];\n" % (self.varname, subview.varname)
+        return self.accessor._callMethod('addSubview', subview)
     
     @property
     def rect(self):

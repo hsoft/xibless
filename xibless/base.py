@@ -100,6 +100,16 @@ class KeyValueId(object):
         else:
             return self._name
     
+    def _callMethod(self, methodname, argument=None, endline=True):
+        # For now, this method only supports call to methods of zero or one argument.
+        if argument is None:
+            result = getattr(self, methodname)._objcAccessor()
+        else:
+            result = '[%s %s:%s]' % (self._objcAccessor(), methodname, convertValueToObjc(argument))
+        if endline:
+            result += ';\n'
+        return result
+    
     def _clear(self):
         for child in self._children.values():
             child._clear()
@@ -185,6 +195,10 @@ class GeneratedItem(object):
         return []
     
     #--- Public
+    @property
+    def accessor(self):
+        return KeyValueId(None, self.varname)
+    
     def generateAssignments(self):
         if self not in KeyValueId.VALUE2KEYS:
             return ""
