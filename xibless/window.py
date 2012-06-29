@@ -21,3 +21,6 @@ class Window(View):
         del self.properties['autoresizingMask']
         return tmpl
     
+    def generateAddSubview(self, subview):
+        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
+    

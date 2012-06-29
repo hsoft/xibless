@@ -13,7 +13,9 @@ def stringArray(strings):
     return "[NSArray arrayWithObjects:%s,nil]" % ','.join(('@"%s"' % s) for s in strings)
 
 def convertValueToObjc(value):
-    if isinstance(value, GeneratedItem):
+    if value is None:
+        return 'nil'
+    elif isinstance(value, GeneratedItem):
         return value.varname
     elif isinstance(value, KeyValueId):
         return value._objcAccessor()
@@ -173,7 +175,8 @@ class GeneratedItem(object):
         tmpl = CodeTemplate("$allocinit$\n$setup$\n$setprop$\n")
         tmpl.varname = self.varname
         tmpl.classname = self.OBJC_CLASS
-        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] init];"
+        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] $initmethod$];"
+        tmpl.initmethod = "init"
         tmpl.setup = ''
         return tmpl
     

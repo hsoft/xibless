@@ -34,7 +34,10 @@ Anchor = namedtuple('Anchor', 'corner growX growY')
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
     
-    BORDER_MARGIN = 20
+    BORDER_MARGIN_LEFT = 20
+    BORDER_MARGIN_RIGHT = 20
+    BORDER_MARGIN_TOP = 20
+    BORDER_MARGIN_BOTTOM = 20
     INTER_VIEW_MARGIN = 8
     # About coordinates: The coordinates below are "Layout coordinates". They will be slightly
     # adjusted at generation time.
@@ -49,6 +52,9 @@ class View(GeneratedItem):
     def __init__(self, parent, width, height):
         GeneratedItem.__init__(self)
         self.parent = parent
+        if isinstance(parent, View):
+            parent.subviews.append(self)
+        self.subviews = []
         self.width = width
         self.height = height
         self.x = 0
@@ -62,22 +68,20 @@ class View(GeneratedItem):
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
-        margin = self.BORDER_MARGIN
         if corner in (Pack.LowerLeft, Pack.UpperLeft):
-            x = margin
+            x = self.parent.BORDER_MARGIN_LEFT
         else:            
-            x = pw - margin - w
+            x = pw - self.parent.BORDER_MARGIN_RIGHT - w
         if corner in (Pack.LowerLeft, Pack.LowerRight):
-            y = margin
+            y = self.parent.BORDER_MARGIN_BOTTOM
         else:            
-            y = ph - margin - h
+            y = ph - self.parent.BORDER_MARGIN_TOP - h
         self.x, self.y = x, y
     
     def packRelativeTo(self, other, side, align):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
-        margin = self.INTER_VIEW_MARGIN
         
         if side in (Pack.Above, Pack.Below):
             if align == Pack.Left:
@@ -87,9 +91,9 @@ class View(GeneratedItem):
             else:
                 x = ox + ((ow - w) / 2)
         elif side == Pack.Left:
-            x = ox - margin - w
+            x = ox - self.INTER_VIEW_MARGIN - w
         else:
-            x = ox + ow + margin
+            x = ox + ow + self.INTER_VIEW_MARGIN
         if side in (Pack.Left, Pack.Right):
             if align == Pack.Below:
                 y = oy
@@ -98,9 +102,9 @@ class View(GeneratedItem):
             else:
                 y = oy + ((oh - h) / 2)
         elif side == Pack.Above:
-            y = oy + oh + margin
+            y = oy + oh + self.INTER_VIEW_MARGIN
         else:
-            y = oy - margin - h
+            y = oy - self.INTER_VIEW_MARGIN - h
         self.x, self.y = x, y
         self.neighbors[Pack.oppositeSide(side)].add(other)
         other.neighbors[side].add(self)
@@ -113,24 +117,31 @@ class View(GeneratedItem):
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
         neighbors = self.neighbors[side]
-        margin = self.BORDER_MARGIN
         if side == Pack.Right:
             nx = max([(n.x + n.width) for n in neighbors] + [x+w])
-            goal = pw - margin
+            goal = pw - self.parent.BORDER_MARGIN_RIGHT
             growby = goal - nx
             w += growby
             for n in neighbors:
                 n.x += growby
         elif side == Pack.Left:
             nx = min([n.x for n in neighbors] + [x])
-            goal = margin
+            goal = self.parent.BORDER_MARGIN_LEFT
             growby = nx - goal
             w += growby
             x -= growby
             for n in neighbors:
                 n.x -= growby
+        elif side == Pack.Below:
+            ny = min([n.y for n in neighbors] + [y])
+            goal = self.parent.BORDER_MARGIN_BOTTOM
+            growby = ny - goal
+            h += growby
+            y -= growby
+            for n in neighbors:
+                n.y -= growby
         else:
-            raise Exception("Vertical fill not supported yet")
+            raise Exception("Above fill not supported yet")
         self.x, self.y, self.width, self.height = x, y, w, h
     
     #--- Generate
@@ -171,7 +182,7 @@ class View(GeneratedItem):
         return tmpl
     
     def generateAddSubview(self, subview):
-        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
+        return "[%s addSubview:%s];\n" % (self.varname, subview.varname)
     
     @property
     def rect(self):

@@ -21,3 +21,4 @@ Contents:
    textfield
    popup
    radio
+   tabview
