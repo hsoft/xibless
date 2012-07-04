@@ -148,7 +148,7 @@ class View(GeneratedItem):
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
-        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:$rect$];"
+        tmpl.initmethod = "initWithFrame:$rect$"
         x, y, w, h = self.x, self.y, self.width, self.height
         x += self.LAYOUT_DELTA_X
         y += self.LAYOUT_DELTA_Y

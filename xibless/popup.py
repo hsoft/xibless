@@ -24,7 +24,7 @@ class Popup(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] initWithFrame:$rect$ pullsDown:$pullsdown$];"
+        tmpl.allocinit = "$classname$ *$varname$ = [[[$classname$ alloc] initWithFrame:$rect$ pullsDown:$pullsdown$] autorelease];"
         tmpl.pullsdown = convertValueToObjc(self.pullsdown)
         self.properties['menu'] = self.menu
         return tmpl

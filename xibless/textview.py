@@ -17,7 +17,7 @@ class TextView(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        tmpl.viewsetup = """NSScrollView *$varname$_container = [[NSScrollView alloc] initWithFrame:$rect$];
+        tmpl.viewsetup = """NSScrollView *$varname$_container = [[[NSScrollView alloc] initWithFrame:$rect$] autorelease];
             [$varname$_container setDocumentView:$varname$];
             [$varname$_container setHasVerticalScroller:YES];
             [$varname$_container setHasHorizontalScroller:NO];

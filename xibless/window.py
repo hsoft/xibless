@@ -11,10 +11,7 @@ class Window(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        tmpl.allocinit = """
-            NSWindow *$varname$ = [[NSWindow alloc] initWithContentRect:$rect$ styleMask:$style$
-                backing:NSBackingStoreBuffered defer:NO];
-        """
+        tmpl.initmethod = "initWithContentRect:$rect$ styleMask:$style$ backing:NSBackingStoreBuffered defer:NO"
         tmpl.style = "NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask"
         self.properties['title'] = self.title
         # Windows don't have autoresizingMask and because it's set in View, we have to remove it.

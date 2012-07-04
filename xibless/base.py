@@ -191,7 +191,7 @@ class GeneratedItem(object):
         tmpl = CodeTemplate("$allocinit$\n$setup$\n$setprop$\n")
         tmpl.varname = self.varname
         tmpl.classname = self.OBJC_CLASS
-        tmpl.allocinit = "$classname$ *$varname$ = [[$classname$ alloc] $initmethod$];"
+        tmpl.allocinit = "$classname$ *$varname$ = [[[$classname$ alloc] $initmethod$] autorelease];"
         tmpl.initmethod = "init"
         tmpl.setup = ''
         return tmpl
