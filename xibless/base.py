@@ -22,6 +22,7 @@ def convertValueToObjc(value):
     elif isinstance(value, Literal):
         return value.value
     elif isinstance(value, basestring):
+        value = value.replace('\n', '\\n')
         return '@"%s"' % value
     elif isinstance(value, bool):
         return 'YES' if value else 'NO'
