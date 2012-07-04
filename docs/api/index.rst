@@ -23,5 +23,6 @@ Contents:
    popup
    radio
    progress
+   image
    tabview
    table

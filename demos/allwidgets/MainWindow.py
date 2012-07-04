@@ -15,8 +15,6 @@ popup = Popup(fooTab.view, items=["One", "Two", "Three"])
 combobox = Combobox(fooTab.view, items=["One", "Two", "Three"])
 combobox.autoComplete = True
 radioButtons = RadioButtons(fooTab.view, items=["One", "Two", "Three", "Four"], columns=2)
-radioButtons.width = 150
-radioButtons.height = 50
 progress = ProgressIndicator(fooTab.view)
 table = TableView(barTab.view)
 table.addColumn("col1", title="Column 1", width=50)
@@ -25,6 +23,7 @@ table.addColumn("col3", title="Column 3", width=150)
 textview = TextView(bazTab.view)
 textview.text = "multi\nline\ntext"
 textview.font = Font(FontFamily.System, 16)
+imageview = ImageView(bazTab.view, "NSApplicationIcon")
 
 tabView.packToCorner(Pack.UpperLeft)
 tabView.fill(Pack.Right)
@@ -40,6 +39,8 @@ button2.packRelativeTo(button1, side=Pack.Right, align=Pack.Above)
 checkbox.packRelativeTo(button1, side=Pack.Below, align=Pack.Left)
 popup.packRelativeTo(checkbox, side=Pack.Below, align=Pack.Left)
 combobox.packRelativeTo(popup, side=Pack.Below, align=Pack.Left)
+radioButtons.width = 150
+radioButtons.height = 50
 radioButtons.packRelativeTo(combobox, side=Pack.Below, align=Pack.Left)
 progress.packRelativeTo(radioButtons, side=Pack.Below, align=Pack.Left)
 
@@ -50,7 +51,10 @@ table.fill(Pack.Below)
 table.setAnchor(Pack.UpperLeft, growX=True, growY=True)
 
 #baz tab
+textview.height = 50
 textview.packToCorner(Pack.UpperLeft)
 textview.fill(Pack.Right)
-textview.fill(Pack.Below)
-textview.setAnchor(Pack.UpperLeft, growX=True, growY=True)
+textview.setAnchor(Pack.UpperLeft, growX=True)
+imageview.packRelativeTo(textview, side=Pack.Below, align=Pack.Left)
+imageview.fill(Pack.Right)
+imageview.setAnchor(Pack.UpperLeft, growX=True)
