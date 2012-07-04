@@ -11,13 +11,13 @@ The ``Button`` is a :class:`View` subclass which represents Cocoa's ``NSButton``
     
     .. attribute:: buttonType
     
-        :ref:`literal-consts`. The type of the button. Equivalent to ``[self buttonType]``. Use
-        with ``NSButtonType`` constants.
+        :ref:`Cocoa constant <literal-consts>`. The type of the button. Equivalent to
+        ``[self buttonType]``. Use with ``NSButtonType`` constants.
     
     .. attribute:: bezelStyle
     
-        :ref:`literal-consts`. The style of the button. Equivalent to ``[self bezelStyle]``. Use
-        with ``NSBezelStyle`` constants.
+        :ref:`Cocoa constant <literal-consts>`. The style of the button. Equivalent to
+        ``[self bezelStyle]``. Use with ``NSBezelStyle`` constants.
     
     .. attribute:: title
         
