@@ -17,3 +17,11 @@ Cocoa's ``NSWindow``.
     .. attribute:: title
         
         *String*. The text on the window. Equivalent to ``[self title]``.
+    
+    .. attribute:: canClose
+    .. attribute:: canResize
+    .. attribute:: canMinimize
+        
+        *Boolean*. Adjusts the window's ``style`` flags according to boolean values you set in those
+        3 attributes. The behave the same way as the Close, Resize and Minimize checkboxes in
+        Interface Builder.

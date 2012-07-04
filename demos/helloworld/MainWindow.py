@@ -2,6 +2,7 @@ ownerclass = 'AppDelegate'
 
 # Init
 result = Window(200, 200, 330, 110, "Tell me your name!")
+result.canResize = False
 nameLabel = Label(result, text="Name:")
 nameLabel.width = 45
 nameField = TextField(result, text="")
