@@ -8,7 +8,17 @@ The ``Button`` is a :class:`View` subclass which represents Cocoa's ``NSButton``
     :param parent: A :class:`View` instance. Same as :attr:`View.parent`.
     :param title: A string. See :attr:`title`.
     :param action: An :class:`Action`. See :attr:`action`.
-
+    
+    .. attribute:: buttonType
+    
+        :ref:`literal-consts`. The type of the button. Equivalent to ``[self buttonType]``. Use
+        with ``NSButtonType`` constants.
+    
+    .. attribute:: bezelStyle
+    
+        :ref:`literal-consts`. The style of the button. Equivalent to ``[self bezelStyle]``. Use
+        with ``NSBezelStyle`` constants.
+    
     .. attribute:: title
         
         *String*. The text on the button. Equivalent to ``[self title]``.
