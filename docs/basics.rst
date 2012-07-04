@@ -81,3 +81,14 @@ retain it when you store the result and in your owner's properties set by the sc
 Of course, if an object is "naturally" retained by another object created in the script, such as
 a ``NSMenuItem`` added to a ``Menu`` or a view added to a superview, then you don't have to manually
 retain those objects.
+
+Unsupported Properties
+----------------------
+
+``xibless`` being in early development, it doesn't support everything Cocoa has to offer yet. If you
+find yourself in a situation where an attribute you want to set on an instance isn't supported,
+you can always try to set it in its ``properties`` dictionary, for example with::
+
+    foo.properties['delegate'] = bar
+
+It's not guaranteed to work, but it very well might.
