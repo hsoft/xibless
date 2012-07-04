@@ -5,17 +5,18 @@ from subprocess import Popen
 
 from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp, const
 from .view import Pack
+from .font import Font, FontFamily, FontSize, FontTrait
 from .menu import Menu, MainMenu
 from .window import Window
 from .button import Button, Checkbox
 from .label import Label
 from .textfield import TextField
+from .textview import TextView
 from .popup import Popup
 from .combo import Combobox
 from .radio import RadioButtons
 from .tabview import TabView
 from .table import TableView
-from .font import Font, FontFamily, FontSize, FontTrait
 
 try:
     execfile
@@ -52,6 +53,7 @@ def generate(modulePath, dest, ownerless=False):
         'Checkbox': Checkbox,
         'Label': Label,
         'TextField': TextField,
+        'TextView': TextView,
         'Popup': Popup,
         'Combobox': Combobox,
         'RadioButtons': RadioButtons,

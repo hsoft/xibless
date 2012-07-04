@@ -19,6 +19,7 @@ Contents:
    menu
    button
    textfield
+   textview
    popup
    radio
    tabview
