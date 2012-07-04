@@ -22,5 +22,6 @@ Contents:
    textview
    popup
    radio
+   progress
    tabview
    table

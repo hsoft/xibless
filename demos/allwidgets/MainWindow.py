@@ -1,5 +1,5 @@
 # Init
-result = Window(200, 200, 350, 300, "All Supported Widgets")
+result = Window(200, 200, 350, 350, "All Supported Widgets")
 tabView = TabView(result)
 fooTab = tabView.addTab("foo")
 barTab = tabView.addTab("bar")
@@ -17,6 +17,7 @@ combobox.autoComplete = True
 radioButtons = RadioButtons(fooTab.view, items=["One", "Two", "Three", "Four"], columns=2)
 radioButtons.width = 150
 radioButtons.height = 50
+progress = ProgressIndicator(fooTab.view)
 table = TableView(barTab.view)
 table.addColumn("col1", title="Column 1", width=50)
 table.addColumn("col2", title="Column 2", width=100)
@@ -40,6 +41,7 @@ checkbox.packRelativeTo(button1, side=Pack.Below, align=Pack.Left)
 popup.packRelativeTo(checkbox, side=Pack.Below, align=Pack.Left)
 combobox.packRelativeTo(popup, side=Pack.Below, align=Pack.Left)
 radioButtons.packRelativeTo(combobox, side=Pack.Below, align=Pack.Left)
+progress.packRelativeTo(radioButtons, side=Pack.Below, align=Pack.Left)
 
 #bar tab
 table.packToCorner(Pack.UpperLeft)

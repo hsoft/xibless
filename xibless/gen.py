@@ -16,6 +16,7 @@ from .textview import TextView
 from .popup import Popup
 from .combo import Combobox
 from .radio import RadioButtons
+from .progress import ProgressIndicator
 from .tabview import TabView
 from .table import TableView
 
@@ -59,6 +60,7 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         'Popup': Popup,
         'Combobox': Combobox,
         'RadioButtons': RadioButtons,
+        'ProgressIndicator': ProgressIndicator,
         'TabView': TabView,
         'TableView': TableView,
         'Font': Font,
