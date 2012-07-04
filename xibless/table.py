@@ -20,12 +20,9 @@ class TableColumn(GeneratedItem):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.initmethod = "initWithIdentifier:$identifier$"
         tmpl.identifier = convertValueToObjc(self.identifier)
-        setup = "[[$varname$ headerCell] setStringValue:@\"$title$\"];\n"
+        self.properties['headerCell.stringValue'] = self.title
         if self.font:
-            setup += "[[$varname$ dataCell] setFont:$fontvarname$];\n"
-            tmpl.fontvarname = self.font.varname
-        tmpl.setup = setup
-        tmpl.title = self.title
+            self.properties['dataCell.font'] = self.font
         self.properties['width'] = self.width
         self.properties['editable'] = self.editable
         return tmpl

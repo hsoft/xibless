@@ -93,7 +93,7 @@ class KeyValueId(object):
     # avoid name clashes.
     def _objcAccessor(self):
         if self._parent and not self._parent._fakeParent:
-            if self.__parent._name == 'nil':
+            if self._parent._name == 'nil':
                 return 'nil'
             else:
                 return '[%s %s]' % (self._parent._objcAccessor(), self._name)
@@ -220,8 +220,12 @@ class GeneratedItem(object):
         for key, value in self.properties.items():
             if value is None:
                 continue
-            value = convertValueToObjc(value)
-            setprop += '[$varname$ set%s:%s];\n' % (upFirstLetter(key), value)
+            dot_elements = key.split('.')
+            accessor = self.accessor
+            for dot_element in dot_elements[:-1]:
+                accessor = getattr(accessor, dot_element)
+            methname = 'set' + upFirstLetter(dot_elements[-1])
+            setprop += accessor._callMethod(methname, value)
         inittmpl.setprop = setprop
         result += inittmpl.render()
         result += self.generateAssignments()
