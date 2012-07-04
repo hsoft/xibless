@@ -1,12 +1,14 @@
 from .textfield import TextField
 
 class Label(TextField):
-    LAYOUT_DELTA_X = -3
-    LAYOUT_DELTA_W = 6
-    
     def __init__(self, parent, text):
         TextField.__init__(self, parent, text)
         self.width = 17
+        
+        self.layoutDeltaX = -3
+        self.layoutDeltaY = 0
+        self.layoutDeltaW = 6
+        self.layoutDeltaH = 0
     
     def generateInit(self):
         tmpl = TextField.generateInit(self)

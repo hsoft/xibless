@@ -4,11 +4,6 @@ from .view import View
 class ProgressIndicator(View):
     OBJC_CLASS = 'NSProgressIndicator'
     
-    LAYOUT_DELTA_X = -2
-    LAYOUT_DELTA_Y = 0
-    LAYOUT_DELTA_W = 4
-    LAYOUT_DELTA_H = 4
-    
     def __init__(self, parent):
         View.__init__(self, parent, 92, 16)
         self.style = const.NSProgressIndicatorBarStyle
@@ -17,6 +12,11 @@ class ProgressIndicator(View):
         self.value = 0
         self.indeterminate = True
         self.displayedWhenStopped = True
+        
+        self.layoutDeltaX = -2
+        self.layoutDeltaY = 0
+        self.layoutDeltaW = 4
+        self.layoutDeltaH = 5
     
     def generateInit(self):
         tmpl = View.generateInit(self)

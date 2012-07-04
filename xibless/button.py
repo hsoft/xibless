@@ -5,22 +5,36 @@ from .view import View
 class Button(View):
     OBJC_CLASS = 'NSButton'
     
-    LAYOUT_DELTA_X = -6
-    LAYOUT_DELTA_Y = -8
-    LAYOUT_DELTA_W = 12
-    LAYOUT_DELTA_H = 12
-    
-    DEFAULT_FONT = Font(FontFamily.System, FontSize.RegularControl)
-    
     def __init__(self, parent, title, action=None):
         View.__init__(self, parent, 80, 20)
         self.buttonType = const.NSMomentaryLightButton
+        # Layout deltas and font are set in bezelStyle setter
         self.bezelStyle = const.NSRoundedBezelStyle
         self.state = None
         self.title = title
         self.action = action
-        self.font = self.DEFAULT_FONT
         self.keyEquivalent = None
+        
+    
+    @property
+    def bezelStyle(self):
+        return self._bezelStyle
+    
+    @bezelStyle.setter
+    def bezelStyle(self, value):
+        self._bezelStyle = value
+        if value == const.NSRoundRectBezelStyle:
+            self.layoutDeltaX = 0
+            self.layoutDeltaY = 0
+            self.layoutDeltaW = 0
+            self.layoutDeltaH = 1
+            self.font = Font(FontFamily.System, 12)
+        else:
+            self.layoutDeltaX = -6
+            self.layoutDeltaY = -8
+            self.layoutDeltaW = 12
+            self.layoutDeltaH = 12
+            self.font = Font(FontFamily.System, FontSize.RegularControl)
     
     def dependencies(self):
         return [self.font]
@@ -42,12 +56,12 @@ class Button(View):
     
 
 class Checkbox(Button):
-    LAYOUT_DELTA_X = -2
-    LAYOUT_DELTA_Y = -2
-    LAYOUT_DELTA_W = 4
-    LAYOUT_DELTA_H = 4
-    
     def __init__(self, parent, title):
         Button.__init__(self, parent, title)
         self.buttonType = const.NSSwitchButton
+        
+        self.layoutDeltaX = -2
+        self.layoutDeltaY = -2
+        self.layoutDeltaW = 4
+        self.layoutDeltaH = 4
     

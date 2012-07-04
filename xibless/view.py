@@ -39,15 +39,6 @@ class View(GeneratedItem):
     BORDER_MARGIN_TOP = 20
     BORDER_MARGIN_BOTTOM = 20
     INTER_VIEW_MARGIN = 8
-    # About coordinates: The coordinates below are "Layout coordinates". They will be slightly
-    # adjusted at generation time.
-    # According to http://www.cocoabuilder.com/archive/cocoa/192607-interface-builder-layout-versus-frame.html
-    # the difference between "Frame Rectangle" and "Layout Rectangle" are hardcoded in IB, so we
-    # need to maintain our own hardcoded constants for each supported widget.
-    LAYOUT_DELTA_X = 0
-    LAYOUT_DELTA_Y = 0
-    LAYOUT_DELTA_W = 0
-    LAYOUT_DELTA_H = 0
     
     def __init__(self, parent, width, height):
         GeneratedItem.__init__(self)
@@ -62,6 +53,17 @@ class View(GeneratedItem):
         self.anchor = Anchor(Pack.UpperLeft, False, False)
         # a mapping PackingSide: {views} which is used in fill() to know how much we can fill
         self.neighbors = defaultdict(set)
+        
+        # About coordinates: The coordinates below are "Layout coordinates". They will be slightly
+        # adjusted at generation time.
+        # According to http://www.cocoabuilder.com/archive/cocoa/192607-interface-builder-layout-versus-frame.html
+        # the difference between "Frame Rectangle" and "Layout Rectangle" are hardcoded in IB, so we
+        # need to maintain our own hardcoded constants for each supported widget.
+        self.layoutDeltaX = 0
+        self.layoutDeltaY = 0
+        self.layoutDeltaW = 0
+        self.layoutDeltaH = 0
+        
     
     #--- Pack
     def packToCorner(self, corner):
@@ -150,10 +152,10 @@ class View(GeneratedItem):
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
         tmpl.initmethod = "initWithFrame:$rect$"
         x, y, w, h = self.x, self.y, self.width, self.height
-        x += self.LAYOUT_DELTA_X
-        y += self.LAYOUT_DELTA_Y
-        w += self.LAYOUT_DELTA_W
-        h += self.LAYOUT_DELTA_H
+        x += self.layoutDeltaX
+        y += self.layoutDeltaY
+        w += self.layoutDeltaW
+        h += self.layoutDeltaH
         tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % (x, y, w, h)
         if self.anchor.growX and self.anchor.growY:
             resizeMask = 'NSViewWidthSizable|NSViewHeightSizable'

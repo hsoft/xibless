@@ -5,11 +5,6 @@ from .menu import Menu
 class Popup(View):
     OBJC_CLASS = 'NSPopUpButton'
     
-    LAYOUT_DELTA_X = -3
-    LAYOUT_DELTA_Y = -4
-    LAYOUT_DELTA_W = -6
-    LAYOUT_DELTA_H = 6
-    
     def __init__(self, parent, items=None):
         View.__init__(self, parent, 100, 20)
         self.menu = Menu('')
@@ -18,6 +13,10 @@ class Popup(View):
                 self.menu.addItem(item)
         self.pullsdown = False
         
+        self.layoutDeltaX = -3
+        self.layoutDeltaY = -4
+        self.layoutDeltaW = -6
+        self.layoutDeltaH = 6
     
     def dependencies(self):
         return [self.menu]

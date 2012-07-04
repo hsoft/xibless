@@ -42,6 +42,15 @@ The ``Button`` is a :class:`View` subclass which represents Cocoa's ``NSButton``
         for escape or ``\r`` for return), escape the backslashes. Therefore, setting a button
         keyEquivalent to escape is done with ``button.keyEquivalent = "\\E"``.
 
+
+Buttons and Layouts
+-------------------
+
+If you fire up Interface Builder and try to play with a button bezel style, you'll notice that
+changing it changes many more things too, such as the layouts and the fonts. ``xibless`` does it
+too (it tries to do exactly as IB does). Whenever :attr:`Button.bezelStyle` is changed, layout
+delta values and fonts are changed. Therefore, if you should always change the :attr:`Button.font`
+and/or do the layouts *after* you've changed your bezel style.
     
 Checkbox
 --------
