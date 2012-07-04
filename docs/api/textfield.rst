@@ -16,6 +16,16 @@ The ``Textfield`` is a :class:`View` subclass that represents Cocoa's ``NSTextFi
         
         :class:`Font`. The font of the text field. Equivalent to ``[self font]``.
     
+    .. attribute:: alignment
+        
+        :ref:`Cocoa constant <literal-consts>`. Alignment of the text within the field.
+        Equivalent to ``[self alignment]``. Use with ``NSTextAlignment`` constants.
+    
+    .. attribute:: textColor
+        
+        :class:`Color`. Color of the text within the field. Equivalent to ``[self textColor]``.
+    
+
 Label
 -----
 

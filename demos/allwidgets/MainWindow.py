@@ -6,6 +6,8 @@ barTab = tabView.addTab("bar")
 bazTab = tabView.addTab("baz")
 label = Label(fooTab.view, text="Label")
 label.font = Font("Verdana", 12, [FontTrait.Bold, FontTrait.Italic])
+label.textColor = Color(0.42, 0.42, 0.84)
+label.alignment = const.NSCenterTextAlignment
 textfield = TextField(fooTab.view, text="TextField")
 button1 = Button(fooTab.view, title="Button")
 button2 = Button(fooTab.view, title="Button")

@@ -16,6 +16,7 @@ Contents:
    window
    action
    font
+   color
    menu
    button
    textfield

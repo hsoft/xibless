@@ -7,6 +7,7 @@ from . import base
 from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const
 from .view import Pack
 from .font import Font, FontFamily, FontSize, FontTrait
+from .color import Color
 from .menu import Menu, MainMenu
 from .window import Window
 from .button import Button, Checkbox
@@ -69,6 +70,7 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         'FontFamily': FontFamily,
         'FontSize': FontSize,
         'FontTrait': FontTrait,
+        'Color': Color,
         'Pack': Pack,
     }
     module_locals = {}

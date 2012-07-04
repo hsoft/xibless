@@ -10,9 +10,11 @@ class TextField(View):
         View.__init__(self, parent, 100, 22)
         self.text = text
         self.font = self.DEFAULT_FONT
+        self.alignment = None
+        self.textColor = None
     
     def dependencies(self):
-        return [self.font]
+        return [self.font, self.textColor]
     
     def generateInit(self):
         tmpl = View.generateInit(self)
@@ -20,5 +22,7 @@ class TextField(View):
         self.properties['font'] = self.font
         self.properties['editable'] = True
         self.properties['selectable'] = True
+        self.properties['alignment'] = self.alignment
+        self.properties['textColor'] = self.textColor
         return tmpl
     
