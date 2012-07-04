@@ -36,6 +36,13 @@ The ``Button`` is a :class:`View` subclass which represents Cocoa's ``NSButton``
         
         :ref:`Cocoa constant <literal-consts>`. Equivalent to ``[self state]``.
     
+    .. attribute:: keyEquivalent
+    
+        String. Equivalent to ``[self keyEquivalent]``. If you use escaped strings (such as ``\E``
+        for escape or ``\r`` for return), escape the backslashes. Therefore, setting a button
+        keyEquivalent to escape is done with ``button.keyEquivalent = "\\E"``.
+
+    
 Checkbox
 --------
 

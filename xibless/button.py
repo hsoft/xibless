@@ -20,6 +20,7 @@ class Button(View):
         self.title = title
         self.action = action
         self.font = self.DEFAULT_FONT
+        self.keyEquivalent = None
     
     def dependencies(self):
         return [self.font]
@@ -30,8 +31,8 @@ class Button(View):
         self.properties['font'] = self.font
         self.properties['buttonType'] = self.buttonType
         self.properties['bezelStyle'] = self.bezelStyle
-        if self.state is not None:
-            self.properties['state'] = self.state
+        self.properties['state'] = self.state
+        self.properties['keyEquivalent'] = self.keyEquivalent
         tmpl.viewsetup = "$linkaction$\n"
         if self.action:
             tmpl.linkaction = self.action.generate(self.varname)

@@ -7,6 +7,7 @@ nameLabel.width = 45
 nameField = TextField(result, text="")
 helloLabel = Label(result, text="")
 button = Button(result, title="Say Hello", action=Action(owner, 'sayHello'))
+button.keyEquivalent = "\\r"
 
 # Owner Assignments
 owner.nameField = nameField
