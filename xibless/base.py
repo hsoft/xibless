@@ -12,6 +12,8 @@ def upFirstLetter(s):
 def stringArray(strings):
     return "[NSArray arrayWithObjects:%s,nil]" % ','.join(('@"%s"' % s) for s in strings)
 
+globalLocalizationTable = None
+
 def convertValueToObjc(value):
     if value is None:
         return 'nil'
@@ -23,7 +25,10 @@ def convertValueToObjc(value):
         return value.value
     elif isinstance(value, basestring):
         value = value.replace('\n', '\\n')
-        return '@"%s"' % value
+        result = '@"%s"' % value
+        if value and globalLocalizationTable:
+            result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, globalLocalizationTable)
+        return result
     elif isinstance(value, bool):
         return 'YES' if value else 'NO'
     elif isinstance(value, (int, float)):

@@ -25,3 +25,11 @@ window.
 Now, all this does is that it generates UI code. ``xibless`` hasn't, yet, any integrated solution
 to let you easily build a XCode-less program. However, what you can do is to look at the ``demos``
 folder and base yourself on those demos (which are completely XCode-less) to build your own project.
+
+Enabling Localization
+---------------------
+
+``xibless.generate()`` has a ``localizationTable`` argument (``--loc-table`` from the command line).
+If you set it to a non-empty string, string localization will be enabled, that is, all strings will
+be wrapper around ``NSLocalizedStringFromTable(theString, localizationTable, @"")``. This enables
+you to have localized UIs. See an example of such UI in the ``localized`` demo.

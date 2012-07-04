@@ -1,4 +1,4 @@
-from .base import GeneratedItem, KeyShortcut, Literal, Action, NSApp, const
+from .base import GeneratedItem, KeyShortcut, Literal, Action, NSApp, const, convertValueToObjc
 
 class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'
@@ -18,9 +18,9 @@ class MenuItem(GeneratedItem):
             tmpl.allocinit = "[$menuname$ addItem:[NSMenuItem separatorItem]];\n"
             tmpl.setup = ""
         else:
-            tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:@\"$name$\" action:nil keyEquivalent:@\"$key$\"];"
+            tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:$name$ action:nil keyEquivalent:@\"$key$\"];"
             tmpl.setup = "$linkaction$"
-        tmpl.name = self.name
+        tmpl.name = convertValueToObjc(self.name)
         tmpl.menuname = menuname
         if self.action:
             tmpl.linkaction = self.action.generate(self.varname)
@@ -69,15 +69,15 @@ class Menu(GeneratedItem):
         tmpl = GeneratedItem.generateInit(self)
         if menuname:
             tmpl.allocinit = """
-                NSMenuItem *_tmpitem = [$menuname$ addItemWithTitle:@"$name$" action:nil keyEquivalent:@""];
-                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
+                NSMenuItem *_tmpitem = [$menuname$ addItemWithTitle:$name$ action:nil keyEquivalent:@""];
+                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:$name$] autorelease];
                 [$menuname$ setSubmenu:$varname$ forItem:_tmpitem];
             """
         else:
             tmpl.allocinit = """
-                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:@"$name$"] autorelease];
+                NSMenu *$varname$ = [[[NSMenu alloc] initWithTitle:$name$] autorelease];
             """
-        tmpl.name = self.name
+        tmpl.name = convertValueToObjc(self.name)
         tmpl.menuname = menuname
         subitemscode = []
         for item in self.items:

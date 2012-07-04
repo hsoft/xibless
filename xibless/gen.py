@@ -3,7 +3,8 @@ import tempfile
 import shutil
 from subprocess import Popen
 
-from .base import CodeTemplate, KeyValueId, Action, GeneratedItem, owner, NSApp, const
+from . import base
+from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const
 from .view import Pack
 from .font import Font, FontFamily, FontSize, FontTrait
 from .menu import Menu, MainMenu
@@ -40,7 +41,8 @@ return result;
 # ownerless is used by runUI. When running a UI, we take one UI script out of its context, so
 # any owner assignment will make code compilation fail. Since we just want to preview the UI, we
 # don't need those assignments, so we skip them.
-def generate(modulePath, dest, ownerless=False):
+def generate(modulePath, dest, ownerless=False, localizationTable=None):
+    base.globalLocalizationTable = localizationTable
     module_globals = {
         'owner': owner,
         'NSApp': NSApp,
