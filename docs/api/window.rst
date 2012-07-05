@@ -29,3 +29,7 @@ Cocoa's ``NSWindow``.
         *Boolean*. Adjusts the window's ``style`` flags according to boolean values you set in those
         3 attributes. The behave the same way as the Close, Resize and Minimize checkboxes in
         Interface Builder.
+    
+    .. attribute:: initialFirstResponder
+        
+        See :class:`View`. Equivalent to ``[self initialViewResponder]``.
