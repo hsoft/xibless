@@ -30,7 +30,7 @@ Other than class references, there's also a few special variables to keep in min
 
 .. code-block:: python
 
-   result = Window(300, 300, 400, 200, title="My Window")
+   result = Window(400, 200, title="My Window")
 
 2. ``owner``. This is a bit like a XIB's "File's owner". You can reference to it when setting
    properties and you can also set its own properties. Of course, the owner has to actually have

@@ -6,13 +6,17 @@ Technically, the ``Window`` is a :class:`View` subclass, but only because of it 
 don't make sense for the window because it doesn't have a superview. It represents, of course,
 Cocoa's ``NSWindow``.
 
-.. class:: Window(x, y, width, height, title)
+.. class:: Window(width, height, title)
     
-    :param x: Numeric. See :attr:`View.x`.
-    :param y: Numeric. See :attr:`View.y`.
     :param width: Numeric. See :attr:`View.width`.
     :param height: Numeric. See :attr:`View.height`.
     :param title: String. See :attr:`title`.
+    
+    .. attribute:: xProportion
+    .. attribute:: yProportion
+    
+        *Numeric*. ``x`` and ``y`` coordinates in proportion of the main screen frame. This value
+        has to be between 0.0 and 1.0.
     
     .. attribute:: title
         

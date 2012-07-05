@@ -8,7 +8,7 @@ is to replace XIBs in XCode and, if you want, get rid of XCode altogether.
 With ``xibless``, instead of designing UIs with a WYSIWYG editor, you build them in a Python script,
 similarly to what you do when you build Qt UIs without the Designer. For example, a script like this::
 
-    result = Window(200, 200, 330, 110, "Tell me your name!")
+    result = Window(330, 110, "Tell me your name!")
     nameLabel = Label(result, text="Name:")
     nameField = TextField(result, text="")
     helloLabel = Label(result, text="")

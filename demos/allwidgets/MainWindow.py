@@ -1,5 +1,5 @@
 # Init
-result = Window(200, 200, 350, 350, "All Supported Widgets")
+result = Window(350, 350, "All Supported Widgets")
 tabView = TabView(result)
 fooTab = tabView.addTab("foo")
 barTab = tabView.addTab("bar")

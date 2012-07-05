@@ -1,7 +1,9 @@
 ownerclass = 'AppDelegate'
 
 # Init
-result = Window(200, 200, 330, 110, "Tell me your name!")
+result = Window(330, 110, "Tell me your name!")
+result.xProportion = 0.8
+result.yProportion = 0.2
 result.canResize = False
 nameLabel = Label(result, text="Name:")
 nameLabel.width = 45
