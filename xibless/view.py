@@ -28,17 +28,31 @@ class Pack(object):
             return Pack.Below
         elif side == Pack.Below:
             return Pack.Above
+    
+    @staticmethod
+    def side2str(side):
+        if side == Pack.Left:
+            return 'left'
+        elif side == Pack.Right:
+            return 'right'
+        elif side == Pack.Above:
+            return 'above'
+        elif side == Pack.Below:
+            return 'below'
 
 Anchor = namedtuple('Anchor', 'corner growX growY')
 
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
     
-    BORDER_MARGIN_LEFT = 20
-    BORDER_MARGIN_RIGHT = 20
-    BORDER_MARGIN_TOP = 20
-    BORDER_MARGIN_BOTTOM = 20
-    INTER_VIEW_MARGIN = 8
+    INNER_MARGIN_LEFT = 20
+    INNER_MARGIN_RIGHT = 20
+    INNER_MARGIN_ABOVE = 20
+    INNER_MARGIN_BELOW = 20
+    OUTER_MARGIN_LEFT = 8
+    OUTER_MARGIN_RIGHT = 8
+    OUTER_MARGIN_ABOVE = 8
+    OUTER_MARGIN_BELOW = 8
     
     def __init__(self, parent, width, height):
         GeneratedItem.__init__(self)
@@ -65,25 +79,36 @@ class View(GeneratedItem):
         self.layoutDeltaH = 0
         
     
-    #--- Pack
+    #--- Layout
+    def outerMargin(self, other, side):
+        # The way outer margins (in other words, margins between sibling views) work is that we
+        # use the maximum value between the two margins of our views. For example, if a button
+        # has a bottom margin of 8 and has a label underneath with a top margin of 7, we use 8.
+        # This method will return the appropriate margin if ``other`` is laid at the ``side`` of
+        # ``self``. ``side`` can only be onle of the 4 sides (left, right, above, below)
+        margin = getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
+        otherMargin = getattr(other, 'OUTER_MARGIN_' + Pack.side2str(Pack.oppositeSide(side)).upper())
+        return max(margin, otherMargin)
+    
     def packToCorner(self, corner):
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
         if corner in (Pack.LowerLeft, Pack.UpperLeft):
-            x = self.parent.BORDER_MARGIN_LEFT
+            x = self.parent.INNER_MARGIN_LEFT
         else:            
-            x = pw - self.parent.BORDER_MARGIN_RIGHT - w
+            x = pw - self.parent.INNER_MARGIN_RIGHT - w
         if corner in (Pack.LowerLeft, Pack.LowerRight):
-            y = self.parent.BORDER_MARGIN_BOTTOM
+            y = self.parent.INNER_MARGIN_BELOW
         else:            
-            y = ph - self.parent.BORDER_MARGIN_TOP - h
+            y = ph - self.parent.INNER_MARGIN_ABOVE - h
         self.x, self.y = x, y
     
     def packRelativeTo(self, other, side, align):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
+        outerMargin = self.outerMargin(other, side)
         
         if side in (Pack.Above, Pack.Below):
             if align == Pack.Left:
@@ -93,9 +118,9 @@ class View(GeneratedItem):
             else:
                 x = ox + ((ow - w) / 2)
         elif side == Pack.Left:
-            x = ox - self.INTER_VIEW_MARGIN - w
+            x = ox - outerMargin - w
         else:
-            x = ox + ow + self.INTER_VIEW_MARGIN
+            x = ox + ow + outerMargin
         if side in (Pack.Left, Pack.Right):
             if align == Pack.Below:
                 y = oy
@@ -104,9 +129,9 @@ class View(GeneratedItem):
             else:
                 y = oy + ((oh - h) / 2)
         elif side == Pack.Above:
-            y = oy + oh + self.INTER_VIEW_MARGIN
+            y = oy + oh + outerMargin
         else:
-            y = oy - self.INTER_VIEW_MARGIN - h
+            y = oy - outerMargin - h
         self.x, self.y = x, y
         self.neighbors[Pack.oppositeSide(side)].add(other)
         other.neighbors[side].add(self)
@@ -121,14 +146,14 @@ class View(GeneratedItem):
         neighbors = self.neighbors[side]
         if side == Pack.Right:
             nx = max([(n.x + n.width) for n in neighbors] + [x+w])
-            goal = pw - self.parent.BORDER_MARGIN_RIGHT
+            goal = pw - self.parent.INNER_MARGIN_RIGHT
             growby = goal - nx
             w += growby
             for n in neighbors:
                 n.x += growby
         elif side == Pack.Left:
             nx = min([n.x for n in neighbors] + [x])
-            goal = self.parent.BORDER_MARGIN_LEFT
+            goal = self.parent.INNER_MARGIN_LEFT
             growby = nx - goal
             w += growby
             x -= growby
@@ -136,7 +161,7 @@ class View(GeneratedItem):
                 n.x -= growby
         elif side == Pack.Below:
             ny = min([n.y for n in neighbors] + [y])
-            goal = self.parent.BORDER_MARGIN_BOTTOM
+            goal = self.parent.INNER_MARGIN_BELOW
             growby = ny - goal
             h += growby
             y -= growby

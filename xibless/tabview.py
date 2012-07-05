@@ -3,10 +3,10 @@ from .view import View
 
 # Views in tab items have different margins than normal views.
 class TabSubView(View):
-    BORDER_MARGIN_LEFT = 17
-    BORDER_MARGIN_RIGHT = 17
-    BORDER_MARGIN_TOP = 3
-    BORDER_MARGIN_BOTTOM = 17
+    INNER_MARGIN_LEFT = 17
+    INNER_MARGIN_RIGHT = 17
+    INNER_MARGIN_TOP = 3
+    INNER_MARGIN_BOTTOM = 17
 
 class TabViewItem(GeneratedItem):
     OBJC_CLASS = 'NSTabViewItem'
