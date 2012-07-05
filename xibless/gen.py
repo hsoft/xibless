@@ -46,6 +46,7 @@ return result;
 # don't need those assignments, so we skip them.
 def generate(modulePath, dest, ownerless=False, localizationTable=None):
     base.globalLocalizationTable = localizationTable
+    base.globalGenerationCounter.reset()
     module_globals = {
         'owner': owner,
         'NSApp': NSApp,

@@ -173,13 +173,10 @@ class Literal(object):
     
 
 class GeneratedItem(object):
-    CREATION_ORDER_COUNTER = 0
     OBJC_CLASS = 'NSObject'
     
     def __init__(self):
-        self.creationOrder = GeneratedItem.CREATION_ORDER_COUNTER
-        GeneratedItem.CREATION_ORDER_COUNTER += 1
-        self.generated = False
+        self.creationOrder = globalGenerationCounter.creationToken()
         # In case we are never assigned to a top level variable and thus never given a varname
         self.varname = "_tmp%d" % self.creationOrder
         # properties to be set at generation time. For example, if "editable" is set to False,
@@ -204,6 +201,10 @@ class GeneratedItem(object):
     @property
     def accessor(self):
         return KeyValueId(None, self.varname)
+    
+    @property
+    def generated(self):
+        return globalGenerationCounter.isGenerated(self)
     
     def generateAssignments(self):
         if self not in KeyValueId.VALUE2KEYS:
@@ -235,6 +236,28 @@ class GeneratedItem(object):
         inittmpl.setprop = setprop
         result += inittmpl.render()
         result += self.generateAssignments()
-        self.generated = True
+        globalGenerationCounter.addGenerated(self)
         return result
     
+
+class GenerationCounter(object):
+    def __init__(self):
+        self.reset()
+    
+    def creationToken(self):
+        count = self.creationCount
+        self.creationCount += 1
+        return count
+    
+    def addGenerated(self, item):
+        self.generatedItems.add(item)
+    
+    def isGenerated(self, item):
+        return item in self.generatedItems
+    
+    def reset(self):
+        self.creationCount = 0
+        self.generatedItems = set()
+    
+
+globalGenerationCounter = GenerationCounter()
