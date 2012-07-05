@@ -78,6 +78,9 @@ class KeyValueId(object):
         self._fakeParent = fakeParent
         self._children = {}
     
+    def __repr__(self):
+        return '<KeyValueId %s>' % self._objcAccessor()
+    
     def __getattr__(self, name):
         if name.startswith('_'):
             return object.__getattribute__(self, name)
