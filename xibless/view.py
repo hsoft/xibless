@@ -86,9 +86,7 @@ class View(GeneratedItem):
         # has a bottom margin of 8 and has a label underneath with a top margin of 7, we use 8.
         # This method will return the appropriate margin if ``other`` is laid at the ``side`` of
         # ``self``. ``side`` can only be onle of the 4 sides (left, right, above, below)
-        margin = getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
-        otherMargin = getattr(other, 'OUTER_MARGIN_' + Pack.side2str(Pack.oppositeSide(side)).upper())
-        return max(margin, otherMargin)
+        return getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
     
     def packToCorner(self, corner):
         assert self.parent is not None
@@ -108,7 +106,9 @@ class View(GeneratedItem):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
-        outerMargin = self.outerMargin(other, side)
+        outerMargin1 = self.outerMargin(other, side)
+        outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
+        outerMargin = max(outerMargin1, outerMargin2)
         
         if side in (Pack.Above, Pack.Below):
             if align == Pack.Left:

@@ -38,12 +38,17 @@ class Button(Control):
             self.font = Font(FontFamily.System, FontSize.RegularControl)
     
     def outerMargin(self, other, side):
-        if isinstance(other, Button) and self.bezelStyle == const.NSRoundedBezelStyle \
-                and other.bezelStyle == const.NSRoundedBezelStyle \
-                and side in (Pack.Left, Pack.Right):
-            return 12
-        else:
-            return Control.outerMargin(self, other, side)
+        # Button vertical margins (it's a bit weird): If it's two Push buttons, the margin is 12
+        # If it's a push button and another type of button, it's 20. If it's a push button and
+        # another type of view, it's the normal 8.
+        if isinstance(other, Button) and self.bezelStyle == const.NSRoundedBezelStyle:
+            if other.bezelStyle == const.NSRoundedBezelStyle:
+                # two push buttons, it's 12 both horizontally and vertically
+                return 12
+            elif side in (Pack.Above, Pack.Below):
+                # A push button and another style of button, the vertical margin is 20
+                return 20
+        return Control.outerMargin(self, other, side)
     
     def generateInit(self):
         tmpl = Control.generateInit(self)
