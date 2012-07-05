@@ -1,6 +1,6 @@
 from .base import const
 from .font import Font, FontFamily, FontSize
-from .view import View
+from .view import View, Pack
 
 class Button(View):
     OBJC_CLASS = 'NSButton'
@@ -35,6 +35,14 @@ class Button(View):
             self.layoutDeltaW = 12
             self.layoutDeltaH = 12
             self.font = Font(FontFamily.System, FontSize.RegularControl)
+    
+    def outerMargin(self, other, side):
+        if isinstance(other, Button) and self.bezelStyle == const.NSRoundedBezelStyle \
+                and other.bezelStyle == const.NSRoundedBezelStyle \
+                and side in (Pack.Left, Pack.Right):
+            return 12
+        else:
+            return View.outerMargin(self, other, side)
     
     def dependencies(self):
         return [self.font]
