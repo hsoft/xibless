@@ -3,7 +3,7 @@ from .textfield import TextField
 class Label(TextField):
     def __init__(self, parent, text):
         TextField.__init__(self, parent, text)
-        self.width = 17
+        self.height = 17
         
         self.layoutDeltaX = -3
         self.layoutDeltaY = 0
