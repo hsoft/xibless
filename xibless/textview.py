@@ -22,6 +22,7 @@ class TextView(View):
             [$varname$_container setHasVerticalScroller:YES];
             [$varname$_container setHasHorizontalScroller:NO];
             [$varname$_container setAutohidesScrollers:NO];
+            [$varname$_container setBorderType:NSBezelBorder];
             [$varname$_container setAutoresizingMask:$autoresize$];
         """
         tmpl.autoresize = convertValueToObjc(self.properties['autoresizingMask'])

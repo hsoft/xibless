@@ -48,6 +48,7 @@ class TableView(View):
             [$varname$_container setHasVerticalScroller:YES];
             [$varname$_container setHasHorizontalScroller:YES];
             [$varname$_container setAutohidesScrollers:YES];
+            [$varname$_container setBorderType:NSBezelBorder];
             [$varname$_container setAutoresizingMask:$autoresize$];
         """
         tmpl.autoresize = convertValueToObjc(self.properties['autoresizingMask'])
