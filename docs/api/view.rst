@@ -10,8 +10,7 @@ but to be subclassed.
     :param width: Numeric. See :attr:`width`.
     :param height: Numeric. See :attr:`height`.
 
-    The ``View`` isn't mean't to be instatiated directly, but every subclass still has to call this
-    contructor. Every view has a parent, which in Cocoa is called superview. ``x`` and ``y`` are
+    Every view has a parent, which in Cocoa is called superview. ``x`` and ``y`` are
     usually set by layout methods, so we don't care about them (they're initialized to ``0``).
     However the size of a widget is important to know before starting the layout process, so we
     add them to the constructor. Many subclasses have defaults for their size, so it's not because

@@ -5,7 +5,7 @@ from subprocess import Popen
 
 from . import base
 from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const
-from .view import Pack
+from .view import View, Pack
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
 from .menu import Menu, MainMenu
@@ -51,6 +51,7 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         'owner': owner,
         'NSApp': NSApp,
         'const': const,
+        'View': View,
         'Menu': Menu,
         'MainMenu': MainMenu,
         'Action': Action,
@@ -118,7 +119,7 @@ def runUI(modulePath):
     tmpPath = tempfile.mkdtemp()
     destPath = os.path.join(tmpPath, 'runtemplate')
     shutil.copytree(runtemplatePath, destPath)
-    shutil.copy(modulePath, os.path.join(destPath, 'MainWindow.py'))
+    shutil.copy(modulePath, os.path.join(destPath, 'MainScript.py'))
     cmd = 'cd "%s" && python ./waf configure && python ./waf && open build/RunUI.app -W && cd ../.. && rm -r "%s"' % (destPath, tmpPath)
     p = Popen(cmd, shell=True)
     p.wait()
