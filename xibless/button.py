@@ -1,12 +1,13 @@
+from .control import Control, ControlHeights
 from .base import const
 from .font import Font, FontFamily, FontSize
-from .view import View, Pack
+from .view import Pack
 
-class Button(View):
+class Button(Control):
     OBJC_CLASS = 'NSButton'
     
     def __init__(self, parent, title, action=None):
-        View.__init__(self, parent, 80, 20)
+        Control.__init__(self, parent, 80, 20)
         self.buttonType = const.NSMomentaryLightButton
         # Layout deltas and font are set in bezelStyle setter
         self.bezelStyle = const.NSRoundedBezelStyle
@@ -42,15 +43,14 @@ class Button(View):
                 and side in (Pack.Left, Pack.Right):
             return 12
         else:
-            return View.outerMargin(self, other, side)
+            return Control.outerMargin(self, other, side)
     
     def dependencies(self):
         return [self.font]
     
     def generateInit(self):
-        tmpl = View.generateInit(self)
+        tmpl = Control.generateInit(self)
         self.properties['title'] = self.title
-        self.properties['font'] = self.font
         self.properties['buttonType'] = self.buttonType
         self.properties['bezelStyle'] = self.bezelStyle
         self.properties['state'] = self.state
@@ -64,12 +64,20 @@ class Button(View):
     
 
 class Checkbox(Button):
+    CONTROL_HEIGHTS = ControlHeights(14, 14, 10)
+    
     def __init__(self, parent, title):
         Button.__init__(self, parent, title)
         self.buttonType = const.NSSwitchButton
+        self.bezelStyle = const.NSRegularSquareBezelStyle
         
         self.layoutDeltaX = -2
         self.layoutDeltaY = -2
         self.layoutDeltaW = 4
         self.layoutDeltaH = 4
     
+    def generateInit(self):
+        tmpl = Button.generateInit(self)
+        self.properties['imagePosition'] = const.NSImageLeft
+        
+        return tmpl

@@ -1,7 +1,7 @@
 Button
 ======
 
-The ``Button`` is a :class:`View` subclass which represents Cocoa's ``NSButton``.
+The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButton``.
 
 .. class:: Button(parent, title[, action=None])
 

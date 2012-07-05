@@ -13,6 +13,7 @@ Contents:
    :maxdepth: 2
    
    view
+   control
    window
    action
    font
