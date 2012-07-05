@@ -35,6 +35,7 @@ class Window(View):
             styleFlags.append("NSMiniaturizableWindowMask")
         tmpl.style = "|".join(styleFlags)
         self.properties['title'] = self.title
+        self.properties['releasedWhenClosed'] = False
         # Windows don't have autoresizingMask and because it's set in View, we have to remove it.
         del self.properties['autoresizingMask']
         return tmpl
