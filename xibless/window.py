@@ -43,5 +43,5 @@ class Window(View):
         return tmpl
     
     def generateAddSubview(self, subview):
-        return "[[%s contentView] addSubview:%s];\n" % (self.varname, subview.varname)
+        return self.accessor.contentView._callMethod('addSubview', subview)
     
