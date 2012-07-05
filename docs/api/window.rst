@@ -32,4 +32,4 @@ Cocoa's ``NSWindow``.
     
     .. attribute:: initialFirstResponder
         
-        See :class:`View`. Equivalent to ``[self initialViewResponder]``.
+        See :class:`View`. Equivalent to ``[self initialFirstResponder]``.
