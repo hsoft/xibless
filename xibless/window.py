@@ -12,6 +12,7 @@ class Window(View):
         self.canClose = True
         self.canResize = True
         self.canMinimize = True
+        self.initialFirstResponder = None
     
     def generateInit(self):
         tmpl = View.generateInit(self)
@@ -36,6 +37,7 @@ class Window(View):
         tmpl.style = "|".join(styleFlags)
         self.properties['title'] = self.title
         self.properties['releasedWhenClosed'] = False
+        self.properties['initialFirstResponder'] = self.initialFirstResponder
         # Windows don't have autoresizingMask and because it's set in View, we have to remove it.
         del self.properties['autoresizingMask']
         return tmpl

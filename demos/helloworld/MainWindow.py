@@ -15,6 +15,7 @@ button.keyEquivalent = "\\r"
 # Owner Assignments
 owner.nameField = nameField
 owner.helloLabel = helloLabel
+result.initialFirstResponder = nameField
 
 # Layout
 nameLabel.packToCorner(Pack.UpperLeft)
