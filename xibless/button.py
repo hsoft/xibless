@@ -45,9 +45,6 @@ class Button(Control):
         else:
             return Control.outerMargin(self, other, side)
     
-    def dependencies(self):
-        return [self.font]
-    
     def generateInit(self):
         tmpl = Control.generateInit(self)
         self.properties['title'] = self.title

@@ -33,6 +33,9 @@ class Control(View):
         self.font.fontSize = fontSize
         self.height = height
     
+    def dependencies(self):
+        return [self.font]
+    
     def generateInit(self):
         tmpl = View.generateInit(self)
         self.properties['font'] = self.font
