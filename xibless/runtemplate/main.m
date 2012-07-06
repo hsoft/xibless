@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     id result = createMainScript(nil);
     NSWindow *window;
     if ([result isKindOfClass:[NSWindow class]]) {
-        NSWindow *window = (NSWindow *)result;
+        window = (NSWindow *)result;
     }
     else if ([result isKindOfClass:[NSView class]]) {
         NSView *view = (NSView *)result;
