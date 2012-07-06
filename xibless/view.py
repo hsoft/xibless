@@ -88,18 +88,21 @@ class View(GeneratedItem):
         # ``self``. ``side`` can only be onle of the 4 sides (left, right, above, below)
         return getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
     
+    def innerMargin(self, side):
+        return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
+    
     def packToCorner(self, corner):
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
         if corner in (Pack.LowerLeft, Pack.UpperLeft):
-            x = self.parent.INNER_MARGIN_LEFT
+            x = self.parent.innerMargin(Pack.Left)
         else:            
-            x = pw - self.parent.INNER_MARGIN_RIGHT - w
+            x = pw - self.parent.innerMargin(Pack.Right) - w
         if corner in (Pack.LowerLeft, Pack.LowerRight):
-            y = self.parent.INNER_MARGIN_BELOW
+            y = self.parent.innerMargin(Pack.Below)
         else:            
-            y = ph - self.parent.INNER_MARGIN_ABOVE - h
+            y = ph - self.parent.innerMargin(Pack.Above) - h
         self.x, self.y = x, y
     
     def packRelativeTo(self, other, side, align=None):
@@ -149,14 +152,14 @@ class View(GeneratedItem):
         neighbors = self.neighbors[side]
         if side == Pack.Right:
             nx = max([(n.x + n.width) for n in neighbors] + [x+w])
-            goal = pw - self.parent.INNER_MARGIN_RIGHT
+            goal = pw - self.parent.innerMargin(Pack.Right)
             growby = goal - nx
             w += growby
             for n in neighbors:
                 n.x += growby
         elif side == Pack.Left:
             nx = min([n.x for n in neighbors] + [x])
-            goal = self.parent.INNER_MARGIN_LEFT
+            goal = self.parent.innerMargin(Pack.Left)
             growby = nx - goal
             w += growby
             x -= growby
@@ -164,7 +167,7 @@ class View(GeneratedItem):
                 n.x -= growby
         elif side == Pack.Below:
             ny = min([n.y for n in neighbors] + [y])
-            goal = self.parent.INNER_MARGIN_BELOW
+            goal = self.parent.innerMargin(Pack.Below)
             growby = ny - goal
             h += growby
             y -= growby

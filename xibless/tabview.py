@@ -5,8 +5,8 @@ from .view import View
 class TabSubView(View):
     INNER_MARGIN_LEFT = 17
     INNER_MARGIN_RIGHT = 17
-    INNER_MARGIN_TOP = 3
-    INNER_MARGIN_BOTTOM = 17
+    INNER_MARGIN_ABOVE = 3
+    INNER_MARGIN_BELOW = 17
 
 class TabViewItem(GeneratedItem):
     OBJC_CLASS = 'NSTabViewItem'
@@ -38,6 +38,11 @@ class TabView(View):
     def __init__(self, parent):
         View.__init__(self, parent, 160, 110)
         self.tabs = []
+        
+        self.layoutDeltaX = -7
+        self.layoutDeltaY = -10
+        self.layoutDeltaW = 14
+        self.layoutDeltaH = 16
     
     def addTab(self, label, identifier=None):
         tab = TabViewItem(self, label, identifier)
