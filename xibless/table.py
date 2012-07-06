@@ -35,6 +35,12 @@ class TableView(View):
         View.__init__(self, parent, 100, 100)
         self.columns = []
         self.font = None
+        self.allowsColumnReordering = None
+        self.allowsColumnResizing = None
+        self.allowsColumnSelection = None
+        self.allowsEmptySelection = None
+        self.allowsMultipleSelection = None
+        self.allowsTypeSelect = None
     
     def addColumn(self, identifier, title, width):
         column = TableColumn(self, identifier, title, width)
@@ -57,6 +63,12 @@ class TableView(View):
             colcode += "[$varname$ addTableColumn:%s];\n" % column.varname
             viewsetup += colcode
         tmpl.viewsetup = viewsetup
+        self.properties['allowsColumnReordering'] = self.allowsColumnReordering
+        self.properties['allowsColumnResizing'] = self.allowsColumnResizing
+        self.properties['allowsColumnSelection'] = self.allowsColumnSelection
+        self.properties['allowsEmptySelection'] = self.allowsEmptySelection
+        self.properties['allowsMultipleSelection'] = self.allowsMultipleSelection
+        self.properties['allowsTypeSelect'] = self.allowsTypeSelect
         return tmpl
     
     def generateAddToParent(self):

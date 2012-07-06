@@ -20,6 +20,16 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         Creates a :class:`TableColumn` and adds it to self. The created item is returned by the
         method.
     
+    .. attribute:: allowsColumnReordering
+    .. attribute:: allowsColumnResizing
+    .. attribute:: allowsColumnSelection
+    .. attribute:: allowsEmptySelection
+    .. attribute:: allowsMultipleSelection
+    .. attribute:: allowsTypeSelect
+        
+        *Boolean*. Sets the corresponding flag in ``NSTableView``. Default values are the same as
+        in ``NSTableView``.
+    
 TableColumn
 -----------
 
