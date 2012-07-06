@@ -102,13 +102,16 @@ class View(GeneratedItem):
             y = ph - self.parent.INNER_MARGIN_ABOVE - h
         self.x, self.y = x, y
     
-    def packRelativeTo(self, other, side, align):
+    def packRelativeTo(self, other, side, align=None):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
         outerMargin1 = self.outerMargin(other, side)
         outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
         outerMargin = max(outerMargin1, outerMargin2)
+        
+        if align is None:
+            align = Pack.Left if side in (Pack.Above, Pack.Below) else Pack.Middle
         
         if side in (Pack.Above, Pack.Below):
             if align == Pack.Left:

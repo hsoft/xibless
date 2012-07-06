@@ -45,7 +45,7 @@ but to be subclassed.
         something in there, so if you send two views in the same corner, they're going to overlap.
         To place views relatively to each other, use :meth:`packRelativeTo`
 
-    .. method:: packRelativeTo(other, side, align)
+    .. method:: packRelativeTo(other, side[, align])
 
         :param other: A :class:`View` instance.
         :param side: A :ref:`side-constants`.
@@ -59,6 +59,9 @@ but to be subclassed.
         with ``Pack.Right``, our view's right side is going to be aligned with ``other``'s right
         side. As you probably guessed, ``align`` has to be of a different orientation than ``side``.
         It doesn't make any sense to ``side`` at ``Pack.Below`` and ``align`` at ``Pack.Above``.
+        
+        The ``align`` argument is optional. If it's not supplied, it will default to ``Left`` if
+        ``side`` is vertical and ``Middle`` otherwise.
     
     .. method:: fill(side)
         
