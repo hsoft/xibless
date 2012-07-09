@@ -1,7 +1,7 @@
 from setuptools import setup
 
 CLASSIFIERS = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'Environment :: Console',
     'License :: OSI Approved :: BSD License',
@@ -13,7 +13,7 @@ CLASSIFIERS = [
 ]
 
 LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
 setup(
     name='xibless',

@@ -1,6 +1,33 @@
 Changes
 =======
 
+Version 0.3.0 -- 2012/07/09
+---------------------------
+
+* Added RadioButtons, TableView, TabView, TextView, ImageView and ProgressIndicator.
+* Added support for string localization.
+* Added TextField.alignment and TextField.textColor.
+* Added Button.keyEquivalent.
+* Added canClose, canResize and canMinimize to Window.
+* Added a Control subclass.
+* View can now be directly instantiated in UI scripts (They're like "Custom Views" in IB).
+* `xibless run` can now be run on script for which the result is a View.
+* Improved layout system.
+* Window origin is now supplied in terms of screen proportions rather than absolute positions.
+* Fixed 'id' ownerclass in main function prototype generation and added the "ownerimport" global
+  variable in the UI script.
+* Escape newlines in string code generation.
+* Added documentation for Button.buttonType and Button.bezelStyle and added a demo for a button
+  with a different bezel style.
+* Fixed the most glaring memory leaks.
+* Fixed a bug where attributes like class-level default fonts wouldn't be generated when generating
+  more than one UI script in the same python session.
+* Windows are not released when closed by default.
+* Added support for circular references (a window setting one of its properties to an item that
+  required that window before being created, for example, initialFirstResponder). We previously
+  couldn't generate code for such bindings.
+* Made the `align` argument in `View.packRelativeTo()` optional.
+
 Version 0.2.0 -- 2012/06/28
 ---------------------------
 
