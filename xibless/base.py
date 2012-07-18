@@ -219,6 +219,10 @@ class GeneratedItem(object):
             assignments.append(assignment)
         return '\n'.join(assignments)
     
+    def generateFinalize(self):
+        # Called after everything has been generated.
+        pass
+    
     def generate(self, *args, **kwargs):
         result = ''
         for dependency in self.dependencies():

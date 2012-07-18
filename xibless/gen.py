@@ -105,7 +105,13 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
     for item in toGenerate:
         if item.generated:
             continue
-        codePieces.append(item.generate())
+        code = item.generate()
+        if code:
+            codePieces.append(code)
+    for item in toGenerate:
+        code = item.generateFinalize()
+        if code:
+            codePieces.append(code)    
     result = module_locals['result']
     tmpl.classname = result.OBJC_CLASS
     tmpl.contents = '\n'.join(codePieces)

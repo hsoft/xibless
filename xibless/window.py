@@ -45,3 +45,6 @@ class Window(View):
     def generateAddSubview(self, subview):
         return self.accessor.contentView._callMethod('addSubview', subview)
     
+    def generateFinalize(self):
+        return self.accessor._callMethod('recalculateKeyViewLoop')
+    
