@@ -7,7 +7,7 @@ The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButto
 
     :param parent: A :class:`View` instance. Same as :attr:`View.parent`.
     :param title: A string. See :attr:`title`.
-    :param action: An :class:`Action`. See :attr:`action`.
+    :param action: An :class:`Action`. See :attr:`Control.action`.
     
     .. attribute:: buttonType
     
@@ -22,11 +22,6 @@ The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButto
     .. attribute:: title
         
         *String*. The text on the button. Equivalent to ``[self title]``.
-    
-    .. attribute:: action
-    
-        :class:`Action`. The action that is performed on click. Equivalent to ``[self setTarget:]``
-        and ``[self setAction:]``.
     
     .. attribute:: font
         

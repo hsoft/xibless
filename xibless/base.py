@@ -41,6 +41,12 @@ class CodeTemplate(object):
         self._template = template
         self._replacements = {}
     
+    def __getattr__(self, key):
+        if key in self._replacements:
+            return self._replacements[key]
+        else:
+            raise AttributeError()
+    
     def __setattr__(self, key, value):
         if key in ['_template', '_replacements']:
             return object.__setattr__(self, key, value)

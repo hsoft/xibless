@@ -1,7 +1,7 @@
 RadioButtons
 ============
 
-The ``RadioButtons`` class is a :class:`View` subclass which represents Cocoa's ``NSMatrix`` in
+The ``RadioButtons`` class is a :class:`Control` subclass which represents Cocoa's ``NSMatrix`` in
 "radio" mode.
 
 .. class:: RadioButton(parent, items[, columns=1])

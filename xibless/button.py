@@ -13,7 +13,6 @@ class Button(Control):
         self.bezelStyle = const.NSRoundedBezelStyle
         self.state = None
         self.title = title
-        self.action = action
         self.keyEquivalent = None
         
     
@@ -57,11 +56,6 @@ class Button(Control):
         self.properties['bezelStyle'] = self.bezelStyle
         self.properties['state'] = self.state
         self.properties['keyEquivalent'] = self.keyEquivalent
-        tmpl.viewsetup = "$linkaction$\n"
-        if self.action:
-            tmpl.linkaction = self.action.generate(self.varname)
-        else:
-            tmpl.linkaction = ''
         return tmpl
     
 

@@ -1,18 +1,18 @@
 from __future__ import division, print_function
 
 from .base import stringArray
-from .view import View
+from .control import Control
 
-class RadioButtons(View):
+class RadioButtons(Control):
     OBJC_CLASS = 'NSMatrix'
     
     def __init__(self, parent, items, columns=1):
-        View.__init__(self, parent, 80, 40)
+        Control.__init__(self, parent, 80, 40)
         self.items = items
         self.columns = columns
     
     def generateInit(self):
-        tmpl = View.generateInit(self)
+        tmpl = Control.generateInit(self)
         tmpl.allocinit = """
         NSMatrix *$varname$;
         {

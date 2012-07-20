@@ -13,6 +13,7 @@ class Control(View):
         View.__init__(self, parent, width, height)
         self.font = Font(FontFamily.System, FontSize.RegularControl)
         self.controlSize = const.NSRegularControlSize
+        self.action = None
     
     @property
     def controlSize(self):
@@ -40,5 +41,7 @@ class Control(View):
         tmpl = View.generateInit(self)
         self.properties['font'] = self.font
         self.properties['cell.controlSize'] = self.controlSize
+        if self.action:
+            tmpl.setup += self.action.generate(self.varname)
         return tmpl
     

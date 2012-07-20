@@ -15,7 +15,6 @@ Contents:
    view
    control
    window
-   action
    font
    color
    menu
