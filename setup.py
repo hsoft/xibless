@@ -13,7 +13,7 @@ CLASSIFIERS = [
 ]
 
 LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 
 setup(
     name='xibless',

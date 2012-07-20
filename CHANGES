@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 0.3.1 -- 2012/07/20
+---------------------------
+
+* Pushed down the `action` attribute from `Button` to `Control`.
+* `RadioButtons` is now a `Control` subclass.
+* Made window recalculate its view loop after having generated its children.
+
 Version 0.3.0 -- 2012/07/09
 ---------------------------
 
