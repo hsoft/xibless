@@ -14,7 +14,7 @@ class Button(Control):
         self.state = None
         self.title = title
         self.keyEquivalent = None
-        
+        self.action = action
     
     @property
     def bezelStyle(self):
