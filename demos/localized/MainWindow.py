@@ -1,4 +1,5 @@
 ownerclass = 'AppDelegate'
+ownerimport = 'AppDelegate.h'
 
 # Init
 result = Window(330, 110, "Tell me your name!")

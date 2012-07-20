@@ -30,11 +30,18 @@ except NameError:
         with open(file, "r") as fh:
             exec(fh.read()+"\n", globals, locals)
 
-UNIT_TMPL = """
+HEADER_TMPL = """
 #import <Cocoa/Cocoa.h>
 $ownerimport$
 
-$classname$* create$name$($ownerdecl$)
+$funcsig$;
+"""
+
+UNIT_TMPL = """
+$mainimport$
+$ownerimport$
+
+$funcsig$
 {
 $contents$
 return result;
@@ -45,6 +52,13 @@ return result;
 # any owner assignment will make code compilation fail. Since we just want to preview the UI, we
 # don't need those assignments, so we skip them.
 def generate(modulePath, dest, ownerless=False, localizationTable=None):
+    dest_basename, dest_ext = os.path.splitext(os.path.basename(dest))
+    if dest_ext == '.h':
+        dest_header = None
+    else:
+        if not dest_ext:
+            dest += '.m'
+        dest_header = os.path.splitext(dest)[0] + '.h'
     base.globalLocalizationTable = localizationTable
     base.globalGenerationCounter.reset()
     module_globals = {
@@ -87,13 +101,19 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
     else:
         ownerclass = module_locals.get('ownerclass', 'id')
         ownerimport = module_locals.get('ownerimport')
-    if ownerclass == 'id':
-        tmpl.ownerdecl = "id owner"
-    else:
-        tmpl.ownerdecl = "%s *owner" % ownerclass
     if ownerimport:
-        tmpl.ownerimport = "#import \"%s\"" % ownerimport
-    tmpl.name = os.path.splitext(os.path.basename(dest))[0]
+        ownerimport = "#import \"%s\"" % ownerimport
+    else:
+        ownerimport = ''
+    if ownerclass == 'id':
+        ownerdecl = "id owner"
+    else:
+        ownerdecl = "%s *owner" % ownerclass
+    if dest_header:
+        tmpl.mainimport = "#import \"{}.h\"".format(dest_basename)
+    else:
+        tmpl.mainimport = "#import <Cocoa/Cocoa.h>"
+        tmpl.ownerimport = ownerimport
     toGenerate = []
     for key, value in module_locals.items():
         if not isinstance(value, GeneratedItem):
@@ -113,11 +133,18 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         if code:
             codePieces.append(code)    
     result = module_locals['result']
-    tmpl.classname = result.OBJC_CLASS
+    funcsig = "{}* create{}({})".format(result.OBJC_CLASS, dest_basename, ownerdecl)
+    tmpl.funcsig = funcsig
     tmpl.contents = '\n'.join(codePieces)
-    fp = open(dest, 'wt')
-    fp.write(tmpl.render())
-    fp.close()
+    with open(dest, 'wt') as fp:
+        fp.write(tmpl.render())
+    if dest_header:
+        tmpl = CodeTemplate(HEADER_TMPL)
+        tmpl.funcsig = funcsig
+        tmpl.ownerimport = ownerimport
+        with open(dest_header, 'wt') as fp:
+            fp.write(tmpl.render())
+        
 
 def runUI(modulePath):
     runtemplatePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runtemplate')

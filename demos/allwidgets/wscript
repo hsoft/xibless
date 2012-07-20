@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import plistlib
 import xibless
@@ -16,8 +16,8 @@ def configure(conf):
 
 def build(ctx):
     ctx.srcnode.make_node('autogen').mkdir()
-    xibless.generate('MainMenu.py', 'autogen/MainMenu.h')
-    xibless.generate('MainWindow.py', 'autogen/MainWindow.h')
+    xibless.generate('MainMenu.py', 'autogen/MainMenu')
+    xibless.generate('MainWindow.py', 'autogen/MainWindow')
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
@@ -28,8 +28,8 @@ def build(ctx):
     ctx.program(
         features      = 'c cprogram',
         target        = appnode.find_node("Contents").find_node("MacOS").make_node(executablename),
-        source        = 'main.m',
-        includes      = 'autogen',
+        source        = ctx.srcnode.ant_glob('autogen/*.m') + ctx.srcnode.ant_glob('*.m'),
+        includes      = '. autogen',
         use           = 'COCOA',
     )
 

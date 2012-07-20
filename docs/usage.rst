@@ -14,6 +14,10 @@ directly from Python, the usage is similar::
     import xibless
     xibless.generate(source, dest)
 
+These commands will generate code at ``dest``. If ``dest`` has an extension other than ``.h``, a
+``.h`` header will be generated alongside it. If ``dest`` doesn't have an extension, a ``.m``
+extension is automatically appended.
+
 The command line ``xibless`` command also has a ``run`` command letting you quicky see what your
 script looks like as a real UI. If you run::
 

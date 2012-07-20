@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
 import shutil
 import plistlib
@@ -32,15 +32,15 @@ def build(ctx):
     ctx.program(
         features      = 'c cprogram',
         target        = appnode.find_node("Contents").find_node("MacOS").make_node(executablename),
-        source        = 'main.m AppDelegate.m',
-        includes      = 'autogen',
+        source        = ctx.srcnode.ant_glob('autogen/*.m') + ctx.srcnode.ant_glob('*.m'),
+        includes      = '. autogen',
         use           = 'COCOA',
     )
 
 def generate_xibless(ctx):
     ctx.srcnode.make_node('autogen').mkdir()
-    xibless.generate('MainMenu.py', 'autogen/MainMenu.h', localizationTable='MainMenu')
-    xibless.generate('MainWindow.py', 'autogen/MainWindow.h', localizationTable='MainWindow')
+    xibless.generate('MainMenu.py', 'autogen/MainMenu', localizationTable='MainMenu')
+    xibless.generate('MainWindow.py', 'autogen/MainWindow', localizationTable='MainWindow')
 
 def create_app_skeleton(ctx, dest, info_plist_path):
     contents = dest.make_node("Contents")
