@@ -1,5 +1,5 @@
 ImageView
-=================
+=========
 
 The ``ImageView`` is a :class:`View` subclass that represents Cocoa's ``NSImageView``.
 

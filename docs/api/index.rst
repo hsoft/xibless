@@ -12,11 +12,11 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
+   types
+   const
    view
    control
    window
-   font
-   color
    menu
    button
    textfield

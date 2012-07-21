@@ -33,3 +33,29 @@ Cocoa's ``NSWindow``.
     .. attribute:: initialFirstResponder
         
         See :class:`View`. Equivalent to ``[self initialFirstResponder]``.
+    
+    .. attribute:: autosaveName
+        
+        *String*. Equivalent to ``[self frameAutosaveName]``.
+    
+    .. attribute:: minSize
+        
+        :class:`Size`. Equivalent to ``[self minSize]``.
+    
+    .. attribute:: maxSize
+        
+        :class:`Size`. Equivalent to ``[self maxSize]``.
+
+Panel
+-----
+
+Sublclasses :class:`Window` and represents Cocoa's ``NSPanel``.
+
+.. class:: Panel(width, height, title)
+    
+    Same initializer as :class:`Window`
+    
+    .. attribute:: style
+        
+        One of :ref:`panel-style-constants`. Sets the style of the panel like IB's selector does.
+    

@@ -74,23 +74,3 @@ but to be subclassed.
         have a button packed at your right and you're filling to the right, the gain in width will
         be decerased by the button's width and margin and the button will be moved to the right to
         accomodate your growth.
-
-.. _corner-constants:
-
-Corner constants
-----------------
-
-.. data:: Pack.UpperLeft
-.. data:: Pack.UpperRight
-.. data:: Pack.LowerLeft
-.. data:: Pack.LowerRight
-
-.. _side-constants:
-
-Side constants
-----------------
-
-.. data:: Pack.Left
-.. data:: Pack.Right
-.. data:: Pack.Above
-.. data:: Pack.Below

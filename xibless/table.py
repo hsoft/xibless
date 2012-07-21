@@ -1,4 +1,4 @@
-from .base import GeneratedItem, convertValueToObjc, KeyValueId
+from .base import GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags
 from .view import View
 
 class TableColumn(GeneratedItem):
@@ -11,7 +11,9 @@ class TableColumn(GeneratedItem):
         self.title = title
         self.width = width
         self.font = table.font
-        self.editable = True
+        self.editable = table.editable
+        self.userResizable = True
+        self.autoResizable = False
     
     def dependencies(self):
         return [self.font]
@@ -25,22 +27,35 @@ class TableColumn(GeneratedItem):
             self.properties['dataCell.font'] = self.font
         self.properties['width'] = self.width
         self.properties['editable'] = self.editable
+        resizingMask = Flags()
+        if self.userResizable:
+            resizingMask.add('NSTableColumnUserResizingMask')
+        if self.autoResizable:
+            resizingMask.add('NSTableColumnAutoresizingMask')
+        if resizingMask:
+            self.properties['resizingMask'] = resizingMask
         return tmpl
     
 
 class TableView(View):
     OBJC_CLASS = 'NSTableView'
+    PROPERTIES = View.PROPERTIES.copy()
+    PROPERTIES.update({
+        'allowsColumnReordering': '',
+        'allowsColumnResizing': '',
+        'allowsColumnSelection': '',
+        'allowsEmptySelection': '',
+        'allowsMultipleSelection': '',
+        'allowsTypeSelect': '',
+        'rowHeight': '',
+        'dataSource': '',
+    })
     
     def __init__(self, parent):
         View.__init__(self, parent, 100, 100)
         self.columns = []
         self.font = None
-        self.allowsColumnReordering = None
-        self.allowsColumnResizing = None
-        self.allowsColumnSelection = None
-        self.allowsEmptySelection = None
-        self.allowsMultipleSelection = None
-        self.allowsTypeSelect = None
+        self.editable = True
     
     def addColumn(self, identifier, title, width):
         column = TableColumn(self, identifier, title, width)
@@ -58,22 +73,20 @@ class TableView(View):
             [$varname$_container setAutoresizingMask:$autoresize$];
         """
         tmpl.autoresize = convertValueToObjc(self.properties['autoresizingMask'])
+        self.properties['columnAutoresizingStyle'] = Literal('NSTableViewUniformColumnAutoresizingStyle')
         for column in self.columns:
             colcode = column.generate()
             colcode += "[$varname$ addTableColumn:%s];\n" % column.varname
             viewsetup += colcode
         tmpl.viewsetup = viewsetup
-        self.properties['allowsColumnReordering'] = self.allowsColumnReordering
-        self.properties['allowsColumnResizing'] = self.allowsColumnResizing
-        self.properties['allowsColumnSelection'] = self.allowsColumnSelection
-        self.properties['allowsEmptySelection'] = self.allowsEmptySelection
-        self.properties['allowsMultipleSelection'] = self.allowsMultipleSelection
-        self.properties['allowsTypeSelect'] = self.allowsTypeSelect
         return tmpl
     
     def generateAddToParent(self):
         container = KeyValueId(None, self.varname + '_container')
         return self.parent.generateAddSubview(container)
+    
+    def generateFinalize(self):
+        return self.accessor._callMethod('sizeToFit')
     
 
     

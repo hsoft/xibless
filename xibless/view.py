@@ -42,6 +42,26 @@ class Pack(object):
 
 Anchor = namedtuple('Anchor', 'corner growX growY')
 
+class Size(object):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    
+    def objcValue(self):
+        return 'NSMakeSize(%d, %d)' % (self.width, self.height)
+    
+
+class Rect(object):
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    
+    def objcValue(self):
+        return 'NSMakeRect(%d, %d, %d, %d)' % (self.x, self.y, self.width, self.height)
+    
+
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
     
@@ -187,7 +207,7 @@ class View(GeneratedItem):
         y += self.layoutDeltaY
         w += self.layoutDeltaW
         h += self.layoutDeltaH
-        tmpl.rect = "NSMakeRect(%d, %d, %d, %d)" % (x, y, w, h)
+        tmpl.rect = Rect(x, y, w, h).objcValue()
         if self.anchor.growX and self.anchor.growY:
             resizeMask = 'NSViewWidthSizable|NSViewHeightSizable'
         elif self.anchor.growX:

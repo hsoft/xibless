@@ -1,18 +1,7 @@
-Font
-====
+Constants
+=========
 
-``Font`` represents Cocoa's ``NSFont`` and is used as values for ``font`` attributes in views that
-have it.
-
-.. class:: Font(family, size[, traits=None])
-    
-    :param family: A :ref:`font-family` or a string.
-    :param size: A :ref:`font-size` or a number.
-    :param traits: A list of :ref:`font-trait`.
-    
-    Creates a font with the specified family, size and traits. ``family`` can be one of the
-    constants or directly a font family name. Same thing for size. The traits is a list of
-    constants (example: ``[FontTrait.Bold, FontTrait.Italic]``).
+These are the constants used throughout ``xibless``.
 
 .. _font-family:
 
@@ -55,3 +44,32 @@ Font Trait constants
 
 .. data:: FontTrait.Bold
 .. data:: FontTrait.Italic
+
+.. _corner-constants:
+
+Corner constants
+----------------
+
+.. data:: Pack.UpperLeft
+.. data:: Pack.UpperRight
+.. data:: Pack.LowerLeft
+.. data:: Pack.LowerRight
+
+.. _side-constants:
+
+Side constants
+----------------
+
+.. data:: Pack.Left
+.. data:: Pack.Right
+.. data:: Pack.Above
+.. data:: Pack.Below
+
+.. _panel-style-constants:
+
+PanelStyle constants
+--------------------
+
+.. data:: PanelStyle.Regular
+.. data:: PanelStyle.Utility
+.. data:: PanelStyle.HUD

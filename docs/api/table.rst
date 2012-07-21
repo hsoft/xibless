@@ -30,6 +30,12 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         *Boolean*. Sets the corresponding flag in ``NSTableView``. Default values are the same as
         in ``NSTableView``.
     
+    .. attribute:: font
+    .. attribute:: editable
+    
+        If you set these attributes before adding your columns, all added columns will copy this
+        attribute.
+    
 TableColumn
 -----------
 
@@ -62,4 +68,12 @@ You shouldn't create it directly, but you can set its attributes.
     .. attribute:: editable
         
         Boolean. Whether the column can be edited. Equivalent to ``[self editable]``.
+    
+    .. attribute:: userResizable
+        
+        Boolean. Whether the user can resize the column.
+    
+    ..attribute:: autoResizable
+        
+        Boolean. Whether the column resizes itself when the table is resized.
     

@@ -5,11 +5,11 @@ from subprocess import Popen
 
 from . import base
 from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const
-from .view import View, Pack
+from .view import View, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
 from .menu import Menu, MainMenu
-from .window import Window
+from .window import Window, Panel, PanelStyle
 from .button import Button, Checkbox
 from .label import Label
 from .textfield import TextField
@@ -61,34 +61,12 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         dest_header = os.path.splitext(dest)[0] + '.h'
     base.globalLocalizationTable = localizationTable
     base.globalGenerationCounter.reset()
-    module_globals = {
-        'owner': owner,
-        'NSApp': NSApp,
-        'const': const,
-        'View': View,
-        'Menu': Menu,
-        'MainMenu': MainMenu,
-        'Action': Action,
-        'Window': Window,
-        'Button': Button,
-        'Checkbox': Checkbox,
-        'Label': Label,
-        'TextField': TextField,
-        'TextView': TextView,
-        'Popup': Popup,
-        'Combobox': Combobox,
-        'RadioButtons': RadioButtons,
-        'ProgressIndicator': ProgressIndicator,
-        'ImageView': ImageView,
-        'TabView': TabView,
-        'TableView': TableView,
-        'Font': Font,
-        'FontFamily': FontFamily,
-        'FontSize': FontSize,
-        'FontTrait': FontTrait,
-        'Color': Color,
-        'Pack': Pack,
+    to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
+        'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
+        'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
+        'TableView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
     }
+    module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}
     execfile(modulePath, module_globals, module_locals)
     assert 'result' in module_locals

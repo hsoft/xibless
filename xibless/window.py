@@ -3,6 +3,12 @@ from .view import View
 
 class Window(View):
     OBJC_CLASS = 'NSWindow'
+    PROPERTIES = View.PROPERTIES.copy()
+    PROPERTIES.update({
+        'title': '',
+        'minSize': '',
+        'maxSize': '',
+    })
     
     def __init__(self, width, height, title):
         View.__init__(self, None, width, height)
@@ -13,6 +19,7 @@ class Window(View):
         self.canResize = True
         self.canMinimize = True
         self.initialFirstResponder = None
+        self.autosaveName = None
     
     def generateInit(self):
         tmpl = View.generateInit(self)
@@ -35,7 +42,6 @@ class Window(View):
         if self.canMinimize:
             styleFlags.append("NSMiniaturizableWindowMask")
         tmpl.style = "|".join(styleFlags)
-        self.properties['title'] = self.title
         self.properties['releasedWhenClosed'] = False
         self.properties['initialFirstResponder'] = self.initialFirstResponder
         # Windows don't have autoresizingMask and because it's set in View, we have to remove it.
@@ -46,5 +52,30 @@ class Window(View):
         return self.accessor.contentView._callMethod('addSubview', subview)
     
     def generateFinalize(self):
-        return self.accessor._callMethod('recalculateKeyViewLoop')
+        # We have to set frameAutosaveName at finalize because otherwise, the frame is restored
+        # before the layout is done and it messes up everything.
+        result = self._generateProperties({'frameAutosaveName': self.autosaveName})
+        result += '\n' + self.accessor._callMethod('recalculateKeyViewLoop')
+        return result
+    
+
+class PanelStyle(object):
+    Regular = 0
+    Utility = 1
+    HUD = 2
+
+class Panel(Window):
+    OBJC_CLASS = 'NSPanel'
+    
+    def __init__(self, width, height, title):
+        Window.__init__(self, width, height, title)
+        self.style = PanelStyle.Regular
+    
+    def generateInit(self):
+        tmpl = Window.generateInit(self)
+        if self.style == PanelStyle.Utility:
+            tmpl.style += '|NSUtilityWindowMask'
+        elif self.style == PanelStyle.HUD:
+            tmpl.style += '|NSHUDWindowMask'
+        return tmpl
     
