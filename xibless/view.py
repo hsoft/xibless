@@ -98,6 +98,9 @@ class View(GeneratedItem):
         self.layoutDeltaW = 0
         self.layoutDeltaH = 0
         
+        # If true, inner and outer margins will be 0
+        self.ignoreMargin = False
+        
     
     #--- Layout
     def outerMargin(self, other, side):
@@ -106,9 +109,13 @@ class View(GeneratedItem):
         # has a bottom margin of 8 and has a label underneath with a top margin of 7, we use 8.
         # This method will return the appropriate margin if ``other`` is laid at the ``side`` of
         # ``self``. ``side`` can only be onle of the 4 sides (left, right, above, below)
+        if self.ignoreMargin:
+            return 0
         return getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
     
     def innerMargin(self, side):
+        if self.ignoreMargin:
+            return 0
         return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
     
     def packToCorner(self, corner):
