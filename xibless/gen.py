@@ -12,7 +12,7 @@ from .menu import Menu, MainMenu
 from .window import Window, Panel, PanelStyle
 from .button import Button, Checkbox
 from .label import Label
-from .textfield import TextField
+from .textfield import TextField, TextAlignment
 from .textview import TextView
 from .popup import Popup
 from .combo import Combobox
@@ -21,6 +21,7 @@ from .progress import ProgressIndicator
 from .image import ImageView
 from .tabview import TabView
 from .table import TableView
+from .splitview import SplitView
 
 try:
     execfile
@@ -64,7 +65,8 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
     to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
         'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
         'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
-        'TableView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
+        'TableView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait',
+        'Color', 'Pack', 'TextAlignment',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}

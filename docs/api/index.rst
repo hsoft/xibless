@@ -27,3 +27,4 @@ Contents:
    image
    tabview
    table
+   splitview

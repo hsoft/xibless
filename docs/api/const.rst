@@ -73,3 +73,14 @@ PanelStyle constants
 .. data:: PanelStyle.Regular
 .. data:: PanelStyle.Utility
 .. data:: PanelStyle.HUD
+
+.. _text-alignment-constants:
+
+TextAlignment constants
+-----------------------
+
+.. data:: TextAlignment.Left
+.. data:: TextAlignment.Right
+.. data:: TextAlignment.Center
+.. data:: TextAlignment.Justified
+.. data:: TextAlignment.Natural

@@ -3,6 +3,16 @@ from .view import View
 
 class ProgressIndicator(View):
     OBJC_CLASS = 'NSProgressIndicator'
+    PROPERTIES = View.PROPERTIES.copy()
+    PROPERTIES.update({
+        'style': '',
+        'controlSize': '',
+        'minValue': '',
+        'maxValue': '',
+        'value': 'doubleValue',
+        'indeterminate': '',
+        'displayedWhenStopped': '',
+    })
     
     def __init__(self, parent):
         View.__init__(self, parent, 92, 16)
@@ -12,19 +22,30 @@ class ProgressIndicator(View):
         self.value = 0
         self.indeterminate = True
         self.displayedWhenStopped = True
+        self._controlSize = None
         
         self.layoutDeltaX = -2
         self.layoutDeltaY = 0
         self.layoutDeltaW = 4
         self.layoutDeltaH = 5
     
-    def generateInit(self):
-        tmpl = View.generateInit(self)
-        self.properties['style'] = self.style
-        self.properties['minValue'] = self.minValue
-        self.properties['maxValue'] = self.maxValue
-        self.properties['doubleValue'] = self.value
-        self.properties['indeterminate'] = self.indeterminate
-        self.properties['displayedWhenStopped'] = self.displayedWhenStopped
-        return tmpl
+    @property
+    def controlSize(self):
+        return self._controlSize
+    
+    @controlSize.setter
+    def controlSize(self, value):
+        if value == const.NSMiniControlSize: # not supported
+            value = const.NSSmallControlSize
+        self._controlSize = value
+        if value == const.NSSmallControlSize:
+            if self.style == const.NSProgressIndicatorBarStyle:
+                self.height = 10
+            else:
+                self.width = self.height = 16
+        else: # regular
+            if self.style == const.NSProgressIndicatorBarStyle:
+                self.height = 16
+            else:
+                self.width = self.height = 32
     

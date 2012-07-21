@@ -18,8 +18,8 @@ The ``Textfield`` is a :class:`View` subclass that represents Cocoa's ``NSTextFi
     
     .. attribute:: alignment
         
-        :ref:`Cocoa constant <literal-consts>`. Alignment of the text within the field.
-        Equivalent to ``[self alignment]``. Use with ``NSTextAlignment`` constants.
+        One of :ref:`text-alignment-constants`. Alignment of the text within the field.
+        Equivalent to ``[self alignment]``.
     
     .. attribute:: textColor
         
