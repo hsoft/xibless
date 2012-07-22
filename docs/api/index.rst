@@ -15,6 +15,7 @@ Contents:
    types
    const
    view
+   layout
    control
    window
    menu

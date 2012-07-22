@@ -2,6 +2,7 @@ from .control import Control, ControlHeights
 from .base import const
 from .font import Font, FontFamily, FontSize
 from .view import Pack
+from .table import TableView
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
@@ -37,15 +38,20 @@ class Button(Control):
             self.font = Font(FontFamily.System, FontSize.RegularControl)
     
     def outerMargin(self, other, side):
-        # Button vertical margins (it's a bit weird): If it's two Push buttons, the margin is 12
-        # If it's a push button and another type of button, it's 20. If it's a push button and
-        # another type of view, it's the normal 8.
-        if isinstance(other, Button) and self.bezelStyle == const.NSRoundedBezelStyle:
-            if other.bezelStyle == const.NSRoundedBezelStyle:
-                # two push buttons, it's 12 both horizontally and vertically
-                return 12
-            elif side in (Pack.Above, Pack.Below):
-                # A push button and another style of button, the vertical margin is 20
+        # Push buttons have special vertical margins
+        if self.bezelStyle == const.NSRoundedBezelStyle and side in (Pack.Above, Pack.Below):
+            if isinstance(other, Button):
+                # If it's two Push buttons, the margin is 12. If it's a push button and another type
+                # of button, it's 20. If it's a push button and another type of view, it's the
+                # normal 8.
+                if other.bezelStyle == const.NSRoundedBezelStyle:
+                    # two push buttons, it's 12 both horizontally and vertically
+                    return 12
+                elif side in (Pack.Above, Pack.Below):
+                    # A push button and another style of button, the vertical margin is 20
+                    return 20
+            elif isinstance(other, TableView):
+                # A push button under a table has 20 of margin
                 return 20
         return Control.outerMargin(self, other, side)
     

@@ -22,6 +22,7 @@ from .image import ImageView
 from .tabview import TabView
 from .table import TableView
 from .splitview import SplitView
+from .layout import HLayout
 
 try:
     execfile
@@ -66,7 +67,7 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
         'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
         'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
         'TableView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait',
-        'Color', 'Pack', 'TextAlignment',
+        'Color', 'Pack', 'TextAlignment', 'HLayout',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}

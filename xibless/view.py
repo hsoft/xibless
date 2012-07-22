@@ -39,6 +39,26 @@ class Pack(object):
             return 'above'
         elif side == Pack.Below:
             return 'below'
+    
+    @staticmethod
+    def isSide(sideOrCorner):
+        return sideOrCorner in {Pack.Left, Pack.Right, Pack.Above, Pack.Below, Pack.Middle}
+    
+    @staticmethod
+    def isCorner(sideOrCorner):
+        return sideOrCorner in {Pack.UpperLeft, Pack.UpperRight, Pack.LowerLeft, Pack.LowerRight}
+    
+    @staticmethod
+    def sidesInCorner(corner):
+        assert Pack.isCorner(corner)
+        if corner == Pack.UpperLeft:
+            return {Pack.Left, Pack.Above}
+        elif corner == Pack.UpperRight:
+            return {Pack.Right, Pack.Above}
+        elif corner == Pack.LowerRight:
+            return {Pack.Right, Pack.Below}
+        elif corner == Pack.LowerLeft:
+            return {Pack.Left, Pack.Below}
 
 Anchor = namedtuple('Anchor', 'corner growX growY')
 
@@ -173,6 +193,10 @@ class View(GeneratedItem):
         self.anchor = Anchor(corner, growX, growY)
     
     def fill(self, side):
+        if Pack.isCorner(side):
+            for side in Pack.sidesInCorner(side):
+                self.fill(side)
+            return
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
@@ -200,8 +224,15 @@ class View(GeneratedItem):
             y -= growby
             for n in neighbors:
                 n.y -= growby
+        elif side == Pack.Above:
+            ny = max([n.y + n.height for n in neighbors] + [y+h])
+            goal = ph - self.parent.innerMargin(Pack.Above)
+            growby = goal - ny
+            h += growby
+            for n in neighbors:
+                n.y += growby
         else:
-            raise Exception("Above fill not supported yet")
+            raise ValueError("Wrong side argument")
         self.x, self.y, self.width, self.height = x, y, w, h
     
     #--- Generate

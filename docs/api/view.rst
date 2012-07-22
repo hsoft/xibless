@@ -65,7 +65,7 @@ but to be subclassed.
     
     .. method:: fill(side)
         
-        :param side: A :ref:`side-constants`.
+        :param side: One of :ref:`side-constants` or :ref:`corner-constants`.
         
         Makes the view grow in a direction specified by ``size`` until it reaches its superview's
         bounds (respecting the margins, of course). The nice thing about ``fill`` is that if you
@@ -74,3 +74,18 @@ but to be subclassed.
         have a button packed at your right and you're filling to the right, the gain in width will
         be decerased by the button's width and margin and the button will be moved to the right to
         accomodate your growth.
+        
+        Using a corner constant instead of a size one is a shorthand for calling ``fill()`` twice.
+        For example, calling ``fill(Pack.LowerRight)`` is the same as calling both
+        ``fill(Pack.Below)`` and ``fill(Pack.Right)``.
+    
+    .. method:: setAnchor(corner[, growX, growY])
+        
+        :param corner: One of the :ref:`corner-constants`
+        :param growX: Boolean
+        :param growY: Boolean
+        
+        Sets the view autoresizing mask. The corner you specify will be the corner the view "stick
+        to" when its parent view is resized. If growX and/or growY is ``True``, the view will grow
+        or shrink with its parent view.
+    

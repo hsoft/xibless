@@ -146,10 +146,7 @@ class Action(object):
         """)
         tmpl.sender = sender
         tmpl.selector = "@selector(%s)" % self.selector
-        if self.target:
-            tmpl.target = self.target._objcAccessor()
-        else:
-            tmpl.target = 'nil'
+        tmpl.target = convertValueToObjc(self.target)
         return tmpl.render()
     
 

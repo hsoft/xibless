@@ -62,3 +62,51 @@ because... it's the same! For example, if you want your textfield to grow horizo
 anchored to the upper left corner, you call::
 
     textfield.setAnchor(Pack.UpperLeft, growX=True)
+
+Layout Objects
+--------------
+
+Calling layout methods can be overly complex and cumbersome, especially for layouts that are
+supposed to be simple, such as a row of buttons aligned vertically. For this purpose,
+:doc:`api/layout` were created. They don't offer any new layout functionality other than than the
+ones presented above, but they can save quite a few calls to them. For now, there's only
+:class:`HLayout` which represents a horizonal row of views, but more are coming.
+
+Let's go with an example. Imagine that we want a window with a table using most of the space, except
+for a few action buttons at the bottom, some of the left side, some of the right side. We want, of
+course, all anchors to be correctly set so that the window can be resized and see its views follow
+accordingly. Here's what we'd have to do without layout items::
+
+    window = Window(500, 300, "MyWindow")
+    table = TableView(window)
+    button1 = Button(window, "Button 1")
+    button2 = Button(window, "Button 2")
+    button3 = Button(window, "Button 3")
+
+    button1.packToCorner(Pack.LowerLeft)
+    button2.packRelativeTo(button1, Pack.Right)
+    button3.packToCorner(Pack.LowerRight)
+    table.packRelativeTo(button1, Pack.Above)
+    table.fill(Pack.UpperRight)
+    button1.setAnchor(Pack.LowerLeft)
+    button2.setAnchor(Pack.LowerLeft)
+    button3.setAnchor(Pack.LowerRight)
+    table.setAnchor(Pack.UpperLeft, growX=True, growY=True)
+
+With :class:`HLayout`, we can create the same layout and save ourselves a bunch of calls::
+
+    window = Window(500, 300, "MyWindow")
+    table = TableView(window)
+    button1 = Button(window, "Button 1")
+    button2 = Button(window, "Button 2")
+    button3 = Button(window, "Button 3")
+
+    buttonLayout = HLayout(left=[button1, button2], right=[button3])
+    buttonLayout.packToCorner(Pack.LowerLeft)
+    buttonLayout.fill(Pack.Right)
+    buttonLayout.setAchor(Pack.Below)
+    table.packRelativeTo(buttonLayout, Pack.Above)
+    table.fill(Pack.UpperRight)
+    table.setAnchor(Pack.UpperLeft, growX=True, growY=True)
+
+**Temporary limitation:** A layout object cannot contain another layout object.
