@@ -12,6 +12,10 @@ def upFirstLetter(s):
 def stringArray(strings):
     return "[NSArray arrayWithObjects:%s,nil]" % ','.join(('@"%s"' % s) for s in strings)
 
+def wrapString(s):
+    s = s.replace('\n', '\\n').replace('"', '\\"')
+    return '@"%s"' % s
+
 globalLocalizationTable = None
 
 def convertValueToObjc(value):
@@ -22,8 +26,7 @@ def convertValueToObjc(value):
     elif hasattr(value, 'objcValue'):
         return value.objcValue()
     elif isinstance(value, basestring):
-        value = value.replace('\n', '\\n')
-        result = '@"%s"' % value
+        result = wrapString(value)
         if value and globalLocalizationTable:
             result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, globalLocalizationTable)
         return result
@@ -177,6 +180,15 @@ class Literal(object):
     
     def objcValue(self):
         return self.value
+    
+
+# Use this for strings that shouldn't be wrapped in NSLocalizedStringFromTable
+class NonLocalizableString(object):
+    def __init__(self, value):
+        self.value = value
+    
+    def objcValue(self):
+        return wrapString(self.value)
     
 
 # Use this for flags-based properties. Will be converted into a "|" joined literal

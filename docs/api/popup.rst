@@ -1,7 +1,7 @@
 Popup
 =====
 
-The ``Popup`` is a :class:`View` subclass which represents Cocoa's ``NSPopUpButton``.
+The ``Popup`` is a :class:`Control` subclass which represents Cocoa's ``NSPopUpButton``.
 
 .. class:: Popup(parent[, items=None])
 

@@ -21,9 +21,10 @@ class HLayout(View):
         self.subviews = subviews
         self._adaptLayoutSize()
         self.setAnchor(Pack.UpperLeft)
+        self.packToCorner(Pack.UpperLeft)
+        self.fill(Pack.Right)
     
     def _adaptLayoutSize(self):
-        self.width = sum(view.width for view in self.subviews)
         self.height = max(view.height for view in self.subviews)
     
     def _arrangeLayout(self):
@@ -44,20 +45,21 @@ class HLayout(View):
                 view.packRelativeTo(previous, Pack.Left)
                 previous = view
     
+    def _updatePos(self):
+        self._arrangeLayout()
+    
     def outerMargin(self, other, side):
         if not self.subviews:
             return 0
         return max(view.outerMargin(other, side) for view in self.subviews)
     
-    def packToCorner(self, corner):
+    def packToCorner(self, *args, **kwargs):
         self._adaptLayoutSize()
-        View.packToCorner(self, corner)
-        self._arrangeLayout()
+        View.packToCorner(self, *args, **kwargs)
     
-    def packRelativeTo(self, other, side, align=None):
+    def packRelativeTo(self, *args, **kwargs):
         self._adaptLayoutSize()
-        View.packRelativeTo(self, other, side, align)
-        self._arrangeLayout()
+        View.packRelativeTo(self, *args, **kwargs)
     
     def setAnchor(self, side):
         if side == Pack.Above:
@@ -71,10 +73,9 @@ class HLayout(View):
         for view in self.right:
             view.setAnchor(rightAnchor)
     
-    def fill(self, side):
+    def fill(self, *args, **kwargs):
         self._adaptLayoutSize()
-        View.fill(self, side)
-        self._arrangeLayout()
+        View.fill(self, *args, **kwargs)
     
     # We don't want to be generating any objc code for the layout.
     def generate(self, *args, **kwargs):

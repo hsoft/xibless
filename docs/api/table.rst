@@ -36,6 +36,15 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         If you set these attributes before adding your columns, all added columns will copy this
         attribute.
     
+OutlineView
+-----------
+
+A :class:`TableView` sublass that represents Cocoa's ``NSOutlineView``.
+
+.. class:: OutlineView(parent)
+    
+    :param parent: A :class:`View` instance. Same as :attr:`View.parent`.
+
 TableColumn
 -----------
 
@@ -73,7 +82,12 @@ You shouldn't create it directly, but you can set its attributes.
         
         Boolean. Whether the user can resize the column.
     
-    ..attribute:: autoResizable
+    .. attribute:: autoResizable
         
         Boolean. Whether the column resizes itself when the table is resized.
+    
+    .. attribute:: dataCell
+        
+        :class:`Control` instance. Sets the column's ``dataCell`` attribute to the control's cell.
+        During code generation, the code will look like ``[column setDataCell:[control cell]]``.
     

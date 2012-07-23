@@ -1,21 +1,74 @@
 from .control import Control, ControlHeights
-from .base import const
-from .font import Font, FontFamily, FontSize
+from .base import const, Literal, KeyValueId, NonLocalizableString
 from .view import Pack
 from .table import TableView
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
+    PROPERTIES = Control.PROPERTIES.copy()
+    PROPERTIES.update({
+        'imagePosition': '',
+    })
     
     def __init__(self, parent, title, action=None):
+        self._bezelStyle = const.NSRoundedBezelStyle
         Control.__init__(self, parent, 80, 20)
         self.buttonType = const.NSMomentaryLightButton
-        # Layout deltas and font are set in bezelStyle setter
-        self.bezelStyle = const.NSRoundedBezelStyle
         self.state = None
         self.title = title
         self.keyEquivalent = None
         self.action = action
+        self.image = None
+        self._updateLayoutDeltas()
+    
+    def _getControlHeights(self):
+        if self.bezelStyle == const.NSTexturedRoundedBezelStyle:
+            return ControlHeights(22, 18, 15)
+        elif self.bezelStyle == const.NSRoundRectBezelStyle:
+            return ControlHeights(18, 16, 14)
+        else:
+            return ControlHeights(21, 18, 15)
+    
+    def _getControlFontSize(self, controlSize):
+        bezelStyle = self.bezelStyle
+        if (bezelStyle == const.NSRoundRectBezelStyle) and (controlSize == const.NSRegularControlSize):
+            return 12
+        else:
+            return Control._getControlFontSize(self, controlSize)
+    
+    def _updateLayoutDeltas(self):
+        bezelStyle = self._bezelStyle
+        controlSize = self._controlSize
+        if bezelStyle == const.NSRoundRectBezelStyle:
+            self.layoutDeltaX = 0
+            self.layoutDeltaY = -1
+            self.layoutDeltaW = 0
+            self.layoutDeltaH = 1
+            if controlSize == const.NSMiniControlSize:
+                self.layoutDeltaY = -2
+                self.layoutDeltaH = 3 
+        elif bezelStyle == const.NSTexturedRoundedBezelStyle:
+            self.layoutDeltaX = 0
+            self.layoutDeltaY = -1
+            self.layoutDeltaW = 0
+            self.layoutDeltaH = 3
+            if controlSize == const.NSSmallControlSize:
+                self.layoutDeltaY = -2
+                self.layoutDeltaH = 2
+            elif controlSize == const.NSMiniControlSize:
+                self.layoutDeltaY = 0
+                self.layoutDeltaH = 0
+        else:
+            self.layoutDeltaX = -6
+            self.layoutDeltaY = -7
+            self.layoutDeltaW = 12
+            self.layoutDeltaH = 11
+            if controlSize == const.NSSmallControlSize:
+                self.layoutDeltaY = -6
+                self.layoutDeltaH = 10
+            elif controlSize == const.NSMiniControlSize:
+                self.layoutDeltaY = -1
+                self.layoutDeltaH = 1
     
     @property
     def bezelStyle(self):
@@ -24,18 +77,8 @@ class Button(Control):
     @bezelStyle.setter
     def bezelStyle(self, value):
         self._bezelStyle = value
-        if value == const.NSRoundRectBezelStyle:
-            self.layoutDeltaX = 0
-            self.layoutDeltaY = 0
-            self.layoutDeltaW = 0
-            self.layoutDeltaH = 1
-            self.font = Font(FontFamily.System, 12)
-        else:
-            self.layoutDeltaX = -6
-            self.layoutDeltaY = -8
-            self.layoutDeltaW = 12
-            self.layoutDeltaH = 12
-            self.font = Font(FontFamily.System, FontSize.RegularControl)
+        self._updateControlSize()
+        self._updateLayoutDeltas()
     
     def outerMargin(self, other, side):
         # Push buttons have special vertical margins
@@ -61,7 +104,11 @@ class Button(Control):
         self.properties['buttonType'] = self.buttonType
         self.properties['bezelStyle'] = self.bezelStyle
         self.properties['state'] = self.state
-        self.properties['keyEquivalent'] = self.keyEquivalent
+        if self.keyEquivalent:
+            self.properties['keyEquivalent'] = NonLocalizableString(self.keyEquivalent)
+        if self.image:
+            self.properties['image'] = Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
+                NonLocalizableString(self.image), endline=False))
         return tmpl
     
 

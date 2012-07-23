@@ -1,4 +1,4 @@
-from .base import const, KeyValueId, Literal
+from .base import const, KeyValueId, Literal, NonLocalizableString
 from .view import View
 
 class ImageView(View):
@@ -11,7 +11,8 @@ class ImageView(View):
     
     def generateInit(self):
         tmpl = View.generateInit(self)
-        self.properties['image'] = Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed', self.name, endline=False))
+        self.properties['image'] = Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
+            NonLocalizableString(self.name), endline=False))
         self.properties['imageAlignment'] = self.alignment
         return tmpl
     

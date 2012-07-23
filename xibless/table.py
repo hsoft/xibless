@@ -1,4 +1,4 @@
-from .base import GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags
+from .base import GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags, NonLocalizableString
 from .view import View
 
 class TableColumn(GeneratedItem):
@@ -14,17 +14,21 @@ class TableColumn(GeneratedItem):
         self.editable = table.editable
         self.userResizable = True
         self.autoResizable = False
+        self.dataCell = None
     
     def dependencies(self):
-        return [self.font]
+        return [self.font, self.dataCell]
     
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.initmethod = "initWithIdentifier:$identifier$"
-        tmpl.identifier = convertValueToObjc(self.identifier)
+        tmpl.identifier = convertValueToObjc(NonLocalizableString(self.identifier))
         self.properties['headerCell.stringValue'] = self.title
-        if self.font:
-            self.properties['dataCell.font'] = self.font
+        if self.dataCell:
+            self.properties['dataCell'] = self.dataCell.accessor.cell
+        else:
+            if self.font:
+                self.properties['dataCell.font'] = self.font
         self.properties['width'] = self.width
         self.properties['editable'] = self.editable
         resizingMask = Flags()
@@ -89,4 +93,6 @@ class TableView(View):
         return self.accessor._callMethod('sizeToFit')
     
 
+class OutlineView(TableView):
+    OBJC_CLASS = 'NSOutlineView'
     

@@ -15,6 +15,32 @@ class Control(View):
         self.controlSize = const.NSRegularControlSize
         self.action = None
     
+    def _getControlHeights(self):
+        return self.CONTROL_HEIGHTS
+    
+    def _getControlFontSize(self, controlSize):
+        if controlSize == const.NSMiniControlSize:
+            return FontSize.MiniControl
+        elif controlSize == const.NSSmallControlSize:
+            return FontSize.SmallControl
+        else:
+            return FontSize.RegularControl
+    
+    def _updateLayoutDeltas(self):
+        pass
+    
+    def _updateControlSize(self):
+        controlSize = self._controlSize
+        controlHeights = self._getControlHeights()
+        if controlSize == const.NSMiniControlSize:
+            self.height = controlHeights.mini
+        elif controlSize == const.NSSmallControlSize:
+            self.height = self.CONTROL_HEIGHTS.small
+        else:
+            self.height = self.CONTROL_HEIGHTS.regular
+        self.font.size = self._getControlFontSize(controlSize)
+        self._updateLayoutDeltas()
+    
     @property
     def controlSize(self):
         return self._controlSize
@@ -22,17 +48,7 @@ class Control(View):
     @controlSize.setter
     def controlSize(self, value):
         self._controlSize = value
-        if value == const.NSMiniControlSize:
-            fontSize = FontSize.MiniControl
-            height = self.CONTROL_HEIGHTS.mini
-        elif value == const.NSSmallControlSize:
-            fontSize = FontSize.SmallControl
-            height = self.CONTROL_HEIGHTS.small
-        else:
-            fontSize = FontSize.RegularControl
-            height = self.CONTROL_HEIGHTS.regular
-        self.font.size = fontSize
-        self.height = height
+        self._updateControlSize()
     
     def dependencies(self):
         return [self.font]

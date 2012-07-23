@@ -117,10 +117,11 @@ class View(GeneratedItem):
         self.layoutDeltaY = 0
         self.layoutDeltaW = 0
         self.layoutDeltaH = 0
-        
-        # If true, inner and outer margins will be 0
-        self.ignoreMargin = False
-        
+    
+    def _updatePos(self):
+        # This is called after the view had its position changed by a layout method. Here, we do
+        # nothing, but the Layout subclass does.
+        pass
     
     #--- Layout
     def outerMargin(self, other, side):
@@ -129,36 +130,42 @@ class View(GeneratedItem):
         # has a bottom margin of 8 and has a label underneath with a top margin of 7, we use 8.
         # This method will return the appropriate margin if ``other`` is laid at the ``side`` of
         # ``self``. ``side`` can only be onle of the 4 sides (left, right, above, below)
-        if self.ignoreMargin:
-            return 0
         return getattr(self, 'OUTER_MARGIN_' + Pack.side2str(side).upper())
     
     def innerMargin(self, side):
-        if self.ignoreMargin:
-            return 0
         return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
     
-    def packToCorner(self, corner):
+    def packToCorner(self, corner, margin=None):
+        def getmargin(side):
+            if margin is not None:
+                return margin
+            else:
+                return self.parent.innerMargin(side)
+        
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
         if corner in (Pack.LowerLeft, Pack.UpperLeft):
-            x = self.parent.innerMargin(Pack.Left)
+            x = getmargin(Pack.Left)
         else:            
             x = pw - self.parent.innerMargin(Pack.Right) - w
         if corner in (Pack.LowerLeft, Pack.LowerRight):
-            y = self.parent.innerMargin(Pack.Below)
+            y = getmargin(Pack.Below)
         else:            
-            y = ph - self.parent.innerMargin(Pack.Above) - h
+            y = ph - getmargin(Pack.Above) - h
         self.x, self.y = x, y
+        self._updatePos()
     
-    def packRelativeTo(self, other, side, align=None):
+    def packRelativeTo(self, other, side, align=None, margin=None):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
-        outerMargin1 = self.outerMargin(other, side)
-        outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
-        outerMargin = max(outerMargin1, outerMargin2)
+        if margin is not None:
+            outerMargin = margin
+        else:
+            outerMargin1 = self.outerMargin(other, side)
+            outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
+            outerMargin = max(outerMargin1, outerMargin2)
         
         if align is None:
             align = Pack.Left if side in (Pack.Above, Pack.Below) else Pack.Middle
@@ -188,14 +195,21 @@ class View(GeneratedItem):
         self.x, self.y = x, y
         self.neighbors[Pack.oppositeSide(side)].add(other)
         other.neighbors[side].add(self)
+        self._updatePos()
     
     def setAnchor(self, corner, growX=False, growY=False):
         self.anchor = Anchor(corner, growX, growY)
     
-    def fill(self, side):
+    def fill(self, side, margin=None):
+        def getmargin(side):
+            if margin is not None:
+                return margin
+            else:
+                return self.parent.innerMargin(side)
+        
         if Pack.isCorner(side):
             for side in Pack.sidesInCorner(side):
-                self.fill(side)
+                self.fill(side, margin=margin)
             return
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
@@ -203,14 +217,14 @@ class View(GeneratedItem):
         neighbors = self.neighbors[side]
         if side == Pack.Right:
             nx = max([(n.x + n.width) for n in neighbors] + [x+w])
-            goal = pw - self.parent.innerMargin(Pack.Right)
+            goal = pw - getmargin(Pack.Right)
             growby = goal - nx
             w += growby
             for n in neighbors:
                 n.x += growby
         elif side == Pack.Left:
             nx = min([n.x for n in neighbors] + [x])
-            goal = self.parent.innerMargin(Pack.Left)
+            goal = getmargin(Pack.Left)
             growby = nx - goal
             w += growby
             x -= growby
@@ -218,7 +232,7 @@ class View(GeneratedItem):
                 n.x -= growby
         elif side == Pack.Below:
             ny = min([n.y for n in neighbors] + [y])
-            goal = self.parent.innerMargin(Pack.Below)
+            goal = getmargin(Pack.Below)
             growby = ny - goal
             h += growby
             y -= growby
@@ -226,7 +240,7 @@ class View(GeneratedItem):
                 n.y -= growby
         elif side == Pack.Above:
             ny = max([n.y + n.height for n in neighbors] + [y+h])
-            goal = ph - self.parent.innerMargin(Pack.Above)
+            goal = ph - getmargin(Pack.Above)
             growby = goal - ny
             h += growby
             for n in neighbors:
@@ -234,6 +248,9 @@ class View(GeneratedItem):
         else:
             raise ValueError("Wrong side argument")
         self.x, self.y, self.width, self.height = x, y, w, h
+        self._updatePos()
+        for n in neighbors:
+            n._updatePos()
     
     #--- Generate
     def generateInit(self):

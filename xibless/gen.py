@@ -20,7 +20,7 @@ from .radio import RadioButtons
 from .progress import ProgressIndicator
 from .image import ImageView
 from .tabview import TabView
-from .table import TableView
+from .table import TableView, OutlineView
 from .splitview import SplitView
 from .layout import HLayout
 
@@ -66,7 +66,7 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
     to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
         'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
         'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
-        'TableView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait',
+        'TableView', 'OutlineView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait',
         'Color', 'Pack', 'TextAlignment', 'HLayout',
     }
     module_globals = {name: globals()[name] for name in to_include}

@@ -37,19 +37,23 @@ but to be subclassed.
 
         *Numeric*. The height of the view. Equivalent to ``[self frame].size.height]``.
 
-    .. method:: packToCorner(corner)
+    .. method:: packToCorner(corner[, margin])
         
-        :param corner: A :ref:`corner-constants`.
+        :param corner: A :ref:`corner-constants`
+        :param margin: Numeric
 
         Send the view to a specified corner of its super view. It doesn't care if there's already
         something in there, so if you send two views in the same corner, they're going to overlap.
-        To place views relatively to each other, use :meth:`packRelativeTo`
+        To place views relatively to each other, use :meth:`packRelativeTo`.
+        
+        You can override default margins by specifying a ``margin`` argument.
 
-    .. method:: packRelativeTo(other, side[, align])
+    .. method:: packRelativeTo(other, side[, align, margin])
 
-        :param other: A :class:`View` instance.
-        :param side: A :ref:`side-constants`.
-        :param align: A :ref:`side-constants`.
+        :param other: A :class:`View` instance
+        :param side: A :ref:`side-constants`
+        :param align: A :ref:`side-constants`
+        :param margin: Numeric
         
         Sends the view at the side of another view, specified by ``other``. The way the view is
         placed next to the other is specified by ``side`` and ``align``. ``side`` tells at which
@@ -62,10 +66,13 @@ but to be subclassed.
         
         The ``align`` argument is optional. If it's not supplied, it will default to ``Left`` if
         ``side`` is vertical and ``Middle`` otherwise.
-    
-    .. method:: fill(side)
         
-        :param side: One of :ref:`side-constants` or :ref:`corner-constants`.
+        You can override default margins by specifying a ``margin`` argument.
+    
+    .. method:: fill(side[, margin])
+        
+        :param side: One of :ref:`side-constants` or :ref:`corner-constants`
+        :param margin: Numeric
         
         Makes the view grow in a direction specified by ``size`` until it reaches its superview's
         bounds (respecting the margins, of course). The nice thing about ``fill`` is that if you
@@ -78,6 +85,8 @@ but to be subclassed.
         Using a corner constant instead of a size one is a shorthand for calling ``fill()`` twice.
         For example, calling ``fill(Pack.LowerRight)`` is the same as calling both
         ``fill(Pack.Below)`` and ``fill(Pack.Right)``.
+        
+        You can override default margins by specifying a ``margin`` argument.
     
     .. method:: setAnchor(corner[, growX, growY])
         
