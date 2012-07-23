@@ -1,5 +1,5 @@
 from .base import const
-from .view import View
+from .control import Control, ControlHeights
 from .font import Font, FontFamily, FontSize
 
 class TextAlignment(object):
@@ -24,15 +24,14 @@ class TextAlignment(object):
         else:
             return value
 
-class TextField(View):
+class TextField(Control):
     OBJC_CLASS = 'NSTextField'
-    
-    DEFAULT_FONT = Font(FontFamily.Label, FontSize.RegularControl)
+    CONTROL_HEIGHTS = ControlHeights(22, 19, 16)
     
     def __init__(self, parent, text):
-        View.__init__(self, parent, 100, 22)
+        Control.__init__(self, parent, 100, 22)
         self.text = text
-        self.font = self.DEFAULT_FONT
+        self.font = Font(FontFamily.Label, FontSize.RegularControl)
         self.alignment = None
         self.textColor = None
     
@@ -40,9 +39,8 @@ class TextField(View):
         return [self.font, self.textColor]
     
     def generateInit(self):
-        tmpl = View.generateInit(self)
+        tmpl = Control.generateInit(self)
         self.properties['stringValue'] = self.text
-        self.properties['font'] = self.font
         self.properties['editable'] = True
         self.properties['selectable'] = True
         self.properties['alignment'] = TextAlignment.objcValue(self.alignment)

@@ -1,6 +1,9 @@
 from .textfield import TextField
+from .control import ControlHeights
 
 class Label(TextField):
+    CONTROL_HEIGHTS = ControlHeights(17, 14, 11)
+    
     def __init__(self, parent, text):
         TextField.__init__(self, parent, text)
         self.height = 17

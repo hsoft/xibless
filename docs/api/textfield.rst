@@ -1,7 +1,7 @@
 TextField
 =========
 
-The ``Textfield`` is a :class:`View` subclass that represents Cocoa's ``NSTextField``.
+The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTextField``.
 
 .. class:: TextField(parent, text)
     
@@ -11,10 +11,6 @@ The ``Textfield`` is a :class:`View` subclass that represents Cocoa's ``NSTextFi
     .. attribute:: text
         
         A string that represents the text field's text. Equivalent to ``[self stringValue]``.
-    
-    .. attribute:: font
-        
-        :class:`Font`. The font of the text field. Equivalent to ``[self font]``.
     
     .. attribute:: alignment
         

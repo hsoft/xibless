@@ -31,7 +31,7 @@ class Control(View):
         else:
             fontSize = FontSize.RegularControl
             height = self.CONTROL_HEIGHTS.regular
-        self.font.fontSize = fontSize
+        self.font.size = fontSize
         self.height = height
     
     def dependencies(self):
