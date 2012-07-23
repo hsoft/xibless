@@ -36,7 +36,7 @@ class TextField(Control):
         self.textColor = None
     
     def dependencies(self):
-        return [self.font, self.textColor]
+        return Control.dependencies(self) + [self.textColor]
     
     def generateInit(self):
         tmpl = Control.generateInit(self)
