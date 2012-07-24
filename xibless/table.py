@@ -99,6 +99,7 @@ class ListView(TableView):
         col = self.addColumn('', '', self.width)
         col.userResizable = False
         col.autoResizable = True
+        col.editable = False
         self.allowsColumnReordering = False
         self.allowsColumnResizing = False
         self.allowsColumnSelection = False
