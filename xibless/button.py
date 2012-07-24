@@ -83,7 +83,7 @@ class Button(Control):
     def outerMargin(self, other, side):
         # Push buttons have special vertical margins
         if self.bezelStyle == const.NSRoundedBezelStyle and side in (Pack.Above, Pack.Below):
-            if isinstance(other, Button):
+            if other.isOrHas(Button, side):
                 # If it's two Push buttons, the margin is 12. If it's a push button and another type
                 # of button, it's 20. If it's a push button and another type of view, it's the
                 # normal 8.
@@ -93,7 +93,7 @@ class Button(Control):
                 elif side in (Pack.Above, Pack.Below):
                     # A push button and another style of button, the vertical margin is 20
                     return 20
-            elif isinstance(other, TableView):
+            elif other.isOrHas(TableView, side):
                 # A push button under a table has 20 of margin
                 return 20
         return Control.outerMargin(self, other, side)

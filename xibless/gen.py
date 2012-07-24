@@ -20,9 +20,9 @@ from .radio import RadioButtons
 from .progress import ProgressIndicator
 from .image import ImageView
 from .tabview import TabView
-from .table import TableView, OutlineView
+from .table import TableView, ListView, OutlineView
 from .splitview import SplitView
-from .layout import HLayout
+from .layout import HLayout, VLayout
 
 try:
     execfile
@@ -67,8 +67,8 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
     to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
         'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
         'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
-        'TableView', 'OutlineView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait',
-        'Color', 'Pack', 'TextAlignment', 'HLayout',
+        'TableView', 'ListView', 'OutlineView', 'SplitView', 'Font', 'FontFamily', 'FontSize',
+        'FontTrait', 'Color', 'Pack', 'TextAlignment', 'HLayout', 'VLayout',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}

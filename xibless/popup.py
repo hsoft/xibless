@@ -18,7 +18,7 @@ class Popup(Control):
         controlSize = self._controlSize
         self.layoutDeltaX = -3
         self.layoutDeltaY = -3
-        self.layoutDeltaW = -6
+        self.layoutDeltaW = 6
         self.layoutDeltaH = 5
         if controlSize == const.NSSmallControlSize:
             self.layoutDeltaY = -3

@@ -69,8 +69,7 @@ Layout Objects
 Calling layout methods can be overly complex and cumbersome, especially for layouts that are
 supposed to be simple, such as a row of buttons aligned vertically. For this purpose,
 :doc:`api/layout` were created. They don't offer any new layout functionality other than than the
-ones presented above, but they can save quite a few calls to them. For now, there's only
-:class:`HLayout` which represents a horizonal row of views, but more are coming.
+ones presented above, but they can save quite a few calls to them.
 
 Let's go with an example. Imagine that we want a window with a table using most of the space, except
 for a few action buttons at the bottom, some of the left side, some of the right side. We want, of
@@ -101,7 +100,7 @@ With :class:`HLayout`, we can create the same layout and save ourselves a bunch 
     button2 = Button(window, "Button 2")
     button3 = Button(window, "Button 3")
 
-    buttonLayout = HLayout(left=[button1, button2], right=[button3])
+    buttonLayout = HLayout([button1, button2, None, button3])
     buttonLayout.packToCorner(Pack.LowerLeft)
     buttonLayout.fill(Pack.Right)
     buttonLayout.setAchor(Pack.Below)

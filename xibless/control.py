@@ -15,6 +15,9 @@ class Control(View):
         self.controlSize = const.NSRegularControlSize
         self.action = None
     
+    def hasFixedHeight(self):
+        return True
+    
     def _getControlHeights(self):
         return self.CONTROL_HEIGHTS
     

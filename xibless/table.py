@@ -93,6 +93,23 @@ class TableView(View):
         return self.accessor._callMethod('sizeToFit')
     
 
+class ListView(TableView):
+    def __init__(self, parent):
+        TableView.__init__(self, parent)
+        col = self.addColumn('', '', self.width)
+        col.userResizable = False
+        col.autoResizable = True
+        self.allowsColumnReordering = False
+        self.allowsColumnResizing = False
+        self.allowsColumnSelection = False
+    
+    def generateInit(self):
+        tmpl = TableView.generateInit(self)
+        self.properties['headerView'] = Literal('nil')
+        self.properties['columnAutoresizingStyle'] = Literal('NSTableViewLastColumnOnlyAutoresizingStyle')
+        return tmpl
+    
+
 class OutlineView(TableView):
     OBJC_CLASS = 'NSOutlineView'
     

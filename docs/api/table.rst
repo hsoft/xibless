@@ -35,7 +35,17 @@ adds that view to the superview (XCode does the same). The reference to the tabl
     
         If you set these attributes before adding your columns, all added columns will copy this
         attribute.
+
+ListView
+--------
+
+A convenience subclass of :class:`TableView`. It also represents a ``NSTableView``, but it sets the
+table so that it has only one column that resizes with the table and no header view.
+
+.. class:: ListView(parent)
     
+    :param parent: A :class:`View` instance. Same as :attr:`View.parent`.
+
 OutlineView
 -----------
 

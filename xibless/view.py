@@ -135,6 +135,18 @@ class View(GeneratedItem):
     def innerMargin(self, side):
         return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
     
+    # Return True if the view can't have its width or height modified by layout methods.
+    def hasFixedWidth(self):
+        return False
+    
+    def hasFixedHeight(self):
+        return False
+    
+    def isOrHas(self, viewtype, side):
+        # Returns whether self is of type `viewtype` or if it contains a view, touching `side`,
+        # that is of that type (Overridden by layouts)
+        return isinstance(self, viewtype)
+    
     def packToCorner(self, corner, margin=None):
         def getmargin(side):
             if margin is not None:
@@ -200,7 +212,7 @@ class View(GeneratedItem):
     def setAnchor(self, corner, growX=False, growY=False):
         self.anchor = Anchor(corner, growX, growY)
     
-    def fill(self, side, margin=None):
+    def fill(self, side, margin=None, goal=None):
         def getmargin(side):
             if margin is not None:
                 return margin
@@ -211,20 +223,26 @@ class View(GeneratedItem):
             for side in Pack.sidesInCorner(side):
                 self.fill(side, margin=margin)
             return
+        if side in {Pack.Left, Pack.Right} and self.hasFixedWidth():
+            return
+        if side in {Pack.Above, Pack.Below} and self.hasFixedHeight():
+            return        
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect
         x, y, w, h = self.rect
         neighbors = self.neighbors[side]
         if side == Pack.Right:
             nx = max([(n.x + n.width) for n in neighbors] + [x+w])
-            goal = pw - getmargin(Pack.Right)
+            if goal is None:
+                goal = pw - getmargin(Pack.Right)
             growby = goal - nx
             w += growby
             for n in neighbors:
                 n.x += growby
         elif side == Pack.Left:
             nx = min([n.x for n in neighbors] + [x])
-            goal = getmargin(Pack.Left)
+            if goal is None:
+                goal = getmargin(Pack.Left)
             growby = nx - goal
             w += growby
             x -= growby
@@ -232,7 +250,8 @@ class View(GeneratedItem):
                 n.x -= growby
         elif side == Pack.Below:
             ny = min([n.y for n in neighbors] + [y])
-            goal = getmargin(Pack.Below)
+            if goal is None:
+                goal = getmargin(Pack.Below)
             growby = ny - goal
             h += growby
             y -= growby
@@ -240,7 +259,8 @@ class View(GeneratedItem):
                 n.y -= growby
         elif side == Pack.Above:
             ny = max([n.y + n.height for n in neighbors] + [y+h])
-            goal = ph - getmargin(Pack.Above)
+            if goal is None:
+                goal = ph - getmargin(Pack.Above)
             growby = goal - ny
             h += growby
             for n in neighbors:

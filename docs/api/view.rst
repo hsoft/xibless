@@ -69,10 +69,11 @@ but to be subclassed.
         
         You can override default margins by specifying a ``margin`` argument.
     
-    .. method:: fill(side[, margin])
+    .. method:: fill(side[, margin, goal])
         
         :param side: One of :ref:`side-constants` or :ref:`corner-constants`
         :param margin: Numeric
+        :param goal: Numeric
         
         Makes the view grow in a direction specified by ``size`` until it reaches its superview's
         bounds (respecting the margins, of course). The nice thing about ``fill`` is that if you
@@ -87,6 +88,11 @@ but to be subclassed.
         ``fill(Pack.Below)`` and ``fill(Pack.Right)``.
         
         You can override default margins by specifying a ``margin`` argument.
+        
+        You can also override the ``goal`` of the filling operation, that is, the point it's trying
+        to reach when it enlarges or shrink. Most of the time, you're not going to need it, but for
+        complex layouts, you might, mostly for operations like "fill my view exactly at the same
+        point at this other view over there".
     
     .. method:: setAnchor(corner[, growX, growY])
         
