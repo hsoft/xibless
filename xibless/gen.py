@@ -50,10 +50,11 @@ return result;
 }
 """
 
-# ownerless is used by runUI. When running a UI, we take one UI script out of its context, so
+# When running a UI (in `runmode`), we take one UI script out of its context, so
 # any owner assignment will make code compilation fail. Since we just want to preview the UI, we
-# don't need those assignments, so we skip them.
-def generate(modulePath, dest, ownerless=False, localizationTable=None):
+# don't need those assignments, so we skip them. Moreover, we revert all instance which had their
+# OBJC_CLASS attribute set because this is also going to make complication fail.
+def generate(modulePath, dest, runmode=False, localizationTable=None):
     dest_basename, dest_ext = os.path.splitext(os.path.basename(dest))
     if dest_ext == '.h':
         dest_header = None
@@ -74,11 +75,14 @@ def generate(modulePath, dest, ownerless=False, localizationTable=None):
     execfile(modulePath, module_globals, module_locals)
     assert 'result' in module_locals
     tmpl = CodeTemplate(UNIT_TMPL)
-    if ownerless:
+    if runmode:
         owner._clear()
         owner._name = 'nil'
         ownerclass = 'id'
         ownerimport = None
+        for value in module_locals.values():
+            if hasattr(value, 'OBJC_CLASS'):
+                value.OBJC_CLASS = value.__class__.OBJC_CLASS
     else:
         ownerclass = module_locals.get('ownerclass', 'id')
         ownerimport = module_locals.get('ownerimport')

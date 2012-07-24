@@ -17,7 +17,7 @@ def configure(conf):
 def build(ctx):
     ctx.srcnode.make_node('autogen').mkdir()
     xibless.generate('MainMenu.py', 'autogen/MainMenu.h')
-    xibless.generate('MainScript.py', 'autogen/MainScript.h', ownerless=True)
+    xibless.generate('MainScript.py', 'autogen/MainScript.h', runmode=True)
     infoplist = ctx.srcnode.find_node("Info.plist")
     info = plistlib.readPlist(infoplist.abspath())
     appname = info['CFBundleName']
