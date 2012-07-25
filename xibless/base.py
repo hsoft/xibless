@@ -1,5 +1,5 @@
 import re
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 try:
     basestring
@@ -138,20 +138,7 @@ owner = KeyValueId(None, 'owner')
 NSApp = KeyValueId(None, 'NSApp')
 const = KeyValueId(None, 'const', fakeParent=True)
 
-class Action(object):
-    def __init__(self, target, selector):
-        self.target = target
-        self.selector = selector
-    
-    def generate(self, sender):
-        tmpl = CodeTemplate("""[$sender$ setTarget:$target$];
-        [$sender$ setAction:$selector$];
-        """)
-        tmpl.sender = sender
-        tmpl.selector = "@selector(%s)" % self.selector
-        tmpl.target = convertValueToObjc(self.target)
-        return tmpl.render()
-    
+Action = namedtuple('Action', 'target selector')
 
 class KeyShortcut(object):
     def __init__(self, shortcutStr):
@@ -207,9 +194,12 @@ class Property(object):
     def _convertValue(self, value):
         return value
     
+    def _setProperty(self, target, value):
+        target.properties[self.targetName] = self._convertValue(value)
+    
     def setOnTarget(self, target):
         if hasattr(target, self.name):
-            target.properties[self.targetName] = self._convertValue(getattr(target, self.name))
+            self._setProperty(target, getattr(target, self.name))
         
     
 class ImageProperty(Property):
@@ -218,6 +208,14 @@ class ImageProperty(Property):
             return None
         return Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
             NonLocalizableString(value), endline=False))
+    
+
+class ActionProperty(Property):
+    def _setProperty(self, target, value):
+        if value is None:
+            return
+        target.properties['target'] = value.target
+        target.properties['action'] = Literal('@selector({})'.format(value.selector))
     
 
 class GeneratedItem(object):

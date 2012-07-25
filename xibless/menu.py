@@ -1,9 +1,11 @@
 from .base import (GeneratedItem, KeyShortcut, Literal, Action, NSApp, const, convertValueToObjc,
-    ImageProperty)
+    ImageProperty, ActionProperty)
 
 class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'
-    PROPERTIES = GeneratedItem.PROPERTIES + ['tag', 'hidden', ImageProperty('image')]
+    PROPERTIES = GeneratedItem.PROPERTIES + [
+        'tag', 'hidden', ImageProperty('image'), ActionProperty('action')
+    ]
     
     def __init__(self, name, action=None, shortcut=None, tag=None):
         GeneratedItem.__init__(self)
@@ -22,8 +24,6 @@ class MenuItem(GeneratedItem):
             tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:$name$ action:nil keyEquivalent:@\"$key$\"];"
         tmpl.name = convertValueToObjc(self.name)
         tmpl.menuname = menuname
-        if self.action:
-            tmpl.setup += self.action.generate(self.varname)
         if self.shortcut:
             tmpl.key = self.shortcut.key
             if self.shortcut.flags:

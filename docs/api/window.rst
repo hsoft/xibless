@@ -45,6 +45,14 @@ Cocoa's ``NSWindow``.
     .. attribute:: maxSize
         
         :class:`Size`. Equivalent to ``[self maxSize]``.
+    
+    .. method:: createToolbar(identifier)
+        
+        :param identifier: String
+        
+        Creates a :class:`Toolbar` linked to this window and returns it. The ``identifier``
+        argument is going to be the identifier of the toolbar.
+    
 
 Panel
 -----

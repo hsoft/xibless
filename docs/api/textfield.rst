@@ -12,6 +12,11 @@ The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTex
         
         A string that represents the text field's text. Equivalent to ``[self stringValue]``.
     
+    .. attribute:: placeholder
+        
+        A string representing the "placeholder text", that is, a text displayed in light shade of
+        grey when the text field contains no text. Equivalent to ``[[self cell] placeholderString]``.
+    
     .. attribute:: alignment
         
         One of :ref:`text-alignment-constants`. Alignment of the text within the field.
@@ -32,6 +37,18 @@ that is, uneditable, unselectable, borderless and backgroundless.
     
     :param parent: A :class:`View` instance. See :attr:`View.parent`.
     :param text: String. See :attr:`TextField.text`.
+
+SearchField
+-----------
+
+A subclass of :class:`TextField` that wraps ``NSSearchField``. Note the slightly different
+initialization signature: instead of ``text``, the second argument is ``placeholder`` because it's
+very rare that we initalize a search field with text. We usually do so with a placeholder string.
+
+.. class:: SearchField(parent, placeholder)
+    
+    :param parent: A :class:`View` instance. See :attr:`View.parent`.
+    :param placeholder: String. See :attr:`TextField.placeholder`.
 
 Combobox
 --------

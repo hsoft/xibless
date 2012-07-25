@@ -135,6 +135,16 @@ class View(GeneratedItem):
     def innerMargin(self, side):
         return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
     
+    # The x, y, width and height pos represent the **layout* rect. To have a frame rect, we need
+    # to apply deltas.
+    def frameRect(self):
+        x, y, w, h = self.x, self.y, self.width, self.height
+        x += self.layoutDeltaX
+        y += self.layoutDeltaY
+        w += self.layoutDeltaW
+        h += self.layoutDeltaH
+        return x, y, w, h
+    
     # Return True if the view can't have its width or height modified by layout methods.
     def hasFixedWidth(self):
         return False
@@ -277,11 +287,7 @@ class View(GeneratedItem):
         tmpl = GeneratedItem.generateInit(self)
         tmpl.setup = "$viewsetup$\n$addtoparent$\n"
         tmpl.initmethod = "initWithFrame:$rect$"
-        x, y, w, h = self.x, self.y, self.width, self.height
-        x += self.layoutDeltaX
-        y += self.layoutDeltaY
-        w += self.layoutDeltaW
-        h += self.layoutDeltaH
+        x, y, w, h = self.frameRect()
         tmpl.rect = Rect(x, y, w, h).objcValue()
         if self.anchor.growX and self.anchor.growY:
             resizeMask = 'NSViewWidthSizable|NSViewHeightSizable'

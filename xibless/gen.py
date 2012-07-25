@@ -11,8 +11,7 @@ from .color import Color
 from .menu import Menu, MainMenu
 from .window import Window, Panel, PanelStyle
 from .button import Button, Checkbox
-from .label import Label
-from .textfield import TextField, TextAlignment
+from .textfield import TextField, Label, SearchField, TextAlignment
 from .textview import TextView
 from .popup import Popup
 from .combo import Combobox
@@ -22,6 +21,7 @@ from .image import ImageView
 from .tabview import TabView
 from .table import TableView, ListView, OutlineView
 from .splitview import SplitView
+from .segment import SegmentedControl
 from .layout import HLayout, VLayout
 
 try:
@@ -42,6 +42,8 @@ $funcsig$;
 UNIT_TMPL = """
 $mainimport$
 $ownerimport$
+
+$supportcode$
 
 $funcsig$
 {
@@ -66,9 +68,10 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
     base.globalGenerationCounter.reset()
     to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
         'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
-        'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView',
-        'TableView', 'ListView', 'OutlineView', 'SplitView', 'Font', 'FontFamily', 'FontSize',
-        'FontTrait', 'Color', 'Pack', 'TextAlignment', 'HLayout', 'VLayout',
+        'SearchField', 'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView',
+        'TabView', 'TableView', 'ListView', 'OutlineView', 'SplitView', 'Font', 'FontFamily',
+        'FontSize', 'FontTrait', 'Color', 'Pack', 'TextAlignment', 'HLayout', 'VLayout',
+        'SegmentedControl',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}
@@ -105,6 +108,13 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
             continue
         value.varname = key
         toGenerate.append(value)
+    # We only want to call this method once for each class, which is why we use a set
+    supportCodeToGenerate = set(o.generateSupportCode for o in toGenerate)
+    tmpl.supportcode = ''
+    for generateMethod in supportCodeToGenerate:
+        code = generateMethod()
+        if code:
+            tmpl.supportcode += code
     toGenerate.sort(key=lambda x: x.creationOrder)
     codePieces = []
     for item in toGenerate:

@@ -1,4 +1,4 @@
-from .base import const
+from .base import const, Property
 from .control import Control, ControlHeights
 from .font import Font, FontFamily, FontSize
 
@@ -27,6 +27,10 @@ class TextAlignment(object):
 class TextField(Control):
     OBJC_CLASS = 'NSTextField'
     CONTROL_HEIGHTS = ControlHeights(22, 19, 16)
+    PROPERTIES = Control.PROPERTIES + [
+        Property('text', 'stringValue'), 'textColor', 
+        Property('placeholder', 'cell.placeholderString'),
+    ]
     
     def __init__(self, parent, text):
         Control.__init__(self, parent, 100, 22)
@@ -40,10 +44,37 @@ class TextField(Control):
     
     def generateInit(self):
         tmpl = Control.generateInit(self)
-        self.properties['stringValue'] = self.text
         self.properties['editable'] = True
         self.properties['selectable'] = True
         self.properties['alignment'] = TextAlignment.objcValue(self.alignment)
-        self.properties['textColor'] = self.textColor
         return tmpl
+    
+
+class Label(TextField):
+    CONTROL_HEIGHTS = ControlHeights(17, 14, 11)
+    
+    def __init__(self, parent, text):
+        TextField.__init__(self, parent, text)
+        self.height = 17
+        
+        self.layoutDeltaX = -3
+        self.layoutDeltaY = 0
+        self.layoutDeltaW = 6
+        self.layoutDeltaH = 0
+    
+    def generateInit(self):
+        tmpl = TextField.generateInit(self)
+        self.properties['editable'] = False
+        self.properties['selectable'] = False
+        self.properties['drawsBackground'] = False
+        self.properties['bordered'] = False
+        return tmpl
+    
+
+class SearchField(TextField):
+    OBJC_CLASS = 'NSSearchField'
+    
+    def __init__(self, parent, placeholder):
+        TextField.__init__(self, parent, None)
+        self.placeholder = placeholder
     

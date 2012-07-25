@@ -1,5 +1,6 @@
 from .base import convertValueToObjc
 from .view import View
+from .toolbar import Toolbar
 
 class Window(View):
     OBJC_CLASS = 'NSWindow'
@@ -15,6 +16,15 @@ class Window(View):
         self.canMinimize = True
         self.initialFirstResponder = None
         self.autosaveName = None
+        self.toolbar = None
+    
+    def createToolbar(self, identifier):
+        assert self.toolbar is None
+        self.toolbar = Toolbar(identifier)
+        return self.toolbar
+    
+    def dependencies(self):
+        return View.dependencies(self) + [self.toolbar]
     
     def generateInit(self):
         tmpl = View.generateInit(self)
@@ -50,6 +60,8 @@ class Window(View):
         # We have to set frameAutosaveName at finalize because otherwise, the frame is restored
         # before the layout is done and it messes up everything.
         result = self._generateProperties({'frameAutosaveName': self.autosaveName})
+        if self.toolbar:
+            result += self._generateProperties({'toolbar': self.toolbar})
         result += '\n' + self.accessor._callMethod('recalculateKeyViewLoop')
         return result
     

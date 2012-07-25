@@ -1,13 +1,16 @@
 from collections import namedtuple
 
 from .view import View
-from .base import const
+from .base import const, Property, ActionProperty
 from .font import Font, FontFamily, FontSize
 
 ControlHeights = namedtuple('ControlHeights', 'regular small mini')
 
 class Control(View):
     CONTROL_HEIGHTS = ControlHeights(20, 17, 14)
+    PROPERTIES = View.PROPERTIES = [
+        ActionProperty('action'), 'font', Property('controlSize', 'cell.controlSize'),
+    ]
     
     def __init__(self, parent, width, height):
         View.__init__(self, parent, width, height)
@@ -55,12 +58,4 @@ class Control(View):
     
     def dependencies(self):
         return [self.font]
-    
-    def generateInit(self):
-        tmpl = View.generateInit(self)
-        self.properties['font'] = self.font
-        self.properties['cell.controlSize'] = self.controlSize
-        if self.action:
-            tmpl.setup += self.action.generate(self.varname)
-        return tmpl
     

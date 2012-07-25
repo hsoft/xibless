@@ -29,3 +29,5 @@ Contents:
    tabview
    table
    splitview
+   segment
+   toolbar
