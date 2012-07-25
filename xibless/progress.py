@@ -1,18 +1,12 @@
-from .base import const
+from .base import const, Property
 from .view import View
 
 class ProgressIndicator(View):
     OBJC_CLASS = 'NSProgressIndicator'
-    PROPERTIES = View.PROPERTIES.copy()
-    PROPERTIES.update({
-        'style': '',
-        'controlSize': '',
-        'minValue': '',
-        'maxValue': '',
-        'value': 'doubleValue',
-        'indeterminate': '',
-        'displayedWhenStopped': '',
-    })
+    PROPERTIES = View.PROPERTIES + [
+        'style', 'controlSize', 'minValue', 'maxValue', 'indeterminate', 'displayedWhenStopped',
+        Property('value', 'doubleValue'),
+    ]
     
     def __init__(self, parent):
         View.__init__(self, parent, 92, 16)

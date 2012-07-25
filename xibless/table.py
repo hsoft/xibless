@@ -43,17 +43,11 @@ class TableColumn(GeneratedItem):
 
 class TableView(View):
     OBJC_CLASS = 'NSTableView'
-    PROPERTIES = View.PROPERTIES.copy()
-    PROPERTIES.update({
-        'allowsColumnReordering': '',
-        'allowsColumnResizing': '',
-        'allowsColumnSelection': '',
-        'allowsEmptySelection': '',
-        'allowsMultipleSelection': '',
-        'allowsTypeSelect': '',
-        'rowHeight': '',
-        'dataSource': '',
-    })
+    PROPERTIES = View.PROPERTIES + [
+        'allowsColumnReordering', 'allowsColumnResizing', 'allowsColumnSelection',
+        'allowsEmptySelection', 'allowsMultipleSelection', 'allowsTypeSelect', 'rowHeight',
+        'dataSource'
+    ]
     
     def __init__(self, parent):
         View.__init__(self, parent, 100, 100)

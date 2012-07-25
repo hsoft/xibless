@@ -3,12 +3,7 @@ from .view import View
 
 class Window(View):
     OBJC_CLASS = 'NSWindow'
-    PROPERTIES = View.PROPERTIES.copy()
-    PROPERTIES.update({
-        'title': '',
-        'minSize': '',
-        'maxSize': '',
-    })
+    PROPERTIES = View.PROPERTIES + ['title', 'minSize', 'maxSize']
     
     def __init__(self, width, height, title):
         View.__init__(self, None, width, height)

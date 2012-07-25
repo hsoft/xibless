@@ -2,10 +2,7 @@ from .view import View
 
 class SplitView(View):
     OBJC_CLASS = 'NSSplitView'
-    PROPERTIES = View.PROPERTIES.copy()
-    PROPERTIES.update({
-        'vertical': '',
-    })
+    PROPERTIES = View.PROPERTIES + ['vertical']
     
     def __init__(self, parent, subviewCount, vertical):
         View.__init__(self, parent, 100, 100)

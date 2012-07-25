@@ -197,13 +197,35 @@ class Flags(set):
         return '|'.join(self)
     
 
+class Property(object):
+    def __init__(self, name, targetName=None):
+        if not targetName:
+            targetName = name
+        self.name = name
+        self.targetName = targetName
+    
+    def _convertValue(self, value):
+        return value
+    
+    def setOnTarget(self, target):
+        if hasattr(target, self.name):
+            target.properties[self.targetName] = self._convertValue(getattr(target, self.name))
+        
+    
+class ImageProperty(Property):
+    def _convertValue(self, value):
+        if not value:
+            return None
+        return Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
+            NonLocalizableString(value), endline=False))
+    
+
 class GeneratedItem(object):
     OBJC_CLASS = 'NSObject'
     # This is a shorthand for setting the self.properties dictionary with the value of the prop in
-    # generateInit(). The mapping is uiPropName: actualPropName. For example, in Window, we have
-    # an 'autosaveName' property, but it maps to frameAutosaveName in NSWindow. If the
-    # actualPropName is the same as uiPropName, you can leave it empty.
-    PROPERTIES = {}
+    # generateInit(). This list contains either Property instances or, to avoid unnecessary
+    # verbosity, a string with the property name, which is the equivalent of Property(name).
+    PROPERTIES = []
     
     def __init__(self):
         self.creationOrder = globalGenerationCounter.creationToken()
@@ -218,11 +240,11 @@ class GeneratedItem(object):
         result = ''
         if properties is None:
             properties = self.properties
-            for attrname, realname in self.PROPERTIES.items():
-                if hasattr(self, attrname):
-                    if not realname:
-                        realname = attrname
-                    properties[realname] = getattr(self, attrname)
+            for prop in self.PROPERTIES:
+                if not isinstance(prop, Property):
+                    assert isinstance(prop, str)
+                    prop = Property(prop)
+                prop.setOnTarget(self)
         for key, value in properties.items():
             if value is None:
                 continue
@@ -278,6 +300,12 @@ class GeneratedItem(object):
     def generateFinalize(self):
         # Called after everything has been generated.
         pass
+    
+    @classmethod
+    def generateSupportCode(cls):
+        # Generate code that has to be placed outside of the main function. Will be called only
+        # once per class.
+        return ''
     
     def generate(self, *args, **kwargs):
         result = ''

@@ -1,18 +1,12 @@
-from .base import const, KeyValueId, Literal, NonLocalizableString
+from .base import const, ImageProperty
 from .view import View
 
 class ImageView(View):
     OBJC_CLASS = 'NSImageView'
+    PROPERTIES = View.PROPERTIES + [ImageProperty('name', 'image'), 'imageAlignment']
     
     def __init__(self, parent, name, alignment=const.NSImageAlignCenter):
         View.__init__(self, parent, 48, 48)
         self.name = name
         self.alignment = alignment
-    
-    def generateInit(self):
-        tmpl = View.generateInit(self)
-        self.properties['image'] = Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
-            NonLocalizableString(self.name), endline=False))
-        self.properties['imageAlignment'] = self.alignment
-        return tmpl
     

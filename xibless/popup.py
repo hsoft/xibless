@@ -1,10 +1,11 @@
-from .base import convertValueToObjc, const
+from .base import convertValueToObjc, const, Literal, KeyValueId, NonLocalizableString
 from .control import Control, ControlHeights
 from .menu import Menu
 
 class Popup(Control):
     OBJC_CLASS = 'NSPopUpButton'
     CONTROL_HEIGHTS = ControlHeights(26, 22, 15)
+    PROPERTIES = Control.PROPERTIES + ['menu']
     
     def __init__(self, parent, items=None):
         Control.__init__(self, parent, 100, 20)
@@ -32,7 +33,6 @@ class Popup(Control):
     
     def generateInit(self):
         tmpl = Control.generateInit(self)
-        tmpl.allocinit = "$classname$ *$varname$ = [[[$classname$ alloc] initWithFrame:$rect$ pullsDown:$pullsdown$] autorelease];"
+        tmpl.initmethod = "initWithFrame:$rect$ pullsDown:$pullsdown$"
         tmpl.pullsdown = convertValueToObjc(self.pullsdown)
-        self.properties['menu'] = self.menu
         return tmpl

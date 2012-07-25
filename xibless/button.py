@@ -1,14 +1,11 @@
 from .control import Control, ControlHeights
-from .base import const, Literal, KeyValueId, NonLocalizableString
+from .base import const, ImageProperty, NonLocalizableString
 from .view import Pack
 from .table import TableView
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
-    PROPERTIES = Control.PROPERTIES.copy()
-    PROPERTIES.update({
-        'imagePosition': '',
-    })
+    PROPERTIES = Control.PROPERTIES + ['imagePosition', ImageProperty('image')]
     
     def __init__(self, parent, title, action=None):
         self._bezelStyle = const.NSRoundedBezelStyle
@@ -106,9 +103,6 @@ class Button(Control):
         self.properties['state'] = self.state
         if self.keyEquivalent:
             self.properties['keyEquivalent'] = NonLocalizableString(self.keyEquivalent)
-        if self.image:
-            self.properties['image'] = Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
-                NonLocalizableString(self.image), endline=False))
         return tmpl
     
 
