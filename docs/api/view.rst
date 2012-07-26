@@ -23,19 +23,23 @@ but to be subclassed.
 
     .. attribute:: x
 
-        *Numeric*. The X position of the view. Equivalent to ``[self frame].origin.x]``.
+        *Numeric*. The X position of the view. In Cocoa: ``frame.origin.x``.
 
     .. attribute:: y
 
-        *Numeric*. The y position of the view. Equivalent to ``[self frame].origin.y]``.
+        *Numeric*. The y position of the view. In Cocoa: ``frame.origin.y``.
 
     .. attribute:: width
 
-        *Numeric*. The width of the view. Equivalent to ``[self frame].size.width]``.
+        *Numeric*. The width of the view. In Cocoa: ``frame.size.width``.
 
     .. attribute:: height
 
-        *Numeric*. The height of the view. Equivalent to ``[self frame].size.height]``.
+        *Numeric*. The height of the view. In Cocoa: ``frame.size.height``.
+    
+    .. attribute:: menu
+        
+        :class:`Menu`. The contextual menu for the view.
 
     .. method:: packToCorner(corner[, margin])
         

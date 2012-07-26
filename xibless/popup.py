@@ -5,7 +5,6 @@ from .menu import Menu
 
 class Popup(Button):
     OBJC_CLASS = 'NSPopUpButton'
-    PROPERTIES = Button.PROPERTIES + ['menu']
     
     def __init__(self, parent, items=None):
         Button.__init__(self, parent, '')

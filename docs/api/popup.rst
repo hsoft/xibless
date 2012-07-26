@@ -13,8 +13,10 @@ The ``Popup`` is a :class:`Button` subclass which represents Cocoa's ``NSPopUpBu
 
     .. attribute:: menu
         
-        :class:`Menu`. The menu that pops up when you click on the popup. You can manimulate that
-        menu like you manipulate a normal menu (it's in fact, a normal menu).
+        :class:`Menu`. Although this is a :class:`View` attribute (for context menus), it has a
+        special role in the ``Popup`` because it's the menu that pops up when you click on it. The
+        difference with the View's attribute is that you don't have to create a Menu instance
+        yourself, it's already automatically created for you.
     
     .. attribute:: pullsdown
     

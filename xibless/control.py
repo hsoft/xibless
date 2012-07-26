@@ -8,7 +8,7 @@ ControlHeights = namedtuple('ControlHeights', 'regular small mini')
 
 class Control(View):
     CONTROL_HEIGHTS = ControlHeights(20, 17, 14)
-    PROPERTIES = View.PROPERTIES = [
+    PROPERTIES = View.PROPERTIES + [
         ActionProperty('action'), 'font', Property('controlSize', 'cell.controlSize'),
     ]
     
