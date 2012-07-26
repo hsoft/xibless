@@ -191,6 +191,9 @@ class Property(object):
         self.name = name
         self.targetName = targetName
     
+    def __repr__(self):
+        return '<{}> {} {}'.format(self.__class__.__name__, self.name, self.targetName)
+    
     def _convertValue(self, value):
         return value
     
