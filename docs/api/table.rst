@@ -30,6 +30,11 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         *Boolean*. Sets the corresponding flag in ``NSTableView``. Default values are the same as
         in ``NSTableView``.
     
+    .. attribute:: alternatingRows
+        
+        *Boolean*. Whether rows have an alternating background colors. In Cocoa, it's
+        ``usesAlternatingRowBackgroundColors``.
+    
     .. attribute:: font
     .. attribute:: editable
     
@@ -70,31 +75,31 @@ You shouldn't create it directly, but you can set its attributes.
     
     .. attribute:: identifier
         
-        String. The identifier of the column. Equivalent to ``[self identifier]``.
+        *String*. The identifier of the column.
     
     .. attribute:: title
         
-        String. The title of the column. Equivalent to ``[[self headerCell] stringValue]``.
+        *String*. The title of the column. In Cocoa: ``headerCell.stringValue``.
     
     .. attribute:: width
         
-        Integer. The width of the column. Equivalent to ``[self width]``.
+        *Integer*. The width of the column.
     
     .. attribute:: font
         
-        :class:`Font`. The font of the column. Equivalent to ``[[self dataCell] font]``.
+        :class:`Font`. The font of the column. In Cocoa: ``dataCell.font``.
     
     .. attribute:: editable
         
-        Boolean. Whether the column can be edited. Equivalent to ``[self editable]``.
+        *Boolean*. Whether the column can be edited.
     
     .. attribute:: userResizable
         
-        Boolean. Whether the user can resize the column.
+        *Boolean*. Whether the user can resize the column.
     
     .. attribute:: autoResizable
         
-        Boolean. Whether the column resizes itself when the table is resized.
+        *Boolean*. Whether the column resizes itself when the table is resized.
     
     .. attribute:: dataCell
         

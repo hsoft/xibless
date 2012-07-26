@@ -7,6 +7,13 @@ contain methods, which can of course be called, but they also contain sttributes
 
     button.x = 42
 
+How to read the API
+-------------------
+
+Being a wrapper around Cocoa, there are naturally a lot of attribute names that are similar to their
+Cocoa counterpart. When a class has an attribute that doesn't specify what attribute it wraps in
+Cocoa, you can assume that it wraps an attribute with the exact same name.
+
 Contents:
 
 .. toctree::

@@ -71,6 +71,11 @@ namespace. For example::
 
     findMenu.addItem("Find...", Action(None, 'performFindPanelAction:'), 'cmd+f', tag=const.NSFindPanelActionShowFindPanel)
 
+The API documentation will indicate when such a constant is required. Ideally, there will be a
+constant in ``xibless`` (see :doc:`api/const`) wrapping every Cocoa constant, but doing so is boring
+work and I'm often too excited doing not-boring work to spend time wrapping constants. But
+eventually...
+
 Memory Management
 -----------------
 

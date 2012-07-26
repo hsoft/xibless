@@ -1,4 +1,5 @@
-from .base import GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags, NonLocalizableString
+from .base import (GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags,
+    NonLocalizableString, Property)
 from .view import View
 
 class TableColumn(GeneratedItem):
@@ -46,7 +47,7 @@ class TableView(View):
     PROPERTIES = View.PROPERTIES + [
         'allowsColumnReordering', 'allowsColumnResizing', 'allowsColumnSelection',
         'allowsEmptySelection', 'allowsMultipleSelection', 'allowsTypeSelect', 'rowHeight',
-        'dataSource'
+        'dataSource', Property('alternatingRows', 'usesAlternatingRowBackgroundColors'),
     ]
     
     def __init__(self, parent):
