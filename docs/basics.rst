@@ -79,6 +79,9 @@ constant in ``xibless`` (see :doc:`api/const`) wrapping every Cocoa constant, bu
 work and I'm often too excited doing not-boring work to spend time wrapping constants. But
 eventually...
 
+**Bitwise OR-ed flags**. Some attributes are actually masks, which required bitwise-OR-ed values.
+Well, you can do that in ``xibless``. Use the ``|`` char as in ``const.flag1 | const.flag2``.
+
 Memory Management
 -----------------
 

@@ -35,6 +35,11 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         *Boolean*. Whether rows have an alternating background colors. In Cocoa, it's
         ``usesAlternatingRowBackgroundColors``.
     
+    .. attribute:: gridStyleMask
+        
+        :ref:`Cocoa constant <literal-consts>`. Style of the table grid lines, if any. Use
+        ``NSTableViewGridLineStyle`` constants.
+    
     .. attribute:: font
     .. attribute:: editable
     
