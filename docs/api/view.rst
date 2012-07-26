@@ -41,6 +41,21 @@ but to be subclassed.
         
         :class:`Menu`. The contextual menu for the view.
 
+    .. method:: bind(name, target, keyPath[, valueTransformer])
+    
+        :param name: *String*
+        :param target: *Instance or accessor*.
+        :param keyPath: *String*.
+        
+        Binds self's ``name`` attribute to ``target``'s ``keyPath`` attribute. To bind something
+        to a User Defaults value, use the global ``defaults`` accessor. For example, if you want
+        to bind the font size of a button to a default value, you'd do
+        ``button.bind('fontSize', defaults, 'values.ButtonFontSizePref')``
+        
+        For now, not all binding options are supported, only the ``valueTransformer`` one. The value
+        you have to give to that argument is the value transformer's name (the same name you'd give
+        to XCode's interface builder).
+    
     .. method:: packToCorner(corner[, margin])
         
         :param corner: A :ref:`corner-constants`

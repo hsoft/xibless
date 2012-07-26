@@ -37,6 +37,14 @@ def convertValueToObjc(value):
     else:
         raise TypeError("Can't figure out the property's type")
 
+def generateDictionary(source):
+    elems = []
+    for key, value in source.items():
+        elems.append(convertValueToObjc(value))
+        elems.append(convertValueToObjc(key))
+    elems.append('nil')
+    return '[NSDictionary dictionaryWithObjectsAndKeys:{}]'.format(','.join(elems))
+
 class CodeTemplate(object):
     def __init__(self, template):
         self._template = template
@@ -137,6 +145,7 @@ class KeyValueId(object):
 owner = KeyValueId(None, 'owner')
 NSApp = KeyValueId(None, 'NSApp')
 const = KeyValueId(None, 'const', fakeParent=True)
+defaults = KeyValueId(None, 'NSUserDefaultsController').sharedUserDefaultsController
 
 Action = namedtuple('Action', 'target selector')
 
@@ -177,6 +186,7 @@ class NonLocalizableString(object):
     def objcValue(self):
         return wrapString(self.value)
     
+NLSTR = NonLocalizableString # The full class name can be pretty long sometimes...
 
 # Use this for flags-based properties. Will be converted into a "|" joined literal
 class Flags(set):
@@ -209,8 +219,7 @@ class ImageProperty(Property):
     def _convertValue(self, value):
         if not value:
             return None
-        return Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed',
-            NonLocalizableString(value), endline=False))
+        return Literal(KeyValueId(None, 'NSImage')._callMethod('imageNamed', NLSTR(value), endline=False))
     
 
 class ActionProperty(Property):
@@ -220,6 +229,7 @@ class ActionProperty(Property):
         target.properties['target'] = value.target
         target.properties['action'] = Literal('@selector({})'.format(value.selector))
     
+Binding = namedtuple('Binding', 'name target keyPath options')
 
 class GeneratedItem(object):
     OBJC_CLASS = 'NSObject'
@@ -235,6 +245,7 @@ class GeneratedItem(object):
         # properties to be set at generation time. For example, if "editable" is set to False,
         # a "[$varname$ setEditable:NO];" statement will be generated.
         self.properties = {}
+        self._bindings = []
     
     #--- Private
     def _generateProperties(self, properties=None):
@@ -285,6 +296,13 @@ class GeneratedItem(object):
     def generated(self):
         return globalGenerationCounter.isGenerated(self)
     
+    def bind(self, name, target, keyPath, valueTransformer=None):
+        options = {}
+        if valueTransformer:
+            options[const.NSValueTransformerNameBindingOption] = NLSTR(valueTransformer)
+        binding = Binding(NLSTR(name), target, NLSTR(keyPath), options)
+        self._bindings.append(binding)
+    
     def objcValue(self):
         return self.varname
     
@@ -297,6 +315,20 @@ class GeneratedItem(object):
             assignment = key._parent._callMethod(setmethod, self)
             assignments.append(assignment)
         return '\n'.join(assignments)
+    
+    def generateBindings(self):
+        bindings = []
+        for binding in self._bindings:
+            method = '[{} bind:{} toObject:{} withKeyPath:{} options:{}];'
+            if binding.options:
+                options = generateDictionary(binding.options)
+            else:
+                options = 'nil'
+            name = convertValueToObjc(binding.name)
+            target = convertValueToObjc(binding.target)
+            keyPath = convertValueToObjc(binding.keyPath)
+            bindings.append(method.format(self.varname, name, target, keyPath, options))
+        return '\n'.join(bindings)
     
     def generateFinalize(self):
         # Called after everything has been generated.
@@ -317,6 +349,7 @@ class GeneratedItem(object):
         inittmpl.setprop = self._generateProperties()
         result += inittmpl.render()
         result += self.generateAssignments()
+        result += self.generateBindings()
         globalGenerationCounter.addGenerated(self)
         return result
     

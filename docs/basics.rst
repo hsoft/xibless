@@ -58,6 +58,9 @@ Other than class references, there's also a few special variables to keep in min
 
 5. ``const``. See :ref:`literal-consts` below.
 
+6. ``defaults``. A reference to ``[NSUserDefaultsController sharedUserDefaultsController]``. For
+   now, it's only useful when you call :meth:`View.bind`.
+
 .. _literal-consts:
 
 Literal Constants

@@ -4,7 +4,7 @@ import shutil
 from subprocess import Popen
 
 from . import base
-from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const
+from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const, defaults
 from .view import View, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
@@ -66,12 +66,12 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
         dest_header = os.path.splitext(dest)[0] + '.h'
     base.globalLocalizationTable = localizationTable
     base.globalGenerationCounter.reset()
-    to_include = {'owner', 'NSApp', 'const', 'View', 'Size', 'Rect', 'Menu', 'MainMenu', 'Action',
-        'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label', 'TextField', 'TextView',
-        'SearchField', 'Popup', 'Combobox', 'RadioButtons', 'ProgressIndicator', 'ImageView',
-        'TabView', 'TableView', 'ListView', 'OutlineView', 'SplitView', 'Font', 'FontFamily',
-        'FontSize', 'FontTrait', 'Color', 'Pack', 'TextAlignment', 'HLayout', 'VLayout',
-        'SegmentedControl',
+    to_include = {'owner', 'NSApp', 'const', 'defaults', 'View', 'Size', 'Rect', 'Menu',
+        'MainMenu', 'Action', 'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox', 'Label',
+        'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',
+        'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
+        'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
+        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}
