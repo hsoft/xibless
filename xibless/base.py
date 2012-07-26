@@ -84,13 +84,9 @@ class KeyValueId(object):
     # this value here." What we can do, however, is having a dictionary of all keys a certain value
     # was assigned to and when we create the code for that value, we insert assignments right after.
     VALUE2KEYS = defaultdict(set)
-    def __init__(self, parent, name, fakeParent=False):
+    def __init__(self, parent, name):
         self._parent = parent
         self._name = name
-        # set fakeParent to True when you want to ignore this KeyValueId in accessors. You can use
-        # this for stuff like "const.NSOnState" where we want the accessor to be "NSOnState", not
-        # [const NSOnState];
-        self._fakeParent = fakeParent
         self._children = {}
     
     def __repr__(self):
@@ -116,7 +112,7 @@ class KeyValueId(object):
     # the methods below aren't actually private, it's just that we prepend them with underscores to
     # avoid name clashes.
     def _objcAccessor(self):
-        if self._parent and not self._parent._fakeParent:
+        if self._parent:
             if self._parent._name == 'nil':
                 return 'nil'
             else:
@@ -142,9 +138,13 @@ class KeyValueId(object):
             keys.discard(self)
     
 
+class ConstGenerator(object):
+    def __getattr__(self, name):
+        return Literal(name)
+    
 owner = KeyValueId(None, 'owner')
 NSApp = KeyValueId(None, 'NSApp')
-const = KeyValueId(None, 'const', fakeParent=True)
+const = ConstGenerator()
 defaults = KeyValueId(None, 'NSUserDefaultsController').sharedUserDefaultsController
 
 Action = namedtuple('Action', 'target selector')
@@ -174,6 +174,17 @@ class Literal(object):
     def __init__(self, value):
         self.value = value
     
+    def __or__(self, other):
+        return Flags([self]) | other
+    
+    def __eq__(self, other):
+        if not isinstance(other, Literal):
+            return False
+        return self.value == other.value
+    
+    def __hash__(self):
+        return hash(self.value)
+    
     def objcValue(self):
         return self.value
     
@@ -190,8 +201,15 @@ NLSTR = NonLocalizableString # The full class name can be pretty long sometimes.
 
 # Use this for flags-based properties. Will be converted into a "|" joined literal
 class Flags(set):
+    def __or__(self, other):
+        assert isinstance(other, Literal)
+        result = Flags(self)
+        result.add(other)
+        return result
+    
     def objcValue(self):
-        return '|'.join(self)
+        elems = ((e.value if isinstance(e, Literal) else e) for e in self)
+        return '|'.join(elems)
     
 
 class Property(object):

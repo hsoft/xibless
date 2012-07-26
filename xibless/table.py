@@ -48,6 +48,7 @@ class TableView(View):
         'allowsColumnReordering', 'allowsColumnResizing', 'allowsColumnSelection',
         'allowsEmptySelection', 'allowsMultipleSelection', 'allowsTypeSelect', 'rowHeight',
         'dataSource', Property('alternatingRows', 'usesAlternatingRowBackgroundColors'),
+        'gridStyleMask', 
     ]
     
     def __init__(self, parent):
