@@ -17,6 +17,7 @@ def wrapString(s):
     return '@"%s"' % s
 
 globalLocalizationTable = None
+globalRunMode = False
 
 def convertValueToObjc(value, requireNSObject=False):
     if value is None:
@@ -377,7 +378,10 @@ class GeneratedItem(object):
         inittmpl.setprop = self._generateProperties()
         result += inittmpl.render()
         result += self.generateAssignments()
-        result += self.generateBindings()
+        if not globalRunMode:
+            # We don't generate bindings in "run" mode because bindings can generate crashes if they
+            # aren't actually connected to something.
+            result += self.generateBindings()
         globalGenerationCounter.addGenerated(self)
         return result
     

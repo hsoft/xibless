@@ -67,6 +67,7 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
             dest += '.m'
         dest_header = os.path.splitext(dest)[0] + '.h'
     base.globalLocalizationTable = localizationTable
+    base.globalRunMode = runmode
     base.globalGenerationCounter.reset()
     to_include = {'owner', 'NSApp', 'const', 'defaults', 'View', 'Size', 'Rect', 'ControlSize',
         'Menu', 'MainMenu', 'Action', 'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox',
