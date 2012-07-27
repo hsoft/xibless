@@ -22,5 +22,17 @@ the bottom of the superview, not relatively to the view above it, etc.. To be fa
 regard, I think the new layout feature in OS X 10.7 make things better, so this argument might have
 less weight now.
 
+Another interesing perk of code over GUI designers is *logical uniformity*. Let's say that you give
+a group of labels a specific font. When you do it, you know why, alright, but when you edit it
+later, it's not obvious that this or that group of labels have the exact same font and that it's
+meant that way. In a ``xibless`` script, you would do something like::
+
+    myLabels = [label1, label2, label3]
+    myFont = Font("My Font Name", 42)
+    for label in myLabels:
+        label.font = myFont
+
+It is now obvious to the person who edits the UI that these labels are meant to have the same font.
+
 Anyway, I'm not going to try to convince you. If you don't already want to get rid of XCode
 and/or XIBs, you probably don't need ``xibless``.
