@@ -17,10 +17,14 @@ XIB, there's no space to leave a comment on why you did things like that. In cod
 and natural.
 
 In the same vein as comments, code also explain the *nature* of a layout better than the XIB. These
-widgets are in a row, this one is places relatively to this one, this one is placed relatively to
-the bottom of the superview, not relatively to the view above it, etc.. To be faire, in this
+widgets are in a row, this one is placed relatively to this one, this one is placed relatively to
+the bottom of the superview, not relatively to the view above it, etc.. To be fair, in this
 regard, I think the new layout feature in OS X 10.7 make things better, so this argument might have
 less weight now.
+
+It's also easier to spot exceptions. Because using something else than the default margins is
+exceptional, the call to the layout method you make with ``margin=42`` stands out. In XCode, it's
+not obvious that you purposefully placed that button at a ``6`` margin instead of the default ``8``.
 
 Another interesing perk of code over GUI designers is *logical uniformity*. Let's say that you give
 a group of labels a specific font. When you do it, you know why, alright, but when you edit it

@@ -1,5 +1,5 @@
 from .base import GeneratedItem, convertValueToObjc
-from .view import View
+from .view import View, Pack
 
 # Views in tab items have different margins than normal views.
 class TabSubView(View):
@@ -51,6 +51,12 @@ class TabView(View):
         for tab in self.tabs:
             tab.view.width = self.width - self.OVERHEAD_W
             tab.view.height = self.height - self.OVERHEAD_H
+    
+    def innerMarginDelta(self, side):
+        if side == Pack.Above:
+            return -12
+        else:
+            return View.innerMarginDelta(self, side)
     
     def addTab(self, label, identifier=None):
         tab = TabViewItem(self, label, identifier)

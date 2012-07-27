@@ -136,6 +136,12 @@ class View(GeneratedItem):
     def innerMargin(self, side):
         return getattr(self, 'INNER_MARGIN_' + Pack.side2str(side).upper())
     
+    def innerMarginDelta(self, side):
+        # This is called in pair with innerMargin to the child view for which we need to know where
+        # to place inside a view. Most of the time, we just user innerMargin, but some view, like
+        # the TabView, are placed closer to the border.
+        return 0
+    
     # The x, y, width and height pos represent the **layout* rect. To have a frame rect, we need
     # to apply deltas.
     def frameRect(self):
@@ -163,7 +169,9 @@ class View(GeneratedItem):
             if margin is not None:
                 return margin
             else:
-                return self.parent.innerMargin(side)
+                result = self.parent.innerMargin(side)
+                result += self.innerMarginDelta(side)
+                return result
         
         assert self.parent is not None
         px, py, pw, ph = self.parent.rect

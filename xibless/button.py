@@ -2,6 +2,7 @@ from .control import Control, ControlHeights
 from .base import const, ImageProperty, NonLocalizableString
 from .view import Pack
 from .table import TableView
+from .tabview import TabView
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
@@ -94,6 +95,9 @@ class Button(Control):
             elif other.isOrHas(TableView, side):
                 # A push button under a table has 20 of margin
                 return 20
+            elif other.isOrHas(TabView, side):
+                # A push button under a tab view has a margin of 10
+                return 10
         return Control.outerMargin(self, other, side)
     
     def generateInit(self):
