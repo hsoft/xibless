@@ -160,26 +160,6 @@ defaults = KeyValueId(None, 'NSUserDefaultsController').sharedUserDefaultsContro
 
 Action = namedtuple('Action', 'target selector')
 
-class KeyShortcut(object):
-    def __init__(self, shortcutStr):
-        self.shortcutStr = shortcutStr
-        elements = set(shortcutStr.lower().split('+'))
-        flags = []
-        availableFlags = [
-            ('cmd', 'NSCommandKeyMask'),
-            ('ctrl', 'NSControlKeyMask'),
-            ('alt', 'NSAlternateKeyMask'),
-            ('shift', 'NSShiftKeyMask'),
-        ]
-        for ident, flag in availableFlags:
-            if ident in elements:
-                elements.remove(ident)
-                flags.append(flag)
-        self.flags = '|'.join(flags)
-        assert len(elements) == 1
-        self.key = list(elements)[0]
-        
-
 # Use this in properties when you need it to be generated as-is, and not wrapped as a normal string
 class Literal(object):
     def __init__(self, value):
@@ -258,6 +238,48 @@ class ActionProperty(Property):
         target.properties['target'] = value.target
         target.properties['action'] = Literal('@selector({})'.format(value.selector))
     
+SPECIAL_KEYS = {
+    'arrowup': 'NSUpArrowFunctionKey',
+    'arrowdown': 'NSDownArrowFunctionKey',
+    'arrowleft': 'NSLeftArrowFunctionKey',
+    'arrowright': 'NSRightArrowFunctionKey',
+}
+
+REPLACED_KEYS = {
+    'return': '\\r',
+    'esc': '\\e',
+    'backspace': '\\b',
+}
+
+SHORTCUT_FLAGS = [
+    ('cmd', 'NSCommandKeyMask'),
+    ('ctrl', 'NSControlKeyMask'),
+    ('alt', 'NSAlternateKeyMask'),
+    ('shift', 'NSShiftKeyMask'),
+]
+
+class KeyShortcutProperty(Property):
+    def _setProperty(self, target, value):
+        if not value:
+            return
+        elements = set(value.lower().split('+'))
+        flags = Flags()
+        for ident, flag in SHORTCUT_FLAGS:
+            if ident in elements:
+                elements.remove(ident)
+                flags.add(flag)
+        if flags:
+            target.properties['keyEquivalentModifierMask'] = flags
+        assert len(elements) == 1
+        key = list(elements)[0]
+        if key in SPECIAL_KEYS:
+            key = Literal('stringFromChar({})'.format(SPECIAL_KEYS[key]))
+        elif key in REPLACED_KEYS:
+            key = NLSTR(REPLACED_KEYS[key])
+        else:
+            key = NLSTR(key)
+        target.properties['keyEquivalent'] = key
+
 Binding = namedtuple('Binding', 'name target keyPath options')
 
 class GeneratedItem(object):

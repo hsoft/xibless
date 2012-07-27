@@ -45,6 +45,12 @@ UNIT_TMPL = """
 $mainimport$
 $ownerimport$
 
+static NSString*
+stringFromChar(unichar c)
+{
+    return [NSString stringWithCharacters:&c length:1];
+}
+
 $supportcode$
 
 $funcsig$

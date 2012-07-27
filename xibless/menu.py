@@ -1,18 +1,17 @@
-from .base import (GeneratedItem, KeyShortcut, Literal, Action, NSApp, const, convertValueToObjc,
-    ImageProperty, ActionProperty)
+from .base import (GeneratedItem, Literal, Action, NSApp, const, convertValueToObjc, ImageProperty,
+    ActionProperty, KeyShortcutProperty)
 
 class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'
     PROPERTIES = GeneratedItem.PROPERTIES + [
-        'tag', 'hidden', ImageProperty('image'), ActionProperty('action')
+        'tag', 'hidden', ImageProperty('image'), ActionProperty('action'),
+        KeyShortcutProperty('shortcut')
     ]
     
     def __init__(self, name, action=None, shortcut=None, tag=None):
         GeneratedItem.__init__(self)
         self.name = name
         self.action = action
-        if shortcut and not isinstance(shortcut, KeyShortcut):
-            shortcut = KeyShortcut(shortcut)
         self.shortcut = shortcut
         self.tag = tag
     
@@ -21,15 +20,9 @@ class MenuItem(GeneratedItem):
         if self.name == "-":
             tmpl.allocinit = "[$menuname$ addItem:[NSMenuItem separatorItem]];\n"
         else:
-            tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:$name$ action:nil keyEquivalent:@\"$key$\"];"
+            tmpl.allocinit = "NSMenuItem *$varname$ = [$menuname$ addItemWithTitle:$name$ action:nil keyEquivalent:@\"\"];"
         tmpl.name = convertValueToObjc(self.name)
         tmpl.menuname = menuname
-        if self.shortcut:
-            tmpl.key = self.shortcut.key
-            if self.shortcut.flags:
-                self.properties['keyEquivalentModifierMask'] = Literal(self.shortcut.flags)
-        else:
-            tmpl.key = "nil"
         return tmpl
     
 
