@@ -132,13 +132,13 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
     tmpl.funcsig = funcsig
     tmpl.contents = '\n'.join(codePieces)
     with open(dest, 'wt') as fp:
-        fp.write(tmpl.render())
+        fp.write(tidyCode(tmpl.render()))
     if dest_header:
         tmpl = CodeTemplate(HEADER_TMPL)
         tmpl.funcsig = funcsig
         tmpl.ownerimport = ownerimport
         with open(dest_header, 'wt') as fp:
-            fp.write(tmpl.render())
+            fp.write(tidyCode(tmpl.render()))
         
 
 def runUI(modulePath):
@@ -152,3 +152,16 @@ def runUI(modulePath):
     p = Popen(cmd, shell=True)
     p.wait()
 
+def tidyCode(code):
+    lines = (l.strip() for l in code.split('\n'))
+    result = []
+    level = 0
+    for line in lines:
+        if not line:
+            if result and result[-1] != '':
+                result.append('')
+            continue
+        level -= line.count('}')
+        result.append((' ' * (level * 4)) + line)
+        level += line.count('{')
+    return '\n'.join(result)
