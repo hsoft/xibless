@@ -73,6 +73,10 @@ class Label(TextField):
 
 class SearchField(TextField):
     OBJC_CLASS = 'NSSearchField'
+    PROPERTIES = TextField.PROPERTIES + [
+        Property('sendsWholeSearchString', 'cell.sendsWholeSearchString'),
+        Property('searchesImmediately', 'cell.sendsSearchStringImmediately'),
+    ]
     
     def __init__(self, parent, placeholder):
         TextField.__init__(self, parent, None)

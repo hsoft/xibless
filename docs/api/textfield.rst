@@ -49,6 +49,16 @@ very rare that we initalize a search field with text. We usually do so with a pl
     
     :param parent: A :class:`View` instance. See :attr:`View.parent`.
     :param placeholder: String. See :attr:`TextField.placeholder`.
+    
+    .. attribute:: sendsWholeSearchString
+    
+        *Boolean*. Whether the search action is triggered after each keystroke or when the user
+        presses return. In Cocoa: ``cell.sendsWholeSearchString``.
+    
+    .. attribute:: searchesImmediately
+        
+        *Boolean*. Whether there's a small delay between the keystroke and the search field action
+        triggering. In Cocoa: ``cell.sendsSearchStringImmediately``.
 
 Combobox
 --------
