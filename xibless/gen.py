@@ -22,6 +22,7 @@ from .tabview import TabView
 from .table import TableView, ListView, OutlineView
 from .splitview import SplitView
 from .segment import SegmentedControl
+from .slider import Slider
 from .layout import HLayout, VLayout
 
 try:
@@ -71,7 +72,7 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
         'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',
         'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
         'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
-        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl',
+        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_locals = {}

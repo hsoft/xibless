@@ -36,4 +36,5 @@ Contents:
    table
    splitview
    segment
+   slider
    toolbar
