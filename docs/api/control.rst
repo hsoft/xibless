@@ -15,9 +15,9 @@ The ``Control`` is a :class:`View` subclass which represents Cocoa's ``NSControl
     
     .. attribute:: controlSize
         
-        :ref:`Cocoa constant <literal-consts>`. One of the 3 Regular, Small and Mini pre-defined
+        :ref:`control-size-consts`. One of the 3 Regular, Small and Mini pre-defined
         control size. Setting this attribute will change the font size and height of the control
-        to pre-defined values (like Interface Bulder does). Use with ``NSControlSize`` constants.
+        to pre-defined values (like Interface Bulder does).
     
     .. attribute:: action
     

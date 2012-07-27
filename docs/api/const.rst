@@ -84,3 +84,12 @@ TextAlignment constants
 .. data:: TextAlignment.Center
 .. data:: TextAlignment.Justified
 .. data:: TextAlignment.Natural
+
+.. _control-size-consts:
+
+ControlSize constants
+---------------------
+
+.. data:: ControlSize.Regular
+.. data:: ControlSize.Small
+.. data:: ControlSize.Mini

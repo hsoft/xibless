@@ -6,6 +6,11 @@ from .font import Font, FontFamily, FontSize
 
 ControlHeights = namedtuple('ControlHeights', 'regular small mini')
 
+class ControlSize(object):
+    Regular = const.NSRegularControlSize
+    Small = const.NSSmallControlSize
+    Mini = const.NSMiniControlSize
+
 class Control(View):
     CONTROL_HEIGHTS = ControlHeights(20, 17, 14)
     PROPERTIES = View.PROPERTIES + [
@@ -15,7 +20,7 @@ class Control(View):
     def __init__(self, parent, width, height):
         View.__init__(self, parent, width, height)
         self.font = Font(FontFamily.System, FontSize.RegularControl)
-        self.controlSize = const.NSRegularControlSize
+        self.controlSize = ControlSize.Regular
         self.action = None
     
     def hasFixedHeight(self):
@@ -25,9 +30,9 @@ class Control(View):
         return self.CONTROL_HEIGHTS
     
     def _getControlFontSize(self, controlSize):
-        if controlSize == const.NSMiniControlSize:
+        if controlSize == ControlSize.Mini:
             return FontSize.MiniControl
-        elif controlSize == const.NSSmallControlSize:
+        elif controlSize == ControlSize.Small:
             return FontSize.SmallControl
         else:
             return FontSize.RegularControl
@@ -38,9 +43,9 @@ class Control(View):
     def _updateControlSize(self):
         controlSize = self._controlSize
         controlHeights = self._getControlHeights()
-        if controlSize == const.NSMiniControlSize:
+        if controlSize == ControlSize.Mini:
             self.height = controlHeights.mini
-        elif controlSize == const.NSSmallControlSize:
+        elif controlSize == ControlSize.Small:
             self.height = self.CONTROL_HEIGHTS.small
         else:
             self.height = self.CONTROL_HEIGHTS.regular
