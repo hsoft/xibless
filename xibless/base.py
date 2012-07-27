@@ -18,7 +18,7 @@ def wrapString(s):
 
 globalLocalizationTable = None
 
-def convertValueToObjc(value):
+def convertValueToObjc(value, requireNSObject=False):
     if value is None:
         return 'nil'
     elif isinstance(value, KeyValueId):
@@ -31,16 +31,26 @@ def convertValueToObjc(value):
             result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, globalLocalizationTable)
         return result
     elif isinstance(value, bool):
-        return 'YES' if value else 'NO'
+        result = 'YES' if value else 'NO'
+        if requireNSObject:
+            result = '[NSNumber numberWithBool:{}]'.format(result)
+        return result
     elif isinstance(value, (int, float)):
-        return str(value)
+        result = str(value)
+        if requireNSObject:
+            if isinstance(value, int):
+                method = '[NSNumber numberWithInteger:{}'
+            else:
+                method = '[NSNumber numberWithDouble:{}'
+            result = method.format(result)
+        return result
     else:
         raise TypeError("Can't figure out the property's type")
 
 def generateDictionary(source):
     elems = []
     for key, value in source.items():
-        elems.append(convertValueToObjc(value))
+        elems.append(convertValueToObjc(value, requireNSObject=True))
         elems.append(convertValueToObjc(key))
     elems.append('nil')
     return '[NSDictionary dictionaryWithObjectsAndKeys:{}]'.format(','.join(elems))
