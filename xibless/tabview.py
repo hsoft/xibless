@@ -14,7 +14,8 @@ class TabViewItem(GeneratedItem):
     def __init__(self, tabview, label, identifier=None):
         GeneratedItem.__init__(self)
         self.label = label
-        self._view = TabSubView(None, tabview.width, tabview.height)
+        self._view = TabSubView(None, tabview.width - tabview.OVERHEAD_W,
+            tabview.height - tabview.OVERHEAD_H)
         self.identifier = identifier
     
     @property
@@ -34,6 +35,8 @@ class TabViewItem(GeneratedItem):
 
 class TabView(View):
     OBJC_CLASS = 'NSTabView'
+    OVERHEAD_W = 6
+    OVERHEAD_H = 30
     
     def __init__(self, parent):
         View.__init__(self, parent, 160, 110)
@@ -43,6 +46,11 @@ class TabView(View):
         self.layoutDeltaY = -10
         self.layoutDeltaW = 14
         self.layoutDeltaH = 16
+    
+    def _updatePos(self):
+        for tab in self.tabs:
+            tab.view.width = self.width - self.OVERHEAD_W
+            tab.view.height = self.height - self.OVERHEAD_H
     
     def addTab(self, label, identifier=None):
         tab = TabViewItem(self, label, identifier)
