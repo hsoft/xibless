@@ -50,3 +50,5 @@ with::
 You can do stuff like this in your script::
 
     myLabel = Label(window, text=args['foo'])
+
+If not specified, ``args`` in the script will be an empty dictionary.
