@@ -40,9 +40,9 @@ def convertValueToObjc(value, requireNSObject=False):
         result = str(value)
         if requireNSObject:
             if isinstance(value, int):
-                method = '[NSNumber numberWithInteger:{}'
+                method = '[NSNumber numberWithInteger:{}]'
             else:
-                method = '[NSNumber numberWithDouble:{}'
+                method = '[NSNumber numberWithDouble:{}]'
             result = method.format(result)
         return result
     else:
@@ -384,12 +384,6 @@ class GeneratedItem(object):
     def generateFinalize(self):
         # Called after everything has been generated.
         pass
-    
-    @classmethod
-    def generateSupportCode(cls):
-        # Generate code that has to be placed outside of the main function. Will be called only
-        # once per class.
-        return ''
     
     def generate(self, *args, **kwargs):
         result = ''

@@ -1,67 +1,6 @@
 from .base import GeneratedItem, const, convertValueToObjc, NonLocalizableString
 from .view import Size
 
-TOOLBAR_DELEGATE_CODE = """
-@interface XiblessToolbarDelegate : NSObject <NSToolbarDelegate>
-{
-    NSMutableDictionary *items;
-    NSArray *defaultItems;
-}
-
-- (void)addItem:(NSToolbarItem *)aItem;
-- (void)setDefaultItems:(NSArray *)aDefaultItems;
-@end
-
-@implementation XiblessToolbarDelegate
-- (id)init
-{
-    self = [super init];
-    items = [[NSMutableDictionary alloc] init];
-    defaultItems = nil;
-    return self;
-}
-
-- (void)dealloc
-{
-    [items release];
-    [defaultItems release];
-    [super dealloc];
-}
-
-- (void)addItem:(NSToolbarItem *)aItem
-{
-    [items setObject:aItem forKey:[aItem itemIdentifier]];
-}
-
-- (void)setDefaultItems:(NSArray *)aDefaultItems
-{
-    [defaultItems release];
-    defaultItems = [aDefaultItems retain];
-}
-
-- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
-{
-    return [items objectForKey:itemIdentifier];
-}
-
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
-{
-    NSMutableArray *result = [NSMutableArray array];
-    [result addObject:NSToolbarSeparatorItemIdentifier];
-    [result addObject:NSToolbarSpaceItemIdentifier];
-    [result addObject:NSToolbarFlexibleSpaceItemIdentifier];
-    [result addObjectsFromArray:[items allKeys]];
-    return result;
-}
-
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
-{
-    return defaultItems;
-}
-@end
-"""
-
-
 class Toolbar(GeneratedItem):
     OBJC_CLASS = 'NSToolbar'
     PROPERTIES = GeneratedItem.PROPERTIES + [
@@ -102,10 +41,6 @@ class Toolbar(GeneratedItem):
             defaultItems = ','.join(convert(item) for item in self.defaultItems)
             tmpl.setup += "[$varname$Delegate setDefaultItems:[NSArray arrayWithObjects:{},nil]];\n".format(defaultItems)
         return tmpl
-    
-    @classmethod
-    def generateSupportCode(cls):
-        return TOOLBAR_DELEGATE_CODE
     
 
 class ToolbarItem(GeneratedItem):

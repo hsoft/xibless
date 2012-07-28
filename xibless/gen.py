@@ -1,4 +1,4 @@
-import os.path
+import os.path as op
 import tempfile
 import shutil
 from subprocess import Popen
@@ -35,7 +35,7 @@ except NameError:
             exec(fh.read()+"\n", globals, locals)
 
 HEADER_TMPL = """
-#import <Cocoa/Cocoa.h>
+#import "XiblessSupport.h"
 $ownerimport$
 
 $funcsig$;
@@ -44,14 +44,6 @@ $funcsig$;
 UNIT_TMPL = """
 $mainimport$
 $ownerimport$
-
-static NSString*
-stringFromChar(unichar c)
-{
-    return [NSString stringWithCharacters:&c length:1];
-}
-
-$supportcode$
 
 $funcsig$
 {
@@ -65,13 +57,13 @@ return result;
 # don't need those assignments, so we skip them. Moreover, we revert all instance which had their
 # OBJC_CLASS attribute set because this is also going to make complication fail.
 def generate(modulePath, dest, runmode=False, localizationTable=None):
-    dest_basename, dest_ext = os.path.splitext(os.path.basename(dest))
+    dest_basename, dest_ext = op.splitext(op.basename(dest))
     if dest_ext == '.h':
         dest_header = None
     else:
         if not dest_ext:
             dest += '.m'
-        dest_header = os.path.splitext(dest)[0] + '.h'
+        dest_header = op.splitext(dest)[0] + '.h'
     base.globalLocalizationTable = localizationTable
     base.globalRunMode = runmode
     base.globalGenerationCounter.reset()
@@ -109,7 +101,7 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
     if dest_header:
         tmpl.mainimport = "#import \"{}.h\"".format(dest_basename)
     else:
-        tmpl.mainimport = "#import <Cocoa/Cocoa.h>"
+        tmpl.mainimport = "#import \"XiblessSupport.h\""
         tmpl.ownerimport = ownerimport
     toGenerate = []
     for key, value in module_locals.items():
@@ -117,13 +109,6 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
             continue
         value.varname = key
         toGenerate.append(value)
-    # We only want to call this method once for each class, which is why we use a set
-    supportCodeToGenerate = set(o.generateSupportCode for o in toGenerate)
-    tmpl.supportcode = ''
-    for generateMethod in supportCodeToGenerate:
-        code = generateMethod()
-        if code:
-            tmpl.supportcode += code
     toGenerate.sort(key=lambda x: x.creationOrder)
     codePieces = []
     for item in toGenerate:
@@ -148,15 +133,15 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
         tmpl.ownerimport = ownerimport
         with open(dest_header, 'wt') as fp:
             fp.write(tidyCode(tmpl.render()))
-        
+    copy_support_unit(op.dirname(dest))
 
 def runUI(modulePath):
-    runtemplatePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runtemplate')
-    assert os.path.exists(runtemplatePath)
+    runtemplatePath = op.join(op.dirname(op.abspath(__file__)), 'runtemplate')
+    assert op.exists(runtemplatePath)
     tmpPath = tempfile.mkdtemp()
-    destPath = os.path.join(tmpPath, 'runtemplate')
+    destPath = op.join(tmpPath, 'runtemplate')
     shutil.copytree(runtemplatePath, destPath)
-    shutil.copy(modulePath, os.path.join(destPath, 'MainScript.py'))
+    shutil.copy(modulePath, op.join(destPath, 'MainScript.py'))
     cmd = 'cd "%s" && python ./waf configure && python ./waf && open build/RunUI.app -W && cd ../.. && rm -r "%s"' % (destPath, tmpPath)
     p = Popen(cmd, shell=True)
     p.wait()
@@ -174,3 +159,10 @@ def tidyCode(code):
         result.append((' ' * (level * 4)) + line)
         level += line.count('{')
     return '\n'.join(result)
+
+def copy_support_unit(destfolder):
+    DATA_PATH = op.join(op.dirname(__file__), 'data')
+    if not op.exists(destfolder):
+        os.makedirs(destfolder)
+    shutil.copy(op.join(DATA_PATH, 'XiblessSupport.h'), destfolder)
+    shutil.copy(op.join(DATA_PATH, 'XiblessSupport.m'), destfolder)
