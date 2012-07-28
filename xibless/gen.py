@@ -56,7 +56,7 @@ return result;
 # any owner assignment will make code compilation fail. Since we just want to preview the UI, we
 # don't need those assignments, so we skip them. Moreover, we revert all instance which had their
 # OBJC_CLASS attribute set because this is also going to make complication fail.
-def generate(modulePath, dest, runmode=False, localizationTable=None):
+def generate(modulePath, dest, runmode=False, localizationTable=None, args=None):
     dest_basename, dest_ext = op.splitext(op.basename(dest))
     if dest_ext == '.h':
         dest_header = None
@@ -75,6 +75,8 @@ def generate(modulePath, dest, runmode=False, localizationTable=None):
         'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider',
     }
     module_globals = {name: globals()[name] for name in to_include}
+    if args:
+        module_globals['args'] = args
     module_locals = {}
     execfile(modulePath, module_globals, module_locals)
     assert 'result' in module_locals

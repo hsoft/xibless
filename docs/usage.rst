@@ -37,3 +37,16 @@ Enabling Localization
 If you set it to a non-empty string, string localization will be enabled, that is, all strings will
 be wrapper around ``NSLocalizedStringFromTable(theString, localizationTable, @"")``. This enables
 you to have localized UIs. See an example of such UI in the ``localized`` demo.
+
+Arbitrary script arguments
+--------------------------
+
+When calling ``generate()`` from Python, you can pass arbitrary arguments through ``args``. What you
+pass will be available as the ``args`` global value in the script. For example, if you generate a UI
+with::
+
+    xibless.generate(source, dest, args={'foo': 'bar'})
+
+You can do stuff like this in your script::
+
+    myLabel = Label(window, text=args['foo'])
