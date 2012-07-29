@@ -1,5 +1,6 @@
-from .base import (GeneratedItem, Literal, Action, NSApp, const, convertValueToObjc, ImageProperty,
-    ActionProperty, KeyShortcutProperty)
+from .base import GeneratedItem, NSApp, const, convertValueToObjc
+from .types import Action
+from .property import ImageProperty, ActionProperty, KeyShortcutProperty
 
 class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'

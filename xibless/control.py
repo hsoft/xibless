@@ -1,7 +1,8 @@
 from collections import namedtuple
 
 from .view import View
-from .base import const, Property, ActionProperty
+from .base import const
+from .property import Property, ActionProperty
 from .font import Font, FontFamily, FontSize
 
 ControlHeights = namedtuple('ControlHeights', 'regular small mini')

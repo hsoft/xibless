@@ -1,6 +1,6 @@
 from __future__ import division, print_function
 
-from .base import stringArray
+from .types import stringArray
 from .control import Control
 
 class RadioButtons(Control):

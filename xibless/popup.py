@@ -1,7 +1,6 @@
-from .base import (convertValueToObjc, const, Literal, KeyValueId, NonLocalizableString,
-    Property)
+from .base import convertValueToObjc, const
+from .property import Property
 from .button import Button
-from .control import Control, ControlHeights
 from .menu import Menu
 
 class Popup(Button):

@@ -1,4 +1,5 @@
-from .base import convertValueToObjc, KeyValueId
+from .base import convertValueToObjc
+from .types import KeyValueId
 from .view import View
 from .font import Font, FontFamily, FontSize
 

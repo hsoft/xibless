@@ -1,5 +1,7 @@
 from .control import Control, ControlHeights
-from .base import const, ImageProperty, NonLocalizableString
+from .base import const
+from .types import NLSTR
+from .property import ImageProperty
 from .view import Pack
 from .table import TableView
 from .tabview import TabView
@@ -107,7 +109,7 @@ class Button(Control):
         self.properties['bezelStyle'] = self.bezelStyle
         self.properties['state'] = self.state
         if self.keyEquivalent:
-            self.properties['keyEquivalent'] = NonLocalizableString(self.keyEquivalent)
+            self.properties['keyEquivalent'] = NLSTR(self.keyEquivalent)
         return tmpl
     
 

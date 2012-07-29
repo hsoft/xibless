@@ -1,4 +1,5 @@
-from .base import GeneratedItem, const, convertValueToObjc, NonLocalizableString
+from .base import GeneratedItem, const, convertValueToObjc
+from .types import NonLocalizableString
 from .view import Size
 
 class Toolbar(GeneratedItem):

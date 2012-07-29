@@ -1,4 +1,5 @@
-from .base import const, Property
+from .base import const
+from .property import Property
 from .control import Control, ControlHeights
 from .font import Font, FontFamily, FontSize
 

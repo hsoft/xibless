@@ -1,4 +1,4 @@
-from .base import stringArray
+from .types import stringArray
 from .textfield import TextField
 
 class Combobox(TextField):

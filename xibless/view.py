@@ -2,7 +2,8 @@ from __future__ import division
 
 from collections import namedtuple, defaultdict
 
-from .base import GeneratedItem, Literal
+from .base import GeneratedItem
+from .types import Literal
 
 class Pack(object):
     # Corners

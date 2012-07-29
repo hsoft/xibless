@@ -1,5 +1,6 @@
 from .control import Control, ControlHeights
-from .base import const, Property, convertValueToObjc
+from .base import const, convertValueToObjc
+from .property import Property
 
 class Segment(object):
     def __init__(self, label, width):

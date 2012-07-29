@@ -1,4 +1,5 @@
-from .base import const, ImageProperty
+from .base import const
+from .property import ImageProperty
 from .view import View
 
 class ImageView(View):

@@ -1,5 +1,6 @@
-from .base import (GeneratedItem, convertValueToObjc, KeyValueId, Literal, Flags,
-    NonLocalizableString, Property)
+from .base import GeneratedItem, convertValueToObjc
+from .types import KeyValueId, Literal, Flags, NonLocalizableString
+from .property import Property
 from .view import View
 
 class TableColumn(GeneratedItem):

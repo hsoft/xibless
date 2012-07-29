@@ -4,7 +4,8 @@ import shutil
 from subprocess import Popen
 
 from . import base
-from .base import CodeTemplate, Action, GeneratedItem, owner, NSApp, const, defaults
+from .base import CodeTemplate, GeneratedItem, owner, NSApp, const, defaults
+from .types import Action
 from .control import ControlSize
 from .view import View, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
