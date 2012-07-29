@@ -1,10 +1,12 @@
-from .base import convertValueToObjc, const, Literal, KeyValueId, NonLocalizableString
+from .base import (convertValueToObjc, const, Literal, KeyValueId, NonLocalizableString,
+    Property)
 from .button import Button
 from .control import Control, ControlHeights
 from .menu import Menu
 
 class Popup(Button):
     OBJC_CLASS = 'NSPopUpButton'
+    PROPERTIES = Button.PROPERTIES + [Property('arrowPosition', 'cell.arrowPosition')]
     
     def __init__(self, parent, items=None):
         Button.__init__(self, parent, '')
