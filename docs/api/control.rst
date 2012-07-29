@@ -24,3 +24,7 @@ The ``Control`` is a :class:`View` subclass which represents Cocoa's ``NSControl
         :class:`Action`. The action that is performed on click. Equivalent to ``[self setTarget:]``
         and ``[self setAction:]``.
     
+    .. attribute:: formatter
+        
+        :doc:`formatter`. The formatter for this control.
+    

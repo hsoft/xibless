@@ -23,6 +23,7 @@ Contents:
    view
    layout
    control
+   formatter
    window
    menu
    button

@@ -93,3 +93,15 @@ ControlSize constants
 .. data:: ControlSize.Regular
 .. data:: ControlSize.Small
 .. data:: ControlSize.Mini
+
+.. _number-style-consts:
+
+NumberStyle constants
+---------------------
+
+.. data:: NumberStyle.NoStyle
+.. data:: NumberStyle.Decimal
+.. data:: NumberStyle.Currency
+.. data:: NumberStyle.Percent
+.. data:: NumberStyle.Scientific
+.. data:: NumberStyle.SpellOut

@@ -15,7 +15,7 @@ class ControlSize(object):
 class Control(View):
     CONTROL_HEIGHTS = ControlHeights(20, 17, 14)
     PROPERTIES = View.PROPERTIES + [
-        ActionProperty('action'), 'font', Property('controlSize', 'cell.controlSize'),
+        ActionProperty('action'), 'font', Property('controlSize', 'cell.controlSize'), 'formatter',
     ]
     
     def __init__(self, parent, width, height):
@@ -23,6 +23,7 @@ class Control(View):
         self.font = Font(FontFamily.System, FontSize.RegularControl)
         self.controlSize = ControlSize.Regular
         self.action = None
+        self.formatter = None
     
     def hasFixedHeight(self):
         return True
@@ -63,5 +64,5 @@ class Control(View):
         self._updateControlSize()
     
     def dependencies(self):
-        return [self.font]
+        return View.dependencies(self) + [self.font, self.formatter]
     

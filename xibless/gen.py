@@ -10,6 +10,7 @@ from .control import ControlSize
 from .view import View, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
+from .formatter import NumberFormatter, NumberStyle
 from .menu import Menu, MainMenu
 from .window import Window, Panel, PanelStyle
 from .button import Button, Checkbox
@@ -75,7 +76,8 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
         'Label', 'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',
         'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
         'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
-        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider',
+        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider', 'NumberFormatter',
+        'NumberStyle',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_globals['args'] = args
