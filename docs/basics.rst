@@ -102,3 +102,17 @@ you can always try to set it in its ``properties`` dictionary, for example with:
     foo.properties['delegate'] = bar
 
 It's not guaranteed to work, but it very well might.
+
+Custom subclasses
+-----------------
+
+In XCode's interface builder, it's possible to specify a custom class to instantiate instead of the
+base class. For example, if you have a home grown ``NSTableView`` subclass and want to instantiate
+it in an XIB, you'd change the table view's class name to ``MyTableView``. In ``xibless``, you can
+do the same by setting the ``OBJC_CLASS`` attribute in this fashion::
+
+    table = TableView(window)
+    table.OBJC_CLASS = 'MyTableView'
+
+Of course, as is the case with XIB's your custom class will be instantiated with the same arguments
+as a typical ``NSTableView`` would.
