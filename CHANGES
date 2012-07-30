@@ -1,6 +1,25 @@
 Changes
 =======
 
+Version 0.4.0 -- 2012/07/30
+---------------------------
+
+* Added Panel, SplitView, OutlineView, ListView, Toolbar, SegmentedControl, SearchField, Slider
+  and NumberFormatter.
+* Added Layouts.
+* Added support for many, many, many new attributes, constants and types.
+* Now generates a ".h" to go alongside the generated unit.
+* Added Property and its subclasses, an easier way to add support for new attributes, even the
+  complex ones.
+* It's now possible to override margins in layout method calls.
+* Added support for bindings with the new ``View.bind()`` method.
+* Added the new ``defaults`` global variable, which can be used to bind to user defaults.
+* Constants accessed with ``const`` can now be bitwise OR-ed.
+* Generated code is now formatted to look a bit better and be easier to debug.
+* Added new constants for menu shortcuts for special keys (arrows, enter etc.).
+* Added support for UI script arguments.
+
+
 Version 0.3.1 -- 2012/07/20
 ---------------------------
 
