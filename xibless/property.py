@@ -44,6 +44,7 @@ SPECIAL_KEYS = {
 
 REPLACED_KEYS = {
     'return': '\\r',
+    'enter': '\\x03',
     'esc': '\\e',
     'backspace': '\\b',
 }
@@ -67,6 +68,8 @@ class KeyShortcutProperty(Property):
                 flags.add(flag)
         if flags:
             target.properties['keyEquivalentModifierMask'] = flags
+        else:
+            target.properties['keyEquivalentModifierMask'] = 0
         assert len(elements) == 1
         key = list(elements)[0]
         if key in SPECIAL_KEYS:

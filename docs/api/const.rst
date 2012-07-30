@@ -114,6 +114,7 @@ Special shortcut keys
 Menu shortcuts with special keys can be created with these special itentifiers:
 
 .. data:: return
+.. data:: enter
 .. data:: backspace
 .. data:: esc
 .. data:: arrowup
