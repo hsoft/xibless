@@ -105,3 +105,18 @@ NumberStyle constants
 .. data:: NumberStyle.Percent
 .. data:: NumberStyle.Scientific
 .. data:: NumberStyle.SpellOut
+
+.. _shortcut-key-consts:
+
+Special shortcut keys
+---------------------
+
+Menu shortcuts with special keys can be created with these special itentifiers:
+
+.. data:: return
+.. data:: backspace
+.. data:: esc
+.. data:: arrowup
+.. data:: arrowdown
+.. data:: arrowleft
+.. data:: arrowright

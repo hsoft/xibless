@@ -77,7 +77,11 @@ The ``MenuItem`` is a class that represents Cocoa's ``NSMenuItem``.
         
         A string that represent the keyboard shortcut that triggers the item. This string has the
         format "modifiers+letter", for example, "cmd+f". Available modifiers are "cmd", "ctrl",
-        "alt" and "shift". Special characters like tabs and arrows aren't yet supported.
+        "alt" and "shift".
+        
+        Some special characters are supported through special identifiers. The list of supported
+        identifiers is :ref:`there <shortcut-key-consts>`. For example, if you want a shortcut that
+        is activated on cmd+<up arrow>, your shorcut would be ``cmd+arrowup``.
     
     .. attribute:: tag
         
