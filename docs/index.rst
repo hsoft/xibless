@@ -15,11 +15,11 @@ similarly to what you do when you build Qt UIs without the Designer. For example
 
     nameLabel.width = 45
     nameLabel.packToCorner(Pack.UpperLeft)
-    nameField.packRelativeTo(nameLabel, Pack.Right, Pack.Middle)
+    nameField.packRelativeTo(nameLabel, Pack.Right, align=Pack.Middle)
     nameField.fill(Pack.Right)
-    helloLabel.packRelativeTo(nameLabel, Pack.Below, Pack.Left)
+    helloLabel.packRelativeTo(nameLabel, Pack.Below, align=Pack.Left)
     helloLabel.fill(Pack.Right)
-    button.packRelativeTo(helloLabel, Pack.Below, Pack.Right)
+    button.packRelativeTo(helloLabel, Pack.Below, align=Pack.Right)
     nameField.setAnchor(Pack.UpperLeft, growX=True)
     helloLabel.setAnchor(Pack.UpperLeft, growX=True)
     button.setAnchor(Pack.UpperRight)
@@ -36,6 +36,16 @@ so this tool is suitable for any Cocoa developer.**
 ``xibless`` runs on Python 2.7 and up. This means that if you're on OS X 10.7 or newer, you can use
 the built-in Python. Otherwise, you'll have to install a more recent version of Python.
 
+Early Development
+-----------------
+
+``xibless`` is in very early development and there's no API documentation yet. For now, you'll have
+to figure that API from the demos and by digging directly in the source. Also, note that this API
+could wildly change before v1.0.
+
+Also, the number of rough edges at the moment are incalculable. There are no error message for
+invalid UI scripts, so it might be very hard, for now, to figure out why your scripts don't work.
+
 Contents:
 
 .. toctree::
@@ -44,7 +54,6 @@ Contents:
    install
    why_xibless
    usage
-   early_development
    basics
    layout
    api/index

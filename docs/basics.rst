@@ -85,9 +85,8 @@ Well, you can do that in ``xibless``. Use the ``|`` char as in ``const.flag1 | c
 Memory Management
 -----------------
 
-At this moment, there's no memory management and there's tons or memory leaks eveywhere, but in the
-future, everything created inside a UI script will be auto-released, which means that you'll have to
-retain it when you store the result and in your owner's properties set by the script.
+Everything created inside a UI script is auto-released, which means that you have to retain it when
+you store the result and in your owner's properties set by the script.
 
 Of course, if an object is "naturally" retained by another object created in the script, such as
 a ``NSMenuItem`` added to a ``Menu`` or a view added to a superview, then you don't have to manually

@@ -17,8 +17,8 @@ make the text field grow, there's no mechanism (yet) that will correctly detect 
 button follow (except if you use :meth:`View.fill`)
 
 A third thing to know is that ``xibless`` tries to mimic margins in Interface Builder. So when we
-send a widget in a corner, we take the margin into account. For now, it's not possible to override
-those margins.
+send a widget in a corner, we take the margin into account. You can override those margins by
+specifying a ``margin`` argument in the layout methods.
 
 The way layouts work in ``xibless`` is by "packing". You start with an empty superview, add some
 widgets to it and start doing the layout by sending one of your widgets in one of the corners,
