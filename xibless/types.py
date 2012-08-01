@@ -1,4 +1,5 @@
 from collections import defaultdict, namedtuple
+from . import globalvars
 
 try:
     basestring
@@ -12,7 +13,7 @@ def wrapString(s):
     s = s.replace('\n', '\\n').replace('"', '\\"')
     return '@"%s"' % s
 
-def convertValueToObjc(value, requireNSObject=False, localizationTable=None):
+def convertValueToObjc(value, requireNSObject=False):
     if value is None:
         return 'nil'
     elif isinstance(value, KeyValueId):
@@ -21,8 +22,8 @@ def convertValueToObjc(value, requireNSObject=False, localizationTable=None):
         return value.objcValue()
     elif isinstance(value, basestring):
         result = wrapString(value)
-        if value and localizationTable:
-            result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, localizationTable)
+        if value and globalvars.globalLocalizationTable:
+            result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, globalvars.globalLocalizationTable)
         return result
     elif isinstance(value, bool):
         result = 'YES' if value else 'NO'

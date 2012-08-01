@@ -3,7 +3,7 @@ import tempfile
 import shutil
 from subprocess import Popen
 
-from . import base
+from . import globalvars
 from .base import CodeTemplate, GeneratedItem, owner, NSApp, const, defaults
 from .types import Action
 from .control import ControlSize
@@ -68,9 +68,9 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
         if not dest_ext:
             dest += '.m'
         dest_header = op.splitext(dest)[0] + '.h'
-    base.globalLocalizationTable = localizationTable
-    base.globalRunMode = runmode
-    base.globalGenerationCounter.reset()
+    globalvars.globalLocalizationTable = localizationTable
+    globalvars.globalRunMode = runmode
+    globalvars.globalGenerationCounter.reset()
     to_include = {'owner', 'NSApp', 'const', 'defaults', 'View', 'Size', 'Rect', 'ControlSize',
         'Menu', 'MainMenu', 'Action', 'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox',
         'Label', 'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',

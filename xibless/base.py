@@ -1,17 +1,12 @@
 import re
 
-from .types import (convertValueToObjc as convertValueToObjcBase, KeyValueId, ConstGenerator,
-    NLSTR, Binding, generateDictionary)
+from .types import (convertValueToObjc, KeyValueId, ConstGenerator, NLSTR, Binding,
+    generateDictionary)
 from .property import Property
-
-globalLocalizationTable = None
-globalRunMode = False
+from . import globalvars
 
 def upFirstLetter(s):
     return s[0].upper() + s[1:]
-
-def convertValueToObjc(value):
-    return convertValueToObjcBase(value, localizationTable=globalLocalizationTable)
 
 class CodeTemplate(object):
     def __init__(self, template):
@@ -59,7 +54,7 @@ class GeneratedItem(object):
     PROPERTIES = []
     
     def __init__(self):
-        self.creationOrder = globalGenerationCounter.creationToken()
+        self.creationOrder = globalvars.globalGenerationCounter.creationToken()
         # In case we are never assigned to a top level variable and thus never given a varname
         self.varname = "_tmp%d" % self.creationOrder
         # properties to be set at generation time. For example, if "editable" is set to False,
@@ -114,7 +109,7 @@ class GeneratedItem(object):
     
     @property
     def generated(self):
-        return globalGenerationCounter.isGenerated(self)
+        return globalvars.globalGenerationCounter.isGenerated(self)
     
     def bind(self, name, target, keyPath, valueTransformer=None):
         options = {}
@@ -163,11 +158,11 @@ class GeneratedItem(object):
         inittmpl.setprop = self._generateProperties()
         result += inittmpl.render()
         result += self.generateAssignments()
-        if not globalRunMode:
+        if not globalvars.globalRunMode:
             # We don't generate bindings in "run" mode because bindings can generate crashes if they
             # aren't actually connected to something.
             result += self.generateBindings()
-        globalGenerationCounter.addGenerated(self)
+        globalvars.globalGenerationCounter.addGenerated(self)
         return result
     
 
@@ -191,4 +186,4 @@ class GenerationCounter(object):
         self.generatedItems = set()
     
 
-globalGenerationCounter = GenerationCounter()
+globalvars.globalGenerationCounter = GenerationCounter()
