@@ -5,7 +5,7 @@ from subprocess import Popen
 
 from . import globalvars
 from .base import CodeTemplate, GeneratedItem, owner, NSApp, const, defaults
-from .types import Action
+from .types import Action, NLSTR
 from .control import ControlSize
 from .view import View, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
@@ -77,7 +77,7 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
         'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
         'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
         'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider', 'NumberFormatter',
-        'NumberStyle',
+        'NumberStyle', 'NLSTR',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_globals['args'] = args

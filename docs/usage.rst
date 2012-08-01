@@ -38,6 +38,9 @@ If you set it to a non-empty string, string localization will be enabled, that i
 be wrapper around ``NSLocalizedStringFromTable(theString, localizationTable, @"")``. This enables
 you to have localized UIs. See an example of such UI in the ``localized`` demo.
 
+If there are some strings that you *don't* want to see wrapped in a localization call, use
+``NLSTR("mystring")`` (NLSTR is for Non-Localizable STRing).
+
 Arbitrary script arguments
 --------------------------
 
