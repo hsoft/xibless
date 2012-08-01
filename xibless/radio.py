@@ -38,4 +38,5 @@ class RadioButtons(Control):
             rows += 1
         tmpl.rows = rows
         tmpl.radiostrings = stringArray(self.items)
+        self.properties['autosizesCells'] = True
         return tmpl
