@@ -1,6 +1,14 @@
 Changes
 =======
 
+Version 0.4.1 -- 2012/08/08
+---------------------------
+
+* Added NLSTR to UI scripts namespace.
+* Don't wrap Window.autosaveName in localization calls.
+* Fixed a bug causing some strings not to be wrapped in localization calls.
+* Set RadioButton's "autosizesCells" to True upon creation.
+
 Version 0.4.0 -- 2012/07/30
 ---------------------------
 
