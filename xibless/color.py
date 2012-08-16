@@ -1,3 +1,5 @@
+from __future__ import division
+
 from .base import GeneratedItem, convertValueToObjc
 
 class Color(GeneratedItem):
@@ -5,10 +7,15 @@ class Color(GeneratedItem):
     
     def __init__(self, red, green, blue, alpha=1.0):
         GeneratedItem.__init__(self)
-        self.red = red
-        self.green = green
-        self.blue = blue
-        self.alpha = alpha
+        def adjust(x):
+            if isinstance(x, int): # we have a color in the 0-0xff range
+                x = x / 0xff
+            return x
+        
+        self.red = adjust(red)
+        self.green = adjust(green)
+        self.blue = adjust(blue)
+        self.alpha = adjust(alpha)
     
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)

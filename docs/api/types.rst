@@ -23,7 +23,9 @@ Color
 
 .. class:: Color(red, green, blue[, alpha=1.0])
     
-    Wraps ``NSColor``. Creates an initialized a color instance with the supplied RGBA values.
+    Wraps ``NSColor``. Creates an initialized color instance with the supplied RGBA values.
+    Expected values are floats between 0.0 and 1.0, but if you feed it integers, it will assume
+    a 0-255 range and will divide values by 255.
 
 Font
 ----
