@@ -15,12 +15,12 @@ owner.nameField = nameField
 owner.helloLabel = helloLabel
 
 # Layout
-nameLabel.packToCorner(Pack.UpperLeft)
-nameField.packRelativeTo(nameLabel, Pack.Right, Pack.Middle)
+nameLabel.moveTo(Pack.UpperLeft)
+nameField.moveNextTo(nameLabel, Pack.Right, Pack.Middle)
 nameField.fill(Pack.Right)
-helloLabel.packRelativeTo(nameLabel, Pack.Below, Pack.Left)
+helloLabel.moveNextTo(nameLabel, Pack.Below, Pack.Left)
 helloLabel.fill(Pack.Right)
-button.packRelativeTo(helloLabel, Pack.Below, Pack.Right)
+button.moveNextTo(helloLabel, Pack.Below, Pack.Right)
 nameField.setAnchor(Pack.UpperLeft, growX=True)
 helloLabel.setAnchor(Pack.UpperLeft, growX=True)
 button.setAnchor(Pack.UpperRight)

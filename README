@@ -15,12 +15,12 @@ similarly to what you do when you build Qt UIs without the Designer. For example
     button = Button(result, title="Say Hello")
 
     nameLabel.width = 45
-    nameLabel.packToCorner(Pack.UpperLeft)
-    nameField.packRelativeTo(nameLabel, Pack.Right, align=Pack.Middle)
+    nameLabel.moveTo(Pack.UpperLeft)
+    nameField.moveNextTo(nameLabel, Pack.Right, align=Pack.Middle)
     nameField.fill(Pack.Right)
-    helloLabel.packRelativeTo(nameLabel, Pack.Below, align=Pack.Left)
+    helloLabel.moveNextTo(nameLabel, Pack.Below, align=Pack.Left)
     helloLabel.fill(Pack.Right)
-    button.packRelativeTo(helloLabel, Pack.Below, align=Pack.Right)
+    button.moveNextTo(helloLabel, Pack.Below, align=Pack.Right)
     nameField.setAnchor(Pack.UpperLeft, growX=True)
     helloLabel.setAnchor(Pack.UpperLeft, growX=True)
     button.setAnchor(Pack.UpperRight)

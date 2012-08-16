@@ -26,18 +26,18 @@ usually the upper left corner. Then, you take another widget and send it next or
 you've just placed, and so on, until you've packed all your widgets.
 
 The first part of the process, sending a widget to a corner of its superview, is done with
-:meth:`View.packToCorner`. You call it by giving it a corner as an argument. For example::
+:meth:`View.move`. You call it by giving it a corner as an argument. For example::
 
-    button.packToCorner(Pack.UpperLeft)
+    button.moveTo(Pack.UpperLeft)
 
 sends ``button`` to the upper left corner of its superview.
 
-The second part, packing widgets relative to each other, is done through :meth:`View.packRelativeTo`.
+The second part, packing widgets relative to each other, is done through :meth:`View.moveNextTo`.
 This method takes an ``other`` argument, which is the widget to place our target next to, ``side``
 which is the side of ``other`` at which to place our target, and then ``align``, which is the side
 to align to if your target widget is smaller than ``other``. For example::
 
-    button.packRelativeTo(textfield, side=Pack.Below, align=Pack.Right)
+    button.moveNextTo(textfield, side=Pack.Below, align=Pack.Right)
 
 will place ``button`` below ``textfield``. If the button's width is smaller than the textfield's,
 the button upper right corner of the button will be aligned with the textfield's lower right corner.
@@ -50,7 +50,7 @@ takes all available space in a direction. For example::
     textfield.fill(Pack.Right)
 
 increases textfield's width until it reaches the superview's bounds. The cool thing about ``fill``
-is that if you used ``packRelativeTo`` to put another widget next to it, it will consider that
+is that if you used ``moveNextTo`` to put another widget next to it, it will consider that
 widget in the filling calculations. So, for example, if you put a button at the right of that
 textfield and then call ``fill``, the amount by which the textfield grows will be reduced by the
 width (and margin) of the button. The button will even be moved to the right accordingly.
@@ -82,10 +82,10 @@ accordingly. Here's what we'd have to do without layout items::
     button2 = Button(window, "Button 2")
     button3 = Button(window, "Button 3")
 
-    button1.packToCorner(Pack.LowerLeft)
-    button2.packRelativeTo(button1, Pack.Right)
-    button3.packToCorner(Pack.LowerRight)
-    table.packRelativeTo(button1, Pack.Above)
+    button1.moveTo(Pack.LowerLeft)
+    button2.moveNextTo(button1, Pack.Right)
+    button3.moveTo(Pack.LowerRight)
+    table.moveNextTo(button1, Pack.Above)
     table.fill(Pack.UpperRight)
     button1.setAnchor(Pack.LowerLeft)
     button2.setAnchor(Pack.LowerLeft)
@@ -101,10 +101,10 @@ With :class:`HLayout`, we can create the same layout and save ourselves a bunch 
     button3 = Button(window, "Button 3")
 
     buttonLayout = HLayout([button1, button2, None, button3])
-    buttonLayout.packToCorner(Pack.LowerLeft)
+    buttonLayout.moveTo(Pack.LowerLeft)
     buttonLayout.fill(Pack.Right)
     buttonLayout.setAchor(Pack.Below)
-    table.packRelativeTo(buttonLayout, Pack.Above)
+    table.moveNextTo(buttonLayout, Pack.Above)
     table.fill(Pack.UpperRight)
     table.setAnchor(Pack.UpperLeft, growX=True, growY=True)
 

@@ -62,18 +62,36 @@ but to be subclassed.
         you have to give to that argument is the value transformer's name (the same name you'd give
         to XCode's interface builder).
     
-    .. method:: packToCorner(corner[, margin])
+    .. method:: moveTo(direction[, target, margin])
         
-        :param corner: A :ref:`corner-constants`
+        :param corner: One of :ref:`side-constants` or :ref:`corner-constants`
+        :param target: Numeric
         :param margin: Numeric
 
-        Send the view to a specified corner of its super view. It doesn't care if there's already
-        something in there, so if you send two views in the same corner, they're going to overlap.
-        To place views relatively to each other, use :meth:`packRelativeTo`.
+        Move the view in the specified direction, which is one of the :ref:`side-constants` (if you
+        specify a corner, it is equivalent to 2 ``moveTo()`` calls with the 2 sides corresponding to
+        the corner).
         
-        You can override default margins by specifying a ``margin`` argument.
+        If you specify a ``target`` argument, you're sending the view to an absolute position. For
+        example, ``moveTo(Pack.Left, target=42)`` sets ``x`` to 42. (note that in the case of
+        ``Right`` and ``Above``, the absolute position is for the right and upper bounds of the
+        view. So, for example, calling ``moveTo(Pack.Above, target=42)`` actually sets ``y`` to
+        ``42 - view.height``).
+        
+        Without a ``target`` argument, the view is moved until it hits its parent bounds
+        (respecting the margins). For example, ``moveTo(Pack.Right)`` sends the view to the right
+        side of its superview. You can specify a ``margin`` argument to override default margins.
+        
+        Note that this method doesn't care if there's already something where it moves, so if you
+        send two views in the same place, they're going to overlap. To place views relatively to
+        each other, use :meth:`moveNextTo`.
 
-    .. method:: packRelativeTo(other, side[, align, margin])
+    
+    .. method:: packToCorner(corner[, margin])
+    
+        *Deprecated*. Same as :meth:`moveTo`.
+    
+    .. method:: moveNextTo(other, side[, align, margin])
 
         :param other: A :class:`View` instance
         :param side: A :ref:`side-constants`
@@ -93,6 +111,10 @@ but to be subclassed.
         ``side`` is vertical and ``Middle`` otherwise.
         
         You can override default margins by specifying a ``margin`` argument.
+    
+    .. method:: packRelativeTo(other, side[, align, margin])
+        
+        *Deprecated*. Same as :meth:`moveNextTo`.
     
     .. method:: fill(side[, margin, goal])
         

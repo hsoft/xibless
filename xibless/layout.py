@@ -78,7 +78,7 @@ class HLayout(Layout):
             first.x = self.x
             previous = first
             for view in self.left[1:]:
-                view.packRelativeTo(previous, Pack.Right)
+                view.moveNextTo(previous, Pack.Right)
                 previous = view
         if self.right:
             first = self.right[-1]
@@ -86,7 +86,7 @@ class HLayout(Layout):
             first.x = self.x + self.width - first.width
             previous = first
             for view in reversed(self.right[:-1]):
-                view.packRelativeTo(previous, Pack.Left)
+                view.moveNextTo(previous, Pack.Left)
                 previous = view
         for view in self.subviews:
             if not view.hasFixedHeight():
@@ -134,7 +134,7 @@ class VLayout(Layout):
             first.x = self.x
             previous = first
             for view in self.above[1:]:
-                view.packRelativeTo(previous, Pack.Below)
+                view.moveNextTo(previous, Pack.Below)
                 previous = view
         if self.below:
             first = self.below[-1]
@@ -142,7 +142,7 @@ class VLayout(Layout):
             first.x = self.x
             previous = first
             for view in reversed(self.below[:-1]):
-                view.packRelativeTo(previous, Pack.Above)
+                view.moveNextTo(previous, Pack.Above)
                 previous = view
         for view in self.subviews:
             if not view.hasFixedWidth():

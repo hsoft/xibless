@@ -165,30 +165,7 @@ class View(GeneratedItem):
         # that is of that type (Overridden by layouts)
         return isinstance(self, viewtype)
     
-    def packToCorner(self, corner, margin=None):
-        def getmargin(side):
-            if margin is not None:
-                return margin
-            else:
-                result = self.parent.innerMargin(side)
-                result += self.innerMarginDelta(side)
-                return result
-        
-        assert self.parent is not None
-        px, py, pw, ph = self.parent.rect
-        x, y, w, h = self.rect
-        if corner in (Pack.LowerLeft, Pack.UpperLeft):
-            x = getmargin(Pack.Left)
-        else:            
-            x = pw - self.parent.innerMargin(Pack.Right) - w
-        if corner in (Pack.LowerLeft, Pack.LowerRight):
-            y = getmargin(Pack.Below)
-        else:            
-            y = ph - getmargin(Pack.Above) - h
-        self.x, self.y = x, y
-        self._updatePos()
-    
-    def packRelativeTo(self, other, side, align=None, margin=None):
+    def moveNextTo(self, other, side, align=None, margin=None):
         assert other.parent is self.parent
         ox, oy, ow, oh = other.rect
         x, y, w, h = self.rect
@@ -228,9 +205,42 @@ class View(GeneratedItem):
         self.neighbors[Pack.oppositeSide(side)].add(other)
         other.neighbors[side].add(self)
         self._updatePos()
+    packRelativeTo = moveNextTo
     
     def setAnchor(self, corner, growX=False, growY=False):
         self.anchor = Anchor(corner, growX, growY)
+    
+    def moveTo(self, direction, target=None, margin=None):
+        if Pack.isCorner(direction):
+            for side in Pack.sidesInCorner(direction):
+                self.moveTo(side, target=target, margin=margin)
+            return
+        if target is None:
+            # We want to move until the border
+            def getmargin(side):
+                if margin is not None:
+                    return margin
+                else:
+                    result = self.parent.innerMargin(side)
+                    result += self.innerMarginDelta(side)
+                    return result
+            margin = getmargin(direction)
+            if direction in {Pack.Left, Pack.Below}:
+                target = margin
+            elif direction == Pack.Above:
+                target = self.parent.height - margin
+            else:
+                target = self.parent.width - margin
+        if direction == Pack.Left:
+            self.x = target
+        elif direction == Pack.Right:
+            self.x = target - self.width
+        elif direction == Pack.Below:
+            self.y = target
+        else:
+            self.y = target - self.height
+        self._updatePos()
+    packToCorner = moveTo # Legacy
     
     def fill(self, side, margin=None, goal=None):
         def getmargin(side):
