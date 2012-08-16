@@ -5,6 +5,7 @@ from .property import ImageProperty
 from .view import Pack
 from .table import TableView
 from .tabview import TabView
+from .textfield import TextField
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
@@ -94,8 +95,8 @@ class Button(Control):
                 elif side in (Pack.Above, Pack.Below):
                     # A push button and another style of button, the vertical margin is 20
                     return 20
-            elif other.isOrHas(TableView, side):
-                # A push button under a table has 20 of margin
+            elif other.isOrHas((TableView, TextField), side):
+                # A push button under a table or textfield has 20 of margin
                 return 20
             elif other.isOrHas(TabView, side):
                 # A push button under a tab view has a margin of 10

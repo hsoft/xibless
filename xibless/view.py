@@ -163,6 +163,7 @@ class View(GeneratedItem):
     def isOrHas(self, viewtype, side):
         # Returns whether self is of type `viewtype` or if it contains a view, touching `side`,
         # that is of that type (Overridden by layouts)
+        # viewtype can be a tuple of types
         return isinstance(self, viewtype)
     
     def moveNextTo(self, other, side, align=None, margin=None):
