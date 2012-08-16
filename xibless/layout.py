@@ -29,7 +29,7 @@ class Layout(View):
     def _updatePos(self):
         self._arrangeLayout()
     
-    def isOrHas(self, viewtype, side):
+    def isOrHas(self, viewtype, side, strict=False):
         if side == Pack.Right:
             viewFilter = lambda v: v.x + v.width == self.x + self.width
         elif side == Pack.Left:
@@ -39,7 +39,7 @@ class Layout(View):
         elif side == Pack.Below:
             viewFilter = lambda v: v.y == self.y
         admissibleViews = filter(viewFilter, self.subviews)
-        return any(v.isOrHas(viewtype, side) for v in admissibleViews)
+        return any(v.isOrHas(viewtype, side, strict=strict) for v in admissibleViews)
     
     def outerMargin(self, other, side):
         return max(view.outerMargin(other, side) for view in self.subviews)

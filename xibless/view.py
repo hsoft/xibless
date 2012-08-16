@@ -160,11 +160,18 @@ class View(GeneratedItem):
     def hasFixedHeight(self):
         return False
     
-    def isOrHas(self, viewtype, side):
+    def isOrHas(self, viewtype, side, strict=False):
         # Returns whether self is of type `viewtype` or if it contains a view, touching `side`,
         # that is of that type (Overridden by layouts)
         # viewtype can be a tuple of types
-        return isinstance(self, viewtype)
+        # If strict is True, only an exact type match will work.
+        if strict:
+            if isinstance(viewtype, tuple):
+                return type(self) in viewtype
+            else:
+                return type(self) is viewtype
+        else:
+            return isinstance(self, viewtype)
     
     def moveNextTo(self, other, side, align=None, margin=None):
         assert other.parent is self.parent

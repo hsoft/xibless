@@ -95,7 +95,7 @@ class Button(Control):
                 elif side in (Pack.Above, Pack.Below):
                     # A push button and another style of button, the vertical margin is 20
                     return 20
-            elif other.isOrHas((TableView, TextField), side):
+            elif other.isOrHas(TableView, side) or other.isOrHas(TextField, side, strict=True):
                 # A push button under a table or textfield has 20 of margin
                 return 20
             elif other.isOrHas(TabView, side):
