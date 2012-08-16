@@ -46,3 +46,23 @@ layout-related methods easier. See :doc:`/layout` for more information.
     The principle of ``VLayout`` is the same as :class:`HLayout`, but vertically. The order in which
     subviews are consider is from top to bottom. The first subview is at the top, and the last is at
     the bottom.
+
+.. class:: VHLayout(subviews[, fillers, width])
+    
+    :param subviews: List of lists of :class:`View`
+    :param fillers: A collection of :class:`View`
+    :param width: Numeric
+    
+    This is a shortcut to creating a :class:`VLayout` with multiple :class:`HLayout` inside. The
+    ``subview`` argument must be given in a "grid" fashion like this::
+    
+        VHLayout([
+            [line1view1, line1view2],
+            [line2view1, line2view2, line2view3],
+            [line3view1, line3view2],
+        ])
+    
+    Instead of giving a single ``filler``, you give a collection of them. You include the filler
+    for each line (if there's no filler for a line, you add nothing) of the layout. The order in
+    which they're added is not important. If you have space fillers (``None`` fillers), you don't
+    have to add ``None`` to the ``fillers`` collection.

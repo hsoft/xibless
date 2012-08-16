@@ -26,7 +26,7 @@ from .table import TableView, ListView, OutlineView
 from .splitview import SplitView
 from .segment import SegmentedControl
 from .slider import Slider
-from .layout import HLayout, VLayout
+from .layout import HLayout, VLayout, VHLayout
 
 try:
     execfile
@@ -76,8 +76,8 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
         'Label', 'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',
         'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
         'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
-        'TextAlignment', 'HLayout', 'VLayout', 'SegmentedControl', 'Slider', 'NumberFormatter',
-        'NumberStyle', 'NLSTR',
+        'TextAlignment', 'HLayout', 'VLayout', 'VHLayout', 'SegmentedControl', 'Slider',
+        'NumberFormatter', 'NumberStyle', 'NLSTR',
     }
     module_globals = {name: globals()[name] for name in to_include}
     module_globals['args'] = args

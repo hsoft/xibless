@@ -107,5 +107,3 @@ With :class:`HLayout`, we can create the same layout and save ourselves a bunch 
     table.moveNextTo(buttonLayout, Pack.Above)
     table.fill(Pack.UpperRight)
     table.setAnchor(Pack.UpperLeft, growX=True, growY=True)
-
-**Temporary limitation:** A layout object cannot contain another layout object.

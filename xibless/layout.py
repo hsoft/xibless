@@ -10,7 +10,7 @@ class Layout(View):
     INNER_MARGIN_ABOVE = 0
     INNER_MARGIN_BELOW = 0
     
-    def __init__(self, subviews, filler):
+    def __init__(self, subviews, filler, width=0, height=0):
         if len(subviews) < 2:
             raise ValueError("Layouts must have a least two subviews")
         if filler is not None and filler not in subviews:
@@ -18,10 +18,10 @@ class Layout(View):
         if None in subviews:
             raise ValueError("There can be at most one None element in the layout, and it can't be present at the same time as a filler")
         parent = subviews[0].parent
-        View.__init__(self, parent, 1, 1)
+        View.__init__(self, parent, width, height)
         self.subviews = subviews
         self.filler = filler
-        self.packToCorner(Pack.UpperLeft)
+        self.moveTo(Pack.UpperLeft)
     
     def _arrangeLayout(self):
         pass
@@ -63,19 +63,19 @@ class HLayout(Layout):
         subviews = left + right
         self.left = left
         self.right = right
-        Layout.__init__(self, subviews, filler)
-        if height:
-            self.height = height
-        else:
-            self.height = max(view.height for view in subviews)
-        last = self.subviews[-1]
-        self.width = last.x + last.width - self.x
+        if not height:
+            height = max(view.height for view in subviews)
+        Layout.__init__(self, subviews, filler, height=height)
+        maxx = max(v.x+v.width for v in self.subviews)
+        minx = min(v.x for v in self.subviews)
+        self.width = maxx - minx
     
     def _arrangeLayout(self):
         if self.left:
             first = self.left[0]
             first.y = self.y
             first.x = self.x
+            first._updatePos()
             previous = first
             for view in self.left[1:]:
                 view.moveNextTo(previous, Pack.Right)
@@ -84,10 +84,15 @@ class HLayout(Layout):
             first = self.right[-1]
             first.y = self.y
             first.x = self.x + self.width - first.width
+            first._updatePos()
             previous = first
             for view in reversed(self.right[:-1]):
                 view.moveNextTo(previous, Pack.Left)
                 previous = view
+        if not self.width:
+            # We haven't set a width for our layout yet, so we're in the middle of its
+            # initialization. Let's not do anything based on width.
+            return
         for view in self.subviews:
             if not view.hasFixedHeight():
                 view.height = self.height
@@ -119,19 +124,19 @@ class VLayout(Layout):
         subviews = above + below
         self.above = above
         self.below = below
-        Layout.__init__(self, subviews, filler)
-        if width:
-            self.width = width
-        else:
-            self.width = max(view.width for view in subviews)
-        first = self.subviews[0]
-        self.height = first.y + first.height - self.y
+        if not width:
+            width = max(view.width for view in subviews)
+        Layout.__init__(self, subviews, filler, width=width)
+        maxy = max(v.y+v.height for v in self.subviews)
+        miny = min(v.y for v in self.subviews)
+        self.height = maxy - miny
     
     def _arrangeLayout(self):
         if self.above:
             first = self.above[0]
             first.y = self.y + self.height - first.height
             first.x = self.x
+            first._updatePos()
             previous = first
             for view in self.above[1:]:
                 view.moveNextTo(previous, Pack.Below)
@@ -140,10 +145,14 @@ class VLayout(Layout):
             first = self.below[-1]
             first.y = self.y
             first.x = self.x
+            first._updatePos()
             previous = first
             for view in reversed(self.below[:-1]):
                 view.moveNextTo(previous, Pack.Above)
                 previous = view
+        if not self.height:
+            # See HLayout._arrangeLayout()
+            return
         for view in self.subviews:
             if not view.hasFixedWidth():
                 view.width = self.width
@@ -165,3 +174,17 @@ class VLayout(Layout):
         if self.filler is not None:
             self.filler.setAnchor(aboveAnchor, growY=True)
     
+
+class VHLayout(VLayout):
+    def __init__(self, viewGrid, fillers=None, width=None):
+        if fillers is None:
+            fillers = set()
+        layouts = []
+        for views in viewGrid:
+            filler = None
+            for candidate in fillers:
+                if candidate in views:
+                    filler = candidate
+                    break
+            layouts.append(HLayout(views, filler))
+        VLayout.__init__(self, layouts, width=width)
