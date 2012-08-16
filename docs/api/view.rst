@@ -41,6 +41,12 @@ but to be subclassed.
         
         :class:`Menu`. The contextual menu for the view.
 
+    .. attribute:: delegate
+        
+        *Instance or accessor*. View's delegate, which has a different role depending on the
+        subclass. The value for this attribute can be either another instance, or a reference, such
+        as ``owner`` or ``owner.something``.
+    
     .. method:: bind(name, target, keyPath[, valueTransformer])
     
         :param name: *String*

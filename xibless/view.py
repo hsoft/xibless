@@ -85,7 +85,7 @@ class Rect(object):
 
 class View(GeneratedItem):
     OBJC_CLASS = 'NSView'
-    PROPERTIES = GeneratedItem.PROPERTIES + ['menu']
+    PROPERTIES = GeneratedItem.PROPERTIES + ['menu', 'delegate']
     
     INNER_MARGIN_LEFT = 20
     INNER_MARGIN_RIGHT = 20
