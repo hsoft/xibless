@@ -11,11 +11,11 @@ process in tab views are made independently of the layout in the tab view's pare
     tab = tabview.addTab("mytab")
     label = Label(mytab.view, "label in my tab")
     
-    tabview.packToCorner(Pack.UpperLeft)
+    tabview.moveTo(Pack.UpperLeft)
     tabview.fill(Pack.Right)
     tabview.fill(Pack.Below)
     tabview.setAnchor(Pack.UpperLeft, growX=True, growY=True)
-    label.packToCorner(Pack.UpperLeft)
+    label.moveTo(Pack.UpperLeft)
     label.fill(Pack.Right)
 
 .. class:: TabView(parent)
