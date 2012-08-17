@@ -22,7 +22,8 @@ def convertValueToObjc(value, requireNSObject=False):
         return value.objcValue()
     elif isinstance(value, basestring):
         result = wrapString(value)
-        if value and globalvars.globalLocalizationTable:
+        # '-' is the string we use for menu separators and we don't want to localize these.
+        if value and value != '-' and globalvars.globalLocalizationTable:
             result = 'NSLocalizedStringFromTable(%s, @"%s", @"")' % (result, globalvars.globalLocalizationTable)
         return result
     elif isinstance(value, bool):
