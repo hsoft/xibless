@@ -352,3 +352,12 @@ class View(GeneratedItem):
     @property
     def rect(self):
         return self.x, self.y, self.width, self.height
+
+class Box(View):
+    OBJC_CLASS = 'NSBox'
+    PROPERTIES = View.PROPERTIES + ['title']
+    
+    def __init__(self, parent, title):
+        View.__init__(self, parent, 100, 100)
+        self.title = title
+    

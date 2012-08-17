@@ -151,3 +151,17 @@ but to be subclassed.
         to" when its parent view is resized. If growX and/or growY is ``True``, the view will grow
         or shrink with its parent view.
     
+
+Box
+---
+
+Subclasses :class:`View` and represents a ``NSBox``
+
+.. class:: Box(parent, title)
+
+    :param parent: A :class:`View` instance. See :attr:`View.parent`.
+    :param title: *String*. See :attr:`title`
+    
+    .. attribute:: title
+        
+        *String*. The title that shows at the top of the box.

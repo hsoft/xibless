@@ -7,7 +7,7 @@ from . import globalvars
 from .base import CodeTemplate, GeneratedItem, owner, NSApp, const, defaults
 from .types import Action, NLSTR
 from .control import ControlSize
-from .view import View, Pack, Size, Rect
+from .view import View, Box, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
 from .formatter import NumberFormatter, NumberStyle
@@ -71,11 +71,11 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
     globalvars.globalLocalizationTable = localizationTable
     globalvars.globalRunMode = runmode
     globalvars.globalGenerationCounter.reset()
-    to_include = {'owner', 'NSApp', 'const', 'defaults', 'View', 'Size', 'Rect', 'ControlSize',
-        'Menu', 'MainMenu', 'Action', 'Window', 'Panel', 'PanelStyle', 'Button', 'Checkbox',
-        'Label', 'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox', 'RadioButtons',
-        'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView', 'OutlineView',
-        'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
+    to_include = {'owner', 'NSApp', 'const', 'defaults', 'View', 'Box', 'Size', 'Rect',
+        'ControlSize', 'Menu', 'MainMenu', 'Action', 'Window', 'Panel', 'PanelStyle', 'Button',
+        'Checkbox', 'Label', 'TextField', 'TextView', 'SearchField', 'Popup', 'Combobox',
+        'RadioButtons', 'ProgressIndicator', 'ImageView', 'TabView', 'TableView', 'ListView',
+        'OutlineView', 'SplitView', 'Font', 'FontFamily', 'FontSize', 'FontTrait', 'Color', 'Pack',
         'TextAlignment', 'HLayout', 'VLayout', 'VHLayout', 'SegmentedControl', 'Slider',
         'NumberFormatter', 'NumberStyle', 'NLSTR',
     }
