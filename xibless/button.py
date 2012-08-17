@@ -1,4 +1,4 @@
-from .control import Control, ControlHeights
+from .control import Control, ControlHeights, ControlSize
 from .base import const
 from .types import NLSTR
 from .property import ImageProperty
@@ -32,7 +32,7 @@ class Button(Control):
     
     def _getControlFontSize(self, controlSize):
         bezelStyle = self.bezelStyle
-        if (bezelStyle == const.NSRoundRectBezelStyle) and (controlSize == const.NSRegularControlSize):
+        if (bezelStyle == const.NSRoundRectBezelStyle) and (controlSize == ControlSize.Regular):
             return 12
         else:
             return Control._getControlFontSize(self, controlSize)
@@ -45,7 +45,7 @@ class Button(Control):
             self.layoutDeltaY = -1
             self.layoutDeltaW = 0
             self.layoutDeltaH = 1
-            if controlSize == const.NSMiniControlSize:
+            if controlSize == ControlSize.Mini:
                 self.layoutDeltaY = -2
                 self.layoutDeltaH = 3 
         elif bezelStyle == const.NSTexturedRoundedBezelStyle:
@@ -53,10 +53,10 @@ class Button(Control):
             self.layoutDeltaY = -1
             self.layoutDeltaW = 0
             self.layoutDeltaH = 3
-            if controlSize == const.NSSmallControlSize:
+            if controlSize == ControlSize.Small:
                 self.layoutDeltaY = -2
                 self.layoutDeltaH = 2
-            elif controlSize == const.NSMiniControlSize:
+            elif controlSize == ControlSize.Mini:
                 self.layoutDeltaY = 0
                 self.layoutDeltaH = 0
         else:
@@ -64,10 +64,10 @@ class Button(Control):
             self.layoutDeltaY = -7
             self.layoutDeltaW = 12
             self.layoutDeltaH = 11
-            if controlSize == const.NSSmallControlSize:
+            if controlSize == ControlSize.Small:
                 self.layoutDeltaY = -6
                 self.layoutDeltaH = 10
-            elif controlSize == const.NSMiniControlSize:
+            elif controlSize == ControlSize.Mini:
                 self.layoutDeltaY = -1
                 self.layoutDeltaH = 1
     
@@ -97,7 +97,15 @@ class Button(Control):
                 elif side in (Pack.Above, Pack.Below):
                     # A push button and another style of button, the vertical margin is 20
                     return 20
-            elif other.isOrHas(TableView, side) or other.isOrHas(TextField, side, strict=True):
+            elif other.isOrHas(TextField, side, strict=True):
+                # Layout rules for push buttons are so damn weird. So, if the text field is of
+                # *regular* size, the push button will have a margin of 8. If it's small or mini,
+                # it's 20. Where the heck is the logic in that?
+                if other.controlSize == ControlSize.Regular:
+                    return 8
+                else:
+                    return 20
+            elif other.isOrHas(TableView, side):
                 # A push button under a table or textfield has 20 of margin
                 return 20
             elif other.isOrHas(TabView, side):
