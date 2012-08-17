@@ -89,7 +89,9 @@ class Button(Control):
                 # of button, it's 20. If it's a push button and another type of view, it's the
                 # normal 8. If it's a layout (thus not a Button instance), we don't consider the
                 # "2 push buttons" special case at all.
-                if isinstance(other, Button) and other.bezelStyle == const.NSRoundedBezelStyle:
+                # We check for an exact button type because the special push button rule doesn't
+                # apply to popups.
+                if type(other) == Button and other.bezelStyle == const.NSRoundedBezelStyle:
                     # two push buttons, it's 12 both horizontally and vertically
                     return 12
                 elif side in (Pack.Above, Pack.Below):
