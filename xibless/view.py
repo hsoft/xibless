@@ -357,7 +357,20 @@ class Box(View):
     OBJC_CLASS = 'NSBox'
     PROPERTIES = View.PROPERTIES + ['title']
     
+    INNER_MARGIN_LEFT = 18
+    INNER_MARGIN_RIGHT = 14
+    # There's something strange regarding the above margin. If I look at positions and margins in
+    # IB, I get 18, but such a margin doesn't place the view correctly inside. When I add 10, I get
+    # a margin that looks a bit more like IB. I have to idea what's the cause of this, but well...
+    INNER_MARGIN_ABOVE = 18 + 10
+    INNER_MARGIN_BELOW = 14
+    
     def __init__(self, parent, title):
         View.__init__(self, parent, 100, 100)
         self.title = title
+        
+        self.layoutDeltaX = -3
+        self.layoutDeltaY = -4
+        self.layoutDeltaW = 6
+        self.layoutDeltaH = 4
     
