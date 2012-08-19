@@ -105,7 +105,9 @@ class HLayout(Layout):
                 fillGoal = self.x + self.width
             self.filler.fill(Pack.Right, goal=fillGoal)
     
-    def setAnchor(self, side):
+    def setAnchor(self, side, growY=False):
+        if side not in {Pack.Above, Pack.Below}:
+            raise ValueError("setAnchor() can only be called with Above or Below in HLayouts.")
         if side == Pack.Above:
             leftAnchor = Pack.UpperLeft
             rightAnchor = Pack.UpperRight
@@ -113,11 +115,17 @@ class HLayout(Layout):
             leftAnchor = Pack.LowerLeft
             rightAnchor = Pack.LowerRight
         for view in self.left:
-            view.setAnchor(leftAnchor)
+            if isinstance(view, VLayout):
+                view.setAnchor(Pack.Left)
+            else:
+                view.setAnchor(leftAnchor, growY=growY)
         for view in self.right:
-            view.setAnchor(rightAnchor)
+            if isinstance(view, VLayout):
+                view.setAnchor(Pack.Right)
+            else:
+                view.setAnchor(rightAnchor, growY=growY)
         if self.filler is not None:
-            self.filler.setAnchor(leftAnchor, growX=True)
+            self.filler.setAnchor(leftAnchor, growX=True, growY=growY)
     
     
 class VLayout(Layout):
@@ -170,7 +178,9 @@ class VLayout(Layout):
                 fillGoal = self.y
             self.filler.fill(Pack.Below, goal=fillGoal)
     
-    def setAnchor(self, side):
+    def setAnchor(self, side, growX=False):
+        if side not in {Pack.Left, Pack.Right}:
+            raise ValueError("setAnchor() can only be called with Left or Right in VLayouts.")
         if side == Pack.Left:
             aboveAnchor = Pack.UpperLeft
             belowAnchor = Pack.LowerLeft
@@ -178,11 +188,17 @@ class VLayout(Layout):
             aboveAnchor = Pack.UpperRight
             belowAnchor = Pack.LowerRight
         for view in self.above:
-            view.setAnchor(aboveAnchor)
+            if isinstance(view, HLayout):
+                view.setAnchor(Pack.Above)
+            else:
+                view.setAnchor(aboveAnchor, growX=growX)
         for view in self.below:
-            view.setAnchor(belowAnchor)
+            if isinstance(view, HLayout):
+                view.setAnchor(Pack.Below)
+            else:
+                view.setAnchor(belowAnchor, growX=growX)
         if self.filler is not None:
-            self.filler.setAnchor(aboveAnchor, growY=True)
+            self.filler.setAnchor(aboveAnchor, growX=growX, growY=True)
     
 
 class VHLayout(VLayout):
