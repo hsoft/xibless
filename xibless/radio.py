@@ -1,15 +1,29 @@
 from __future__ import division, print_function
 
 from .types import stringArray
-from .control import Control
+from .control import Control, ControlHeights
 
 class RadioButtons(Control):
     OBJC_CLASS = 'NSMatrix'
     
     def __init__(self, parent, items, columns=1):
-        Control.__init__(self, parent, 80, 40)
         self.items = items
         self.columns = columns
+        Control.__init__(self, parent, 80, 40)
+    
+    def _getRowCount(self):
+        rows = len(self.items) // self.columns
+        if len(self.items) % self.columns:
+            print("WARNING: A radio button has a number of items that is uneven with it's columns.")
+            rows += 1
+        return rows
+    
+    def _getControlHeights(self):
+        # Our control height depends on our number of rows
+        result = Control._getControlHeights(self)
+        rows = self._getRowCount()
+        heights = (x*rows for x in result)
+        return ControlHeights(*heights)
     
     def generateInit(self):
         tmpl = Control.generateInit(self)
@@ -32,11 +46,7 @@ class RadioButtons(Control):
         }
         """
         tmpl.cols = self.columns
-        rows = len(self.items) // self.columns
-        if len(self.items) % self.columns:
-            print("WARNING: A radio button has a number of items that is uneven with it's columns.")
-            rows += 1
-        tmpl.rows = rows
+        tmpl.rows = self._getRowCount()
         tmpl.radiostrings = stringArray(self.items)
         self.properties['autosizesCells'] = True
         return tmpl

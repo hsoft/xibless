@@ -48,9 +48,9 @@ class Control(View):
         if controlSize == ControlSize.Mini:
             self.height = controlHeights.mini
         elif controlSize == ControlSize.Small:
-            self.height = self.CONTROL_HEIGHTS.small
+            self.height = controlHeights.small
         else:
-            self.height = self.CONTROL_HEIGHTS.regular
+            self.height = controlHeights.regular
         self.font.size = self._getControlFontSize(controlSize)
         self._updateLayoutDeltas()
     
