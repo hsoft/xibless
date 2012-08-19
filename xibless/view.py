@@ -125,6 +125,11 @@ class View(GeneratedItem):
         # nothing, but the Layout subclass does.
         pass
     
+    def _getOuterMargin(self, other, side):
+        outerMargin1 = self.outerMargin(other, side)
+        outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
+        return max(outerMargin1, outerMargin2)
+    
     #--- Layout
     def outerMargin(self, other, side):
         # The way outer margins (in other words, margins between sibling views) work is that we
@@ -180,9 +185,7 @@ class View(GeneratedItem):
         if margin is not None:
             outerMargin = margin
         else:
-            outerMargin1 = self.outerMargin(other, side)
-            outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
-            outerMargin = max(outerMargin1, outerMargin2)
+            outerMargin = self._getOuterMargin(other, side)
         
         if align is None:
             align = Pack.Left if side in (Pack.Above, Pack.Below) else Pack.Middle

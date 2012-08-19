@@ -96,8 +96,13 @@ class HLayout(Layout):
         for view in self.subviews:
             if not view.hasFixedHeight():
                 view.height = self.height
+                view._updatePos()
         if self.filler is not None:
-            fillGoal = self.x + self.width
+            if self.right:
+                justRight = self.right[0]
+                fillGoal = justRight.x - self._getOuterMargin(justRight, Pack.Right)
+            else:
+                fillGoal = self.x + self.width
             self.filler.fill(Pack.Right, goal=fillGoal)
     
     def setAnchor(self, side):
@@ -156,8 +161,13 @@ class VLayout(Layout):
         for view in self.subviews:
             if not view.hasFixedWidth():
                 view.width = self.width
+                view._updatePos()
         if self.filler is not None:
-            fillGoal = self.y
+            if self.below:
+                justUnder = self.below[0]
+                fillGoal = justUnder.y + justUnder.height + self._getOuterMargin(justUnder, Pack.Below)
+            else:
+                fillGoal = self.y
             self.filler.fill(Pack.Below, goal=fillGoal)
     
     def setAnchor(self, side):
