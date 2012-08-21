@@ -207,6 +207,12 @@ class VHLayout(VLayout):
             fillers = set()
         layouts = []
         for views in viewGrid:
+            if not views:
+                continue
+            if len(views) == 1:
+                # With only one view, add it directly
+                layouts.append(views[0])
+                continue
             filler = None
             for candidate in fillers:
                 if candidate in views:
