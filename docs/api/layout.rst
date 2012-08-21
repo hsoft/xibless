@@ -6,11 +6,13 @@ middle, but it's not intended to be directly instantiated), but that's a tempora
 are not generated in Objective-C code. All they do is that they make the task of calling
 layout-related methods easier. See :doc:`/layout` for more information.
 
-.. class:: HLayout(subviews[, filler, height])
+.. class:: HLayout(subviews[, filler, height, margin, align])
     
     :param subviews: List of :class:`View`
     :param filler: :class:`View` instance
     :param height: Numeric
+    :param margin: Numeric
+    :param align: Numeric
     
     Creates a layout representing a horizontal row managing ``subviews``. The first element is the
     leftmost one and the rest is going to be placed sequetially to the right. The list of subviews
@@ -28,6 +30,14 @@ layout-related methods easier. See :doc:`/layout` for more information.
     height. Instead of automatically determining the layout's height from subviews, you can specify
     a height with the ``height`` argument.
     
+    You can specify a ``margin`` argument if you want to force a certain margin between your layout
+    elements. If you don't, standard margins will be applied.
+    
+    When placing views with a height that is smaller than the layout's height, we have to decide
+    how to vertically align the view. Will it be sent above, below, in the middle? You decide. If
+    you don't middle is the default alignment. Valid values are ``Pack.Above``, ``Pack.Middle``,
+    ``Pack.Below``.
+    
     .. method:: setAnchor(side)
         
         :param side: One of the :ref:`side-constants`. Only vertical ones.
@@ -37,21 +47,30 @@ layout-related methods easier. See :doc:`/layout` for more information.
         What it does is that it sets the anchor of all its subviews at once, the left subviews
         being anchored left, and the right subviews being anchored right.
 
-.. class:: VLayout(subviews[, filler, width])
+.. class:: VLayout(subviews[, filler, width, margin, align])
     
     :param subviews: List of :class:`View`
     :param filler: :class:`View` instance
     :param width: Numeric
+    :param margin: Numeric
+    :param align: Numeric
     
     The principle of ``VLayout`` is the same as :class:`HLayout`, but vertically. The order in which
     subviews are consider is from top to bottom. The first subview is at the top, and the last is at
     the bottom.
+    
+    Alignment for vertical layout is done horizontally. Therefore, valid values are ``Pack.Left``,
+    ``Pack.Middle``, ``Pack.Right``. Default is left.
 
-.. class:: VHLayout(subviews[, fillers, width])
+.. class:: VHLayout(subviews[, fillers, width, hmargin, vmargin, halign, valign])
     
     :param subviews: List of lists of :class:`View`
     :param fillers: A collection of :class:`View`
     :param width: Numeric
+    :param hmargin: Numeric
+    :param vmargin: Numeric
+    :param halign: Numeric
+    :param valign: Numeric
     
     This is a shortcut to creating a :class:`VLayout` with multiple :class:`HLayout` inside. The
     ``subview`` argument must be given in a "grid" fashion like this::
@@ -66,3 +85,8 @@ layout-related methods easier. See :doc:`/layout` for more information.
     for each line (if there's no filler for a line, you add nothing) of the layout. The order in
     which they're added is not important. If you have space fillers (``None`` fillers), you don't
     have to add ``None`` to the ``fillers`` collection.
+    
+    Margin and align arguments are the same as simple layouts. ``hmargin`` is the horizontal margin
+    and ``vmargin`` is the vertical one. ``halign`` is the horizontal alignment (applied to the
+    **vertical** layout) and ``valign`` is the vertical alignment (applied to the **horizontal**
+    layout).

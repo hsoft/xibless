@@ -79,6 +79,12 @@ class Rect(object):
         self.width = width
         self.height = height
     
+    def __repr__(self):
+        return '<Rect{}>'.format(tuple(self))
+    
+    def __iter__(self):
+        return iter((self.x, self.y, self.width, self.height))
+    
     def objcValue(self):
         return 'NSMakeRect(%d, %d, %d, %d)' % (self.x, self.y, self.width, self.height)
     
@@ -165,18 +171,10 @@ class View(GeneratedItem):
     def hasFixedHeight(self):
         return False
     
-    def isOrHas(self, viewtype, side, strict=False):
-        # Returns whether self is of type `viewtype` or if it contains a view, touching `side`,
-        # that is of that type (Overridden by layouts)
-        # viewtype can be a tuple of types
-        # If strict is True, only an exact type match will work.
-        if strict:
-            if isinstance(viewtype, tuple):
-                return type(self) in viewtype
-            else:
-                return type(self) is viewtype
-        else:
-            return isinstance(self, viewtype)
+    def viewsAtSide(self, side):
+        # Returns all views touching `side`. For a normal view, there is of course only self, but
+        # for layouts, it may return multiple views.
+        return [self]
     
     def moveNextTo(self, other, side, align=None, margin=None):
         assert other.parent is self.parent
@@ -252,6 +250,28 @@ class View(GeneratedItem):
             self.y = target - self.height
         self._updatePos()
     packToCorner = moveTo # Legacy
+    
+    def moveInsideRect(self, rect, halign=None, valign=None):
+        if halign is None:
+            halign = Pack.Left
+        if valign is None:
+            valign = Pack.Middle
+        x, y, w, h = self.rect
+        x = rect.x
+        if w < rect.width:
+            if halign == Pack.Middle:
+                x += (rect.width - w) / 2
+            elif halign == Pack.Right:
+                x += rect.width - w
+        y = rect.y
+        if h < rect.height:
+            if valign == Pack.Middle:
+                y += (rect.height - h) / 2
+            elif valign == Pack.Above:
+                y += rect.height - h
+        self.x = x
+        self.y = y
+        self._updatePos()
     
     def fill(self, side, margin=None, goal=None):
         def getmargin(side):
@@ -354,7 +374,7 @@ class View(GeneratedItem):
     
     @property
     def rect(self):
-        return self.x, self.y, self.width, self.height
+        return Rect(self.x, self.y, self.width, self.height)
 
 class Box(View):
     OBJC_CLASS = 'NSBox'

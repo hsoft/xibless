@@ -10,7 +10,7 @@ class Layout(View):
     INNER_MARGIN_ABOVE = 0
     INNER_MARGIN_BELOW = 0
     
-    def __init__(self, subviews, filler, width=0, height=0):
+    def __init__(self, subviews, filler, width=0, height=0, margin=None):
         if len(subviews) < 2:
             raise ValueError("Layouts must have a least two subviews")
         if filler is not None and filler not in subviews:
@@ -21,6 +21,7 @@ class Layout(View):
         View.__init__(self, parent, width, height)
         self.subviews = subviews
         self.filler = filler
+        self.margin = margin
         self.moveTo(Pack.UpperLeft)
     
     def _arrangeLayout(self):
@@ -29,7 +30,13 @@ class Layout(View):
     def _updatePos(self):
         self._arrangeLayout()
     
-    def isOrHas(self, viewtype, side, strict=False):
+    def _getInterViewMargin(self, view, other, side):
+        if self.margin is not None:
+            return self.margin
+        else:
+            return view._getOuterMargin(other, side)
+    
+    def viewsAtSide(self, side):
         if side == Pack.Right:
             viewFilter = lambda v: v.x + v.width == self.x + self.width
         elif side == Pack.Left:
@@ -38,8 +45,7 @@ class Layout(View):
             viewFilter = lambda v: v.y + v.height == self.y + self.height
         elif side == Pack.Below:
             viewFilter = lambda v: v.y == self.y
-        admissibleViews = filter(viewFilter, self.subviews)
-        return any(v.isOrHas(viewtype, side, strict=strict) for v in admissibleViews)
+        return list(filter(viewFilter, self.subviews))
     
     def outerMargin(self, other, side):
         return max(view.outerMargin(other, side) for view in self.subviews)
@@ -55,7 +61,7 @@ def splitByElement(views, element):
     return views[:index], views[index+1:]
 
 class HLayout(Layout):
-    def __init__(self, subviews, filler=None, height=None):
+    def __init__(self, subviews, filler=None, height=None, margin=None, align=None):
         left, right = splitByElement(subviews, filler)
         if filler is not None:
             left.append(filler)
@@ -65,29 +71,36 @@ class HLayout(Layout):
         self.right = right
         if not height:
             height = max(view.height for view in subviews)
-        Layout.__init__(self, subviews, filler, height=height)
+        self.align = align
+        Layout.__init__(self, subviews, filler, height=height, margin=margin)
         maxx = max(v.x+v.width for v in self.subviews)
         minx = min(v.x for v in self.subviews)
         self.width = maxx - minx
     
     def _arrangeLayout(self):
+        rect = self.rect
         if self.left:
             first = self.left[0]
-            first.y = self.y
-            first.x = self.x
-            first._updatePos()
+            rect.width = first.width
+            first.moveInsideRect(rect, valign=self.align)
             previous = first
             for view in self.left[1:]:
-                view.moveNextTo(previous, Pack.Right)
+                margin = self._getInterViewMargin(view, previous, Pack.Right)
+                rect.x += rect.width + margin
+                rect.width = view.width
+                view.moveInsideRect(rect, valign=self.align)
                 previous = view
         if self.right:
             first = self.right[-1]
-            first.y = self.y
-            first.x = self.x + self.width - first.width
-            first._updatePos()
+            rect.width = first.width
+            rect.x = self.x + self.width - first.width
+            first.moveInsideRect(rect, valign=self.align)
             previous = first
             for view in reversed(self.right[:-1]):
-                view.moveNextTo(previous, Pack.Left)
+                margin = self._getInterViewMargin(view, previous, Pack.Left)
+                rect.width = view.width
+                rect.x -= rect.width + margin
+                view.moveInsideRect(rect, valign=self.align)
                 previous = view
         if not self.width:
             # We haven't set a width for our layout yet, so we're in the middle of its
@@ -100,7 +113,7 @@ class HLayout(Layout):
         if self.filler is not None:
             if self.right:
                 justRight = self.right[0]
-                fillGoal = justRight.x - self._getOuterMargin(justRight, Pack.Right)
+                fillGoal = justRight.x - self._getInterViewMargin(self.filler, justRight, Pack.Left)
             else:
                 fillGoal = self.x + self.width
             self.filler.fill(Pack.Right, goal=fillGoal)
@@ -129,7 +142,7 @@ class HLayout(Layout):
     
     
 class VLayout(Layout):
-    def __init__(self, subviews, filler=None, width=None):
+    def __init__(self, subviews, filler=None, width=None, margin=None, align=None):
         above, below = splitByElement(subviews, filler)
         if filler is not None:
             above.append(filler)
@@ -139,29 +152,37 @@ class VLayout(Layout):
         self.below = below
         if not width:
             width = max(view.width for view in subviews)
-        Layout.__init__(self, subviews, filler, width=width)
+        self.align = align
+        Layout.__init__(self, subviews, filler, width=width, margin=margin)
         maxy = max(v.y+v.height for v in self.subviews)
         miny = min(v.y for v in self.subviews)
         self.height = maxy - miny
     
     def _arrangeLayout(self):
+        rect = self.rect
         if self.above:
             first = self.above[0]
-            first.y = self.y + self.height - first.height
-            first.x = self.x
-            first._updatePos()
+            rect.height = first.height
+            rect.y = self.y + self.height - first.height
+            first.moveInsideRect(rect, halign=self.align)
             previous = first
             for view in self.above[1:]:
-                view.moveNextTo(previous, Pack.Below)
+                margin = self._getInterViewMargin(view, previous, Pack.Below)
+                rect.height = view.height
+                rect.y -= rect.height + margin
+                view.moveInsideRect(rect, halign=self.align)
                 previous = view
         if self.below:
             first = self.below[-1]
-            first.y = self.y
-            first.x = self.x
-            first._updatePos()
+            rect.y = self.y
+            rect.height = first.height
+            first.moveInsideRect(rect, halign=self.align)
             previous = first
             for view in reversed(self.below[:-1]):
-                view.moveNextTo(previous, Pack.Above)
+                margin = self._getInterViewMargin(view, previous, Pack.Above)
+                rect.y += rect.height + margin
+                rect.height = view.height
+                view.moveInsideRect(rect, halign=self.align)
                 previous = view
         if not self.height:
             # See HLayout._arrangeLayout()
@@ -173,7 +194,7 @@ class VLayout(Layout):
         if self.filler is not None:
             if self.below:
                 justUnder = self.below[0]
-                fillGoal = justUnder.y + justUnder.height + self._getOuterMargin(justUnder, Pack.Below)
+                fillGoal = justUnder.y + justUnder.height + self._getInterViewMargin(self.filler, justUnder, Pack.Above)
             else:
                 fillGoal = self.y
             self.filler.fill(Pack.Below, goal=fillGoal)
@@ -202,7 +223,8 @@ class VLayout(Layout):
     
 
 class VHLayout(VLayout):
-    def __init__(self, viewGrid, fillers=None, width=None):
+    def __init__(self, viewGrid, fillers=None, width=None, hmargin=None, vmargin=None, halign=None,
+            valign=None):
         if fillers is None:
             fillers = set()
         layouts = []
@@ -218,5 +240,5 @@ class VHLayout(VLayout):
                 if candidate in views:
                     filler = candidate
                     break
-            layouts.append(HLayout(views, filler))
-        VLayout.__init__(self, layouts, width=width)
+            layouts.append(HLayout(views, filler, margin=hmargin, align=valign))
+        VLayout.__init__(self, layouts, width=width, margin=vmargin, align=halign)
