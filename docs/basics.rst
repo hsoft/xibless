@@ -116,3 +116,16 @@ do the same by setting the ``OBJC_CLASS`` attribute in this fashion::
 
 Of course, as is the case with XIB's your custom class will be instantiated with the same arguments
 as a typical ``NSTableView`` would.
+
+Import from modules
+-------------------
+
+Because UI scripts are Python modules, it's possible to import from other modules. The folder in
+which the UI script is will be in ``PYTHONPATH``, so you can do stuff like add a ``common.py`` unit
+and then do ``from common import MyLabelSubclass`` in your UI scripts.
+
+The only thing to remember, however, is that the magic that goes on in UI scripts to put all xibless
+classes in your UI script's global namespace doesn't work for imported modules. Therefore, if your
+module use any xibless classes, you have to import them yourself from the ``xibless`` package (and
+you'll have to figure out where they live in the package). That's far from ideal, I'll fix that
+some day.

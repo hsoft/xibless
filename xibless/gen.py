@@ -1,3 +1,5 @@
+import sys
+import os
 import os.path as op
 import tempfile
 import shutil
@@ -82,7 +84,9 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
     module_globals = {name: globals()[name] for name in to_include}
     module_globals['args'] = args
     module_locals = {}
+    sys.path.insert(0, op.dirname(modulePath))
     execfile(modulePath, module_globals, module_locals)
+    del sys.path[0]
     assert 'result' in module_locals
     tmpl = CodeTemplate(UNIT_TMPL)
     if runmode:
@@ -90,8 +94,9 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
         owner._name = 'nil'
         ownerclass = 'id'
         ownerimport = None
+        # We do this to avoid custom OBJC classes definition from preventing compilation.
         for value in module_locals.values():
-            if hasattr(value, 'OBJC_CLASS'):
+            if hasattr(value, 'OBJC_CLASS') and hasattr(value.__class__, 'OBJC_CLASS'):
                 value.OBJC_CLASS = value.__class__.OBJC_CLASS
     else:
         ownerclass = module_locals.get('ownerclass', 'id')
@@ -147,7 +152,12 @@ def runUI(modulePath):
     tmpPath = tempfile.mkdtemp()
     destPath = op.join(tmpPath, 'runtemplate')
     shutil.copytree(runtemplatePath, destPath)
-    shutil.copy(modulePath, op.join(destPath, 'MainScript.py'))
+    wscriptPath = op.join(destPath, 'wscript')
+    with open(wscriptPath, 'rt') as fp:
+        wscriptContent = fp.read()
+    wscriptContent = wscriptContent.replace('{{script_path}}', op.abspath(modulePath))
+    with open(wscriptPath, 'wt') as fp:
+        fp.write(wscriptContent)
     cmd = 'cd "%s" && python ./waf configure && python ./waf && open build/RunUI.app -W && cd ../.. && rm -r "%s"' % (destPath, tmpPath)
     p = Popen(cmd, shell=True)
     p.wait()
