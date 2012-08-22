@@ -1,7 +1,7 @@
 from .control import Control, ControlHeights, ControlSize
 from .base import const
 from .types import NLSTR
-from .property import ImageProperty
+from .property import ImageProperty, KeyShortcutProperty
 from .view import Pack
 from .table import TableView
 from .tabview import TabView
@@ -9,7 +9,8 @@ from .textfield import TextField
 
 class Button(Control):
     OBJC_CLASS = 'NSButton'
-    PROPERTIES = Control.PROPERTIES + ['imagePosition', ImageProperty('image')]
+    PROPERTIES = Control.PROPERTIES + ['imagePosition', ImageProperty('image'),
+        KeyShortcutProperty('shortcut')]
     
     def __init__(self, parent, title, action=None):
         self._bezelStyle = const.NSRoundedBezelStyle
@@ -17,7 +18,6 @@ class Button(Control):
         self.buttonType = const.NSMomentaryLightButton
         self.state = None
         self.title = title
-        self.keyEquivalent = None
         self.action = action
         self.image = None
         self._updateLayoutDeltas()
@@ -59,6 +59,11 @@ class Button(Control):
             elif controlSize == ControlSize.Mini:
                 self.layoutDeltaY = 0
                 self.layoutDeltaH = 0
+        elif bezelStyle == const.NSSmallSquareBezelStyle:
+            self.layoutDeltaX = 0
+            self.layoutDeltaY = -1
+            self.layoutDeltaW = 0
+            self.layoutDeltaH = 2
         else:
             self.layoutDeltaX = -6
             self.layoutDeltaY = -7
@@ -124,7 +129,7 @@ class Button(Control):
         self.properties['buttonType'] = self.buttonType
         self.properties['bezelStyle'] = self.bezelStyle
         self.properties['state'] = self.state
-        if self.keyEquivalent:
+        if getattr(self, 'keyEquivalent', None):
             self.properties['keyEquivalent'] = NLSTR(self.keyEquivalent)
         return tmpl
     

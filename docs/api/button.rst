@@ -31,11 +31,15 @@ The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButto
         
         :ref:`Cocoa constant <literal-consts>`. Equivalent to ``[self state]``.
     
-    .. attribute:: keyEquivalent
-    
-        String. Equivalent to ``[self keyEquivalent]``. If you use escaped strings (such as ``\E``
-        for escape or ``\r`` for return), escape the backslashes. Therefore, setting a button
-        keyEquivalent to escape is done with ``button.keyEquivalent = "\\E"``.
+    .. attribute:: shortcut
+        
+        A string that represent the keyboard shortcut that triggers the button. This string has the
+        format "modifiers+letter", for example, "cmd+f". Available modifiers are "cmd", "ctrl",
+        "alt" and "shift".
+        
+        Some special characters are supported through special identifiers. The list of supported
+        identifiers is :ref:`there <shortcut-key-consts>`. For example, if you want a shortcut that
+        is activated on cmd+<up arrow>, your shorcut would be ``cmd+arrowup``.
     
     .. attribute:: image
         
