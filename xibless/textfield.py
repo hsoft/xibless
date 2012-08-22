@@ -39,6 +39,10 @@ class TextField(Control):
         self.font = Font(FontFamily.Label, FontSize.RegularControl)
         self.alignment = None
         self.textColor = None
+        self.fixedHeight = True
+    
+    def hasFixedHeight(self):
+        return self.fixedHeight
     
     def dependencies(self):
         return Control.dependencies(self) + [self.textColor]

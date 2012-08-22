@@ -26,6 +26,14 @@ The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTex
         
         :class:`Color`. Color of the text within the field. Equivalent to ``[self textColor]``.
     
+    .. attribute:: fixedHeight
+    
+        *Boolean*. ``TextField``, being a :class:`Control` subclass, has its height governed by
+        :attr:`Control.controlSize`. This means that any layout method that would otherwise change
+        a view's height (for example, :meth:`View.fill`) will not do it for a ``Control``. However,
+        in some cases, you want a text field to have a variable height because you want it to be
+        multi-line. In these cases, set this attribute to ``False`` to indicate that
+        height-modyifing layout methods can affect this view.
 
 Label
 -----
