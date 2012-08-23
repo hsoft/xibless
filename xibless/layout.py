@@ -65,7 +65,6 @@ class HLayout(Layout):
         left, right = splitByElement(subviews, filler)
         if filler is not None:
             left.append(filler)
-            filler.setAnchor(Pack.UpperLeft, growX=True)
         subviews = left + right
         self.left = left
         self.right = right
@@ -78,6 +77,15 @@ class HLayout(Layout):
         self.width = maxx - minx
     
     def _arrangeLayout(self):
+        # It's possible to have _arrangeLayout() called with a 0 width, this means that we're in
+        # initialization and that we should avoid doing any layout operations that require a width.
+        if self.width:
+            # We have to set the width of our flexible width widgets before we move them inside
+            # their calculated rect or else we will misalign them on the basis of false width.
+            for view in self.subviews:
+                if not view.hasFixedHeight():
+                    view.height = self.height
+                    view._updatePos()
         rect = self.rect
         if self.left:
             first = self.left[0]
@@ -102,15 +110,7 @@ class HLayout(Layout):
                 rect.x -= rect.width + margin
                 view.moveInsideRect(rect, valign=self.align)
                 previous = view
-        if not self.width:
-            # We haven't set a width for our layout yet, so we're in the middle of its
-            # initialization. Let's not do anything based on width.
-            return
-        for view in self.subviews:
-            if not view.hasFixedHeight():
-                view.height = self.height
-                view._updatePos()
-        if self.filler is not None:
+        if self.width and self.filler is not None:
             if self.right:
                 justRight = self.right[0]
                 fillGoal = justRight.x - self._getInterViewMargin(self.filler, justRight, Pack.Left)
@@ -138,15 +138,17 @@ class HLayout(Layout):
             else:
                 view.setAnchor(rightAnchor, growY=growY)
         if self.filler is not None:
-            self.filler.setAnchor(leftAnchor, growX=True, growY=growY)
+            if isinstance(self.filler, VLayout):
+                self.filler.setAnchor(Pack.Left, growX=True)
+            else:
+                self.filler.setAnchor(leftAnchor, growX=True, growY=growY)
     
-    
+
 class VLayout(Layout):
     def __init__(self, subviews, filler=None, width=None, margin=None, align=None):
         above, below = splitByElement(subviews, filler)
         if filler is not None:
             above.append(filler)
-            filler.setAnchor(Pack.UpperLeft, growY=True)
         subviews = above + below
         self.above = above
         self.below = below
@@ -159,6 +161,12 @@ class VLayout(Layout):
         self.height = maxy - miny
     
     def _arrangeLayout(self):
+        # See HLayout._arrangeLayout() comments, they apply here as well.
+        if self.height:
+            for view in self.subviews:
+                if not view.hasFixedWidth():
+                    view.width = self.width
+                    view._updatePos()
         rect = self.rect
         if self.above:
             first = self.above[0]
@@ -184,14 +192,7 @@ class VLayout(Layout):
                 rect.height = view.height
                 view.moveInsideRect(rect, halign=self.align)
                 previous = view
-        if not self.height:
-            # See HLayout._arrangeLayout()
-            return
-        for view in self.subviews:
-            if not view.hasFixedWidth():
-                view.width = self.width
-                view._updatePos()
-        if self.filler is not None:
+        if self.height and self.filler is not None:
             if self.below:
                 justUnder = self.below[0]
                 fillGoal = justUnder.y + justUnder.height + self._getInterViewMargin(self.filler, justUnder, Pack.Above)
@@ -219,26 +220,35 @@ class VLayout(Layout):
             else:
                 view.setAnchor(belowAnchor, growX=growX)
         if self.filler is not None:
-            self.filler.setAnchor(aboveAnchor, growX=growX, growY=True)
+            if isinstance(self.filler, HLayout):
+                self.filler.setAnchor(Pack.Above, growY=True)
+            else:
+                self.filler.setAnchor(aboveAnchor, growX=growX, growY=True)
     
 
 class VHLayout(VLayout):
-    def __init__(self, viewGrid, fillers=None, width=None, hmargin=None, vmargin=None, halign=None,
-            valign=None):
-        if fillers is None:
-            fillers = set()
+    def __init__(self, viewGrid, hfillers=None, vfiller=None, width=None, hmargin=None, vmargin=None,
+            halign=None, valign=None):
+        if hfillers is None:
+            hfillers = set()
         layouts = []
+        mainFiller = None
         for views in viewGrid:
             if not views:
                 continue
             if len(views) == 1:
                 # With only one view, add it directly
                 layouts.append(views[0])
+                if vfiller is not None and views[0] is vfiller:
+                    mainFiller = views[0]
                 continue
             filler = None
-            for candidate in fillers:
+            for candidate in hfillers:
                 if candidate in views:
                     filler = candidate
                     break
-            layouts.append(HLayout(views, filler, margin=hmargin, align=valign))
-        VLayout.__init__(self, layouts, width=width, margin=vmargin, align=halign)
+            layout = HLayout(views, filler, margin=hmargin, align=valign)
+            if vfiller is not None and vfiller in views:
+                mainFiller = layout
+            layouts.append(layout)
+        VLayout.__init__(self, layouts, filler=mainFiller, width=width, margin=vmargin, align=halign)

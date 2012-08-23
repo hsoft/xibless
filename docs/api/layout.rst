@@ -62,10 +62,11 @@ layout-related methods easier. See :doc:`/layout` for more information.
     Alignment for vertical layout is done horizontally. Therefore, valid values are ``Pack.Left``,
     ``Pack.Middle``, ``Pack.Right``. Default is left.
 
-.. class:: VHLayout(subviews[, fillers, width, hmargin, vmargin, halign, valign])
+.. class:: VHLayout(subviews[, hfillers, vfiller, width, hmargin, vmargin, halign, valign])
     
     :param subviews: List of lists of :class:`View`
-    :param fillers: A collection of :class:`View`
+    :param hfillers: A collection of :class:`View`
+    :param vfiller: A :class:`View` instance.
     :param width: Numeric
     :param hmargin: Numeric
     :param vmargin: Numeric
@@ -81,10 +82,21 @@ layout-related methods easier. See :doc:`/layout` for more information.
             [line3view1, line3view2],
         ])
     
-    Instead of giving a single ``filler``, you give a collection of them. You include the filler
-    for each line (if there's no filler for a line, you add nothing) of the layout. The order in
-    which they're added is not important. If you have space fillers (``None`` fillers), you don't
-    have to add ``None`` to the ``fillers`` collection.
+    Specifying fillers in such a layout is a complex matter. There's two types of fillers, first
+    the horizontal fillers. They're given as a collection of views (because there can be more than
+    one in the grid) as the ``hfillers`` argument. You include the filler for each line (if there's
+    no filler for a line, you add nothing) of the layout. The order in which they're added is not
+    important. If you have space fillers (``None`` fillers), you don't have to add ``None`` to the
+    ``hfillers`` collection. For example, if you want the second view of each line to be fillers,
+    you'd specifiy ``{line1view2, line2view2, line3view2}`` as the ``hfillers`` argument.
+    
+    Then, there's also the ``vfiller`` argument, which is the vertical filler (there's only one).
+    Because the ``VHLayout`` is a vertical layout that dynamically creates horizontal layouts, it's
+    impossible for you to specify a filler instance beforehand because you don't have access to the
+    horizontal layout instances that have yet to be created. Therefore, in the case of ``VHLayout``,
+    you can specify an instance **in** the view array. For example, if, in the example above, you
+    wanted to make the middle line the filler, you could have specified any of ``line2view1``,
+    ``line2view2`` or ``line2view3`` as the ``vfiller`` and the result would have been the same.
     
     Margin and align arguments are the same as simple layouts. ``hmargin`` is the horizontal margin
     and ``vmargin`` is the vertical one. ``halign`` is the horizontal alignment (applied to the
