@@ -54,9 +54,8 @@ class GeneratedItem(object):
     PROPERTIES = []
     
     def __init__(self):
-        self.creationOrder = globalvars.globalGenerationCounter.creationToken()
-        # In case we are never assigned to a top level variable and thus never given a varname
-        self.varname = "_tmp%d" % self.creationOrder
+        globalvars.globalGenerationCounter.register(self)
+        self._varname = None
         # properties to be set at generation time. For example, if "editable" is set to False,
         # a "[$varname$ setEditable:NO];" statement will be generated.
         self.properties = {}
@@ -110,6 +109,16 @@ class GeneratedItem(object):
     @property
     def generated(self):
         return globalvars.globalGenerationCounter.isGenerated(self)
+    
+    @property
+    def varname(self):
+        if not self._varname:
+            self._varname = "_tmp%d" % globalvars.globalGenerationCounter.varnameToken()
+        return self._varname
+    
+    @varname.setter
+    def varname(self, value):
+        self._varname = value
     
     def bind(self, name, target, keyPath, valueTransformer=None):
         options = {}
@@ -168,12 +177,17 @@ class GeneratedItem(object):
 
 class GenerationCounter(object):
     def __init__(self):
-        self.reset()
+        self.varnameTokenCounter = 0
+        self.createdItems = []
+        self.generatedItems = set()
     
-    def creationToken(self):
-        count = self.creationCount
-        self.creationCount += 1
-        return count
+    def register(self, item):
+        self.createdItems.append(item)
+    
+    def varnameToken(self):
+        result = self.varnameTokenCounter
+        self.varnameTokenCounter += 1
+        return result
     
     def addGenerated(self, item):
         self.generatedItems.add(item)
@@ -182,7 +196,10 @@ class GenerationCounter(object):
         return item in self.generatedItems
     
     def reset(self):
-        self.creationCount = 0
+        for item in set(self.createdItems) | self.generatedItems:
+            item.varname = None
+        self.varnameTokenCounter = 0
+        self.createdItems = []
         self.generatedItems = set()
     
 

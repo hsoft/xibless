@@ -114,13 +114,10 @@ def generate(modulePath, dest, runmode=False, localizationTable=None, args=None)
     else:
         tmpl.mainimport = "#import \"XiblessSupport.h\""
         tmpl.ownerimport = ownerimport
-    toGenerate = []
     for key, value in module_locals.items():
-        if not isinstance(value, GeneratedItem):
-            continue
-        value.varname = key
-        toGenerate.append(value)
-    toGenerate.sort(key=lambda x: x.creationOrder)
+        if isinstance(value, GeneratedItem) and value.varname.startswith('_tmp'):
+            value.varname = key
+    toGenerate = globalvars.globalGenerationCounter.createdItems
     codePieces = []
     for item in toGenerate:
         if item.generated:
