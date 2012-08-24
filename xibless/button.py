@@ -135,7 +135,7 @@ class Button(Control):
     
 
 class Checkbox(Button):
-    CONTROL_HEIGHTS = ControlHeights(14, 14, 10)
+    CONTROL_HEIGHTS = ControlHeights(14, 12, 10)
     
     def __init__(self, parent, title):
         Button.__init__(self, parent, title)
@@ -146,6 +146,9 @@ class Checkbox(Button):
         self.layoutDeltaY = -2
         self.layoutDeltaW = 4
         self.layoutDeltaH = 4
+    
+    def _getControlHeights(self):
+        return self.CONTROL_HEIGHTS
     
     def generateInit(self):
         tmpl = Button.generateInit(self)
