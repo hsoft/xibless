@@ -217,6 +217,10 @@ class View(GeneratedItem):
     packRelativeTo = moveNextTo
     
     def setAnchor(self, corner, growX=False, growY=False):
+        if self.hasFixedHeight():
+            growY = False
+        if self.hasFixedWidth():
+            growX = False
         self.anchor = Anchor(corner, growX, growY)
     
     def moveTo(self, direction, target=None, margin=None):

@@ -150,6 +150,12 @@ but to be subclassed.
         Sets the view autoresizing mask. The corner you specify will be the corner the view "stick
         to" when its parent view is resized. If growX and/or growY is ``True``, the view will grow
         or shrink with its parent view.
+        
+        Note that with views that have a fixed height or a fixed width, ``growY`` and ``growX``
+        arguments will have respectively no effect and will always be set to ``False``. This is to
+        avoid weird anchor rules in layouts with fillers. If you want to override the fixed nature
+        or a view's size, make sure you override the appropriate flag where supported (for example
+        :attr:`TextField.fixedHeight`) before you call ``setAnchor()``.
     
 
 Box
