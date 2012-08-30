@@ -2,8 +2,8 @@ from __future__ import division
 
 from collections import namedtuple, defaultdict
 
-from .base import GeneratedItem
-from .types import Literal
+from .base import GeneratedItem, const
+from .types import Flags
 
 class Pack(object):
     # Corners
@@ -358,28 +358,30 @@ class View(GeneratedItem):
         tmpl.initmethod = "initWithFrame:$rect$"
         x, y, w, h = self.frameRect()
         tmpl.rect = Rect(x, y, w, h).objcValue()
-        if self.anchor.growX and self.anchor.growY:
-            resizeMask = 'NSViewWidthSizable|NSViewHeightSizable'
-        elif self.anchor.growX:
-            if self.anchor.corner in (Pack.LowerLeft, Pack.LowerRight):
-                resizeMask = 'NSViewWidthSizable|NSViewMaxYMargin'
+        anchor = self.anchor
+        if anchor.growX and anchor.growY:
+            resizeMask = const.NSViewWidthSizable | const.NSViewHeightSizable
+        elif anchor.growX:
+            if anchor.corner in {Pack.LowerLeft, Pack.LowerRight}:
+                resizeMask = const.NSViewWidthSizable | const.NSViewMaxYMargin
             else:
-                resizeMask = 'NSViewWidthSizable|NSViewMinYMargin'
-        elif self.anchor.growY:
-            if self.anchor.corner in (Pack.UpperLeft, Pack.LowerLeft):
-                resizeMask = 'NSViewHeightSizable|NSViewMaxXMargin'
+                resizeMask = const.NSViewWidthSizable | const.NSViewMinYMargin
+        elif anchor.growY:
+            if anchor.corner in {Pack.UpperLeft, Pack.LowerLeft}:
+                resizeMask = const.NSViewHeightSizable | const.NSViewMaxXMargin
             else:
-                resizeMask = 'NSViewHeightSizable|NSViewMinXMargin'
+                resizeMask = const.NSViewHeightSizable | const.NSViewMinXMargin
         else:
-            if self.anchor.corner == Pack.LowerLeft:
-                resizeMask = 'NSViewMaxXMargin|NSViewMaxYMargin'
-            elif self.anchor.corner == Pack.UpperRight:
-                resizeMask = 'NSViewMinXMargin|NSViewMinYMargin'
-            elif self.anchor.corner == Pack.LowerRight:
-                resizeMask = 'NSViewMinXMargin|NSViewMaxYMargin'
-            else:
-                resizeMask = 'NSViewMaxXMargin|NSViewMinYMargin'
-        self.properties['autoresizingMask'] = Literal(resizeMask)
+            resizeMask = Flags()
+            if anchor.corner in {Pack.LowerLeft, Pack.UpperLeft, Pack.Left, Pack.Above, Pack.Below, Pack.Middle}:
+                resizeMask |= const.NSViewMaxXMargin
+            if anchor.corner in {Pack.LowerRight, Pack.UpperRight, Pack.Right, Pack.Above, Pack.Below, Pack.Middle}:
+                resizeMask |= const.NSViewMinXMargin
+            if anchor.corner in {Pack.LowerLeft, Pack.LowerRight, Pack.Below, Pack.Left, Pack.Right, Pack.Middle}:
+                resizeMask |= const.NSViewMaxYMargin
+            if anchor.corner in {Pack.UpperLeft, Pack.UpperRight, Pack.Above, Pack.Left, Pack.Right, Pack.Middle}:
+                resizeMask |= const.NSViewMinYMargin
+        self.properties['autoresizingMask'] = resizeMask
         if self.parent is not None:
             tmpl.addtoparent = self.generateAddToParent()
         return tmpl

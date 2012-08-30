@@ -122,6 +122,9 @@ class Literal(object):
     def __init__(self, value):
         self.value = value
     
+    def __repr__(self):
+        return "<Literal %r>" % self.value
+    
     def __or__(self, other):
         return Flags([self]) | other
     
