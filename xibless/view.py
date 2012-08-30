@@ -110,6 +110,8 @@ class View(GeneratedItem):
         self.subviews = []
         self.width = width
         self.height = height
+        self.fixedWidth = None
+        self.fixedHeight = None
         self.x = 0
         self.y = 0
         self.anchor = Anchor(Pack.UpperLeft, False, False)
@@ -135,6 +137,12 @@ class View(GeneratedItem):
         outerMargin1 = self.outerMargin(other, side)
         outerMargin2 = other.outerMargin(self, Pack.oppositeSide(side))
         return max(outerMargin1, outerMargin2)
+    
+    def _hasFixedWidth(self):
+        return False
+    
+    def _hasFixedHeight(self):
+        return False
     
     #--- Layout
     def outerMargin(self, other, side):
@@ -166,10 +174,16 @@ class View(GeneratedItem):
     
     # Return True if the view can't have its width or height modified by layout methods.
     def hasFixedWidth(self):
-        return False
+        if self.fixedWidth is not None:
+            return self.fixedWidth
+        else:
+            return self._hasFixedWidth()
     
     def hasFixedHeight(self):
-        return False
+        if self.fixedHeight is not None:
+            return self.fixedHeight
+        else:
+            return self._hasFixedHeight()
     
     def viewsAtSide(self, side):
         # Returns all views touching `side`. For a normal view, there is of course only self, but

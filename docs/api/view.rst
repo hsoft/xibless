@@ -37,6 +37,16 @@ but to be subclassed.
 
         *Numeric*. The height of the view. In Cocoa: ``frame.size.height``.
     
+    .. attribute:: fixedWidth
+    .. attribute:: fixedHeight
+    
+        *Boolean*. Use this attribute to override default "fixed" values, usually for layout
+        purposes. By default, a view is not fixed, but you could want a layout to not automatically
+        resize a view like it does by default. In this case, you would set this attribute to
+        ``False``. Also, :class:`Control` subclasses have a fixed height, which means that by
+        default, its height isn't modified by layouts. You could want to override this to
+        ``True``, for example, if you want a :class:`TextField` to grow vertically in a layout.
+    
     .. attribute:: menu
         
         :class:`Menu`. The contextual menu for the view.
@@ -155,7 +165,7 @@ but to be subclassed.
         arguments will have respectively no effect and will always be set to ``False``. This is to
         avoid weird anchor rules in layouts with fillers. If you want to override the fixed nature
         or a view's size, make sure you override the appropriate flag where supported (for example
-        :attr:`TextField.fixedHeight`) before you call ``setAnchor()``.
+        :attr:`View.fixedHeight`) before you call ``setAnchor()``.
     
 
 Box

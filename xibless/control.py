@@ -25,7 +25,7 @@ class Control(View):
         self.action = None
         self.formatter = None
     
-    def hasFixedHeight(self):
+    def _hasFixedHeight(self):
         return True
     
     def _getControlHeights(self):
