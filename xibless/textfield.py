@@ -33,7 +33,7 @@ class TextField(Control):
         Property('placeholder', 'cell.placeholderString'),
     ]
     
-    def __init__(self, parent, text):
+    def __init__(self, parent, text=None):
         Control.__init__(self, parent, 100, 22)
         self.text = text
         self.font = Font(FontFamily.Label, FontSize.RegularControl)

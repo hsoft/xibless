@@ -3,7 +3,7 @@ TextField
 
 The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTextField``.
 
-.. class:: TextField(parent, text)
+.. class:: TextField(parent[, text])
     
     :param parent: A :class:`View` instance. See :attr:`View.parent`.
     :param text: String. See :attr:`text`.
