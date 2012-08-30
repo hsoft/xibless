@@ -64,6 +64,11 @@ class Button(Control):
             self.layoutDeltaY = -1
             self.layoutDeltaW = 0
             self.layoutDeltaH = 2
+        elif bezelStyle == const.NSRegularSquareBezelStyle:
+            self.layoutDeltaX = -2
+            self.layoutDeltaY = -3
+            self.layoutDeltaW = 4
+            self.layoutDeltaH = 5
         else:
             self.layoutDeltaX = -6
             self.layoutDeltaY = -7
