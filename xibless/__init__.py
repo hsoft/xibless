@@ -4,6 +4,8 @@ from argparse import ArgumentParser
 
 from .gen import generate, runUI
 
+__version__ = '0.4.1'
+
 def main():
     parser = ArgumentParser()
     parser.add_argument('command', choices=['compile', 'run'],

@@ -1,4 +1,5 @@
 from setuptools import setup
+from xibless import __version__
 
 CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
@@ -13,11 +14,10 @@ CLASSIFIERS = [
 ]
 
 LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
-VERSION = '0.4.1'
 
 setup(
     name='xibless',
-    version=VERSION,
+    version=__version__,
     author='Virgil Dupras',
     author_email='hsoft@hardcoded.net',
     packages=['xibless'],
@@ -34,7 +34,7 @@ setup(
     },
     command_options={
        'build_sphinx': {
-           'version': ('setup.py', VERSION),
-           'release': ('setup.py', VERSION)}
+           'version': ('setup.py', __version__),
+           'release': ('setup.py', __version__)}
     },
 )
