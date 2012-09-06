@@ -9,7 +9,7 @@ from datetime import datetime
 from . import globalvars
 from .base import CodeTemplate, GeneratedItem, owner, NSApp, const, defaults
 from .types import Action, NLSTR
-from .control import ControlSize
+from .control import ControlSize, TextAlignment
 from .view import View, Box, Pack, Size, Rect
 from .font import Font, FontFamily, FontSize, FontTrait
 from .color import Color
@@ -17,7 +17,7 @@ from .formatter import NumberFormatter, NumberStyle
 from .menu import Menu, MainMenu
 from .window import Window, Panel, PanelStyle
 from .button import Button, Checkbox
-from .textfield import TextField, Label, SearchField, TextAlignment
+from .textfield import TextField, Label, SearchField
 from .textview import TextView
 from .popup import Popup
 from .combo import Combobox

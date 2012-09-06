@@ -6,7 +6,7 @@ class MenuItem(GeneratedItem):
     OBJC_CLASS = 'NSMenuItem'
     PROPERTIES = GeneratedItem.PROPERTIES + [
         'tag', 'hidden', ImageProperty('image'), ActionProperty('action'),
-        KeyShortcutProperty('shortcut')
+        KeyShortcutProperty('shortcut'), 'state'
     ]
     
     def __init__(self, name, action=None, shortcut=None, tag=None):

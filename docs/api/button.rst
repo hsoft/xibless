@@ -19,6 +19,10 @@ The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButto
         :ref:`Cocoa constant <literal-consts>`. The style of the button. Equivalent to
         ``[self bezelStyle]``. Use with ``NSBezelStyle`` constants.
     
+    .. attribute:: bordered
+    
+        *Boolean*. Whether the button has a border.
+    
     .. attribute:: title
         
         *String*. The text on the button. Equivalent to ``[self title]``.
@@ -29,7 +33,7 @@ The ``Button`` is a :class:`Control` subclass which represents Cocoa's ``NSButto
     
     .. attribute:: state
         
-        :ref:`Cocoa constant <literal-consts>`. Equivalent to ``[self state]``.
+        :ref:`Cocoa constant <literal-consts>`. Use with ``NSCellStateValue`` constants.
     
     .. attribute:: shortcut
         

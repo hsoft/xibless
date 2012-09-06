@@ -86,6 +86,11 @@ The ``MenuItem`` is a class that represents Cocoa's ``NSMenuItem``.
     .. attribute:: tag
         
         Integer value corresponding to ``[self tag]``.
+    
+    .. attribute:: state
+        
+        :ref:`Cocoa constant <literal-consts>`. Use with ``NSCellStateValue`` constants.
+    
 
 MainMenu
 --------

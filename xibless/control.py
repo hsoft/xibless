@@ -12,10 +12,18 @@ class ControlSize(object):
     Small = const.NSSmallControlSize
     Mini = const.NSMiniControlSize
 
+class TextAlignment(object):
+    Left = const.NSLeftTextAlignment
+    Right = const.NSRightTextAlignment
+    Center = const.NSCenterTextAlignment
+    Justified = const.NSJustifiedTextAlignment
+    Natural = const.NSNaturalTextAlignment
+    
 class Control(View):
     CONTROL_HEIGHTS = ControlHeights(20, 17, 14)
     PROPERTIES = View.PROPERTIES + [
         ActionProperty('action'), 'font', Property('controlSize', 'cell.controlSize'), 'formatter',
+        'alignment'
     ]
     
     def __init__(self, parent, width, height):

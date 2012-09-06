@@ -17,11 +17,6 @@ The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTex
         A string representing the "placeholder text", that is, a text displayed in light shade of
         grey when the text field contains no text. Equivalent to ``[[self cell] placeholderString]``.
     
-    .. attribute:: alignment
-        
-        One of :ref:`text-alignment-constants`. Alignment of the text within the field.
-        Equivalent to ``[self alignment]``.
-    
     .. attribute:: textColor
         
         :class:`Color`. Color of the text within the field. Equivalent to ``[self textColor]``.

@@ -45,3 +45,6 @@ set up. Instantiate with :meth:`SegmentedControl.addSegment`
         
         Numeric. The width of the segment.
     
+    .. attribute:: image
+        
+        String. Name of the image resource to display in the segment.

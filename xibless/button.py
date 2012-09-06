@@ -10,7 +10,7 @@ from .textfield import TextField
 class Button(Control):
     OBJC_CLASS = 'NSButton'
     PROPERTIES = Control.PROPERTIES + ['imagePosition', ImageProperty('image'),
-        KeyShortcutProperty('shortcut')]
+        KeyShortcutProperty('shortcut'), 'bordered']
     
     def __init__(self, parent, title, action=None):
         self._bezelStyle = const.NSRoundedBezelStyle
@@ -69,6 +69,11 @@ class Button(Control):
             self.layoutDeltaY = -3
             self.layoutDeltaW = 4
             self.layoutDeltaH = 5
+        elif bezelStyle == const.NSShadowlessSquareBezelStyle:
+            self.layoutDeltaX = 0
+            self.layoutDeltaY = 0
+            self.layoutDeltaW = 0
+            self.layoutDeltaH = 0            
         else:
             self.layoutDeltaX = -6
             self.layoutDeltaY = -7

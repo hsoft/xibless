@@ -13,6 +13,11 @@ The ``Control`` is a :class:`View` subclass which represents Cocoa's ``NSControl
         
         :class:`Font`. The font of the control. Equivalent to ``[self font]``.
     
+    .. attribute:: alignment
+        
+        One of :ref:`text-alignment-constants`. Alignment of the text within the field.
+        Equivalent to ``[self alignment]``.
+    
     .. attribute:: controlSize
         
         :ref:`control-size-consts`. One of the 3 Regular, Small and Mini pre-defined

@@ -6,6 +6,7 @@ class Segment(object):
     def __init__(self, label, width):
         self.label = label
         self.width = width
+        self.image = None
     
 
 class SegmentedControl(Control):
@@ -51,4 +52,7 @@ class SegmentedControl(Control):
                 convertValueToObjc(segment.label), convertValueToObjc(index))
             tmpl.setup += '[$varname$ setWidth:{} forSegment:{}];'.format(
                 convertValueToObjc(segment.width), convertValueToObjc(index))
+            if segment.image:
+                tmpl.setup += '[$varname$ setImage:[NSImage imageNamed:{}] forSegment:{}];'.format(
+                convertValueToObjc(segment.image), convertValueToObjc(index))
         return tmpl
