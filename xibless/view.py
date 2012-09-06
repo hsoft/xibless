@@ -351,6 +351,12 @@ class View(GeneratedItem):
         for n in neighbors:
             n._updatePos()
     
+    def fillAll(self, margin=None, setAnchor=False):
+        self.moveTo(Pack.UpperLeft, margin=margin)
+        self.fill(Pack.LowerRight, margin=margin)
+        if setAnchor:
+            self.setAnchor(Pack.UpperLeft, growX=True, growY=True)
+    
     #--- Generate
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)

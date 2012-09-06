@@ -151,6 +151,20 @@ but to be subclassed.
         complex layouts, you might, mostly for operations like "fill my view exactly at the same
         point at this other view over there".
     
+    .. method:: fillAll([margin, setAnchor])
+        
+        :param margin: Numeric
+        :param setAnchor: Boolean
+        
+        This is a shortcut to::
+            
+            self.moveTo(Pack.UpperLeft)
+            self.fill(Pack.LowerRight)
+        
+        which simply takes all the space in the parent view. You can specify a margin like you'd do
+        with :meth:`moveTo` and :meth:`fill`. If ``setAnchor`` is ``True``, an anchor growing on
+        all sides will be set.
+    
     .. method:: setAnchor(corner[, growX, growY])
         
         :param corner: One of the :ref:`corner-constants`
