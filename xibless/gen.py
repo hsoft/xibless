@@ -30,6 +30,7 @@ from .splitview import SplitView
 from .segment import SegmentedControl
 from .slider import Slider
 from .layout import HLayout, VLayout, VHLayout
+from .util import modified_after
 
 try:
     execfile
@@ -184,5 +185,7 @@ def copy_support_unit(destfolder):
     DATA_PATH = op.join(op.dirname(__file__), 'data')
     if not op.exists(destfolder):
         os.makedirs(destfolder)
-    shutil.copy(op.join(DATA_PATH, 'XiblessSupport.h'), destfolder)
-    shutil.copy(op.join(DATA_PATH, 'XiblessSupport.m'), destfolder)
+    if modified_after(op.join(DATA_PATH, 'XiblessSupport.h'), op.join(destfolder, 'XiblessSupport.h')):
+        shutil.copy(op.join(DATA_PATH, 'XiblessSupport.h'), destfolder)
+    if modified_after(op.join(DATA_PATH, 'XiblessSupport.m'), op.join(destfolder, 'XiblessSupport.m')):
+        shutil.copy(op.join(DATA_PATH, 'XiblessSupport.m'), destfolder)
