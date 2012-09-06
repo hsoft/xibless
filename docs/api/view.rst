@@ -57,6 +57,11 @@ but to be subclassed.
         subclass. The value for this attribute can be either another instance, or a reference, such
         as ``owner`` or ``owner.something``.
     
+    .. attribute:: focusRingType
+    
+        :ref:`Cocoa constant <literal-consts>`. Type of border glow that shows up when the view has
+        focus. Use ``NSFocusRingType`` constants.
+    
     .. method:: bind(name, target, keyPath[, valueTransformer])
     
         :param name: *String*

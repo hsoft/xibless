@@ -1,5 +1,5 @@
-from .base import GeneratedItem, convertValueToObjc
-from .types import KeyValueId, Literal, Flags, NonLocalizableString
+from .base import GeneratedItem, convertValueToObjc, const
+from .types import KeyValueId, Flags, NonLocalizableString
 from .property import Property
 from .view import View
 
@@ -57,6 +57,7 @@ class TableView(View):
         self.columns = []
         self.font = None
         self.editable = True
+        self.borderType = const.NSBezelBorder
     
     def addColumn(self, identifier, title, width):
         column = TableColumn(self, identifier, title, width)
@@ -70,11 +71,12 @@ class TableView(View):
             [$varname$_container setHasVerticalScroller:YES];
             [$varname$_container setHasHorizontalScroller:YES];
             [$varname$_container setAutohidesScrollers:YES];
-            [$varname$_container setBorderType:NSBezelBorder];
+            [$varname$_container setBorderType:$borderType$];
             [$varname$_container setAutoresizingMask:$autoresize$];
         """
         tmpl.autoresize = convertValueToObjc(self.properties['autoresizingMask'])
-        self.properties['columnAutoresizingStyle'] = Literal('NSTableViewUniformColumnAutoresizingStyle')
+        tmpl.borderType = convertValueToObjc(self.borderType)
+        self.properties['columnAutoresizingStyle'] = const.NSTableViewUniformColumnAutoresizingStyle
         for column in self.columns:
             colcode = column.generate()
             colcode += "[$varname$ addTableColumn:%s];\n" % column.varname
@@ -103,8 +105,8 @@ class ListView(TableView):
     
     def generateInit(self):
         tmpl = TableView.generateInit(self)
-        self.properties['headerView'] = Literal('nil')
-        self.properties['columnAutoresizingStyle'] = Literal('NSTableViewLastColumnOnlyAutoresizingStyle')
+        self.properties['headerView'] = const.nil
+        self.properties['columnAutoresizingStyle'] = const.NSTableViewLastColumnOnlyAutoresizingStyle
         return tmpl
     
 

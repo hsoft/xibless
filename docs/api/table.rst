@@ -40,6 +40,11 @@ adds that view to the superview (XCode does the same). The reference to the tabl
         :ref:`Cocoa constant <literal-consts>`. Style of the table grid lines, if any. Use
         ``NSTableViewGridLineStyle`` constants.
     
+    .. attribute:: borderType
+        
+        :ref:`Cocoa constant <literal-consts>`. Border type of the enclosing scroll view. Use
+        ``NSBorderType`` constants.
+    
     .. attribute:: font
     .. attribute:: editable
     
