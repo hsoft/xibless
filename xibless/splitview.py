@@ -2,7 +2,7 @@ from .view import View
 
 class SplitView(View):
     OBJC_CLASS = 'NSSplitView'
-    PROPERTIES = View.PROPERTIES + ['vertical']
+    PROPERTIES = View.PROPERTIES + ['vertical', 'dividerStyle']
     
     def __init__(self, parent, subviewCount, vertical):
         View.__init__(self, parent, 100, 100)
@@ -11,6 +11,3 @@ class SplitView(View):
             # Simply by having `self` as its parent, the view is appended to self.subviews
             View(self, 100, 100)
     
-    def generateInit(self):
-        tmpl = View.generateInit(self)
-        return tmpl
