@@ -22,6 +22,11 @@ process in tab views are made independently of the layout in the tab view's pare
     
     :param parent: A :class:`View` instance. Same as :attr:`View.parent`.
     
+    .. attribute:: tabViewType
+    
+        :ref:`Cocoa constant <literal-consts>`. Determines where the tabs, if any, are located. Use
+        with ``NSTabViewType`` constants.
+    
     .. method:: addTab(label[, identifier=None])
         
         :param label: String. See :attr:`TabViewItem.label`.
