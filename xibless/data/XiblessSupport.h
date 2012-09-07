@@ -11,3 +11,5 @@
 @end
 
 NSString* stringFromChar(unichar c);
+void setAccessibilityDescription(id obj, NSString *description);
+void setAccessibilityDescriptionOfChild(id obj, NSInteger childIndex, NSString *description);

@@ -52,3 +52,23 @@ NSString* stringFromChar(unichar c)
 {
     return [NSString stringWithCharacters:&c length:1];
 }
+
+void setAccessibilityDescription(id obj, NSString *description)
+{
+    id accessibilityObject = NSAccessibilityUnignoredDescendant(obj);
+    [accessibilityObject accessibilitySetOverrideValue:description forAttribute:NSAccessibilityDescriptionAttribute];
+}
+
+void setAccessibilityDescriptionOfChild(id obj, NSInteger childIndex, NSString *description)
+{
+    id accessibilityObject = NSAccessibilityUnignoredDescendant(obj);
+    NSArray *children = [accessibilityObject accessibilityAttributeValue:NSAccessibilityChildrenAttribute];
+    
+    if (childIndex >= [children count]) {
+        NSLog(@"childIndex out of bounds in setAccessibilityDescriptionOfChild");
+        return;
+    }
+    
+    id child = [children objectAtIndex:childIndex];
+    [child accessibilitySetOverrideValue:description forAttribute:NSAccessibilityDescriptionAttribute];
+}

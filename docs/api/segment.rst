@@ -48,3 +48,9 @@ set up. Instantiate with :meth:`SegmentedControl.addSegment`
     .. attribute:: image
         
         String. Name of the image resource to display in the segment.
+    
+    .. attribute:: accessibilityDescription
+        
+        *String*. The string that is spoken out by Voice Over when the segment is selected. There's
+        no equivalent for this feature in XCode. To set a segment's accessibility description in a
+        normal project, you have to resort to manual code. Well, not with xibless!

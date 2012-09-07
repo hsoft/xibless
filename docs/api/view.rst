@@ -62,6 +62,11 @@ but to be subclassed.
         :ref:`Cocoa constant <literal-consts>`. Type of border glow that shows up when the view has
         focus. Use ``NSFocusRingType`` constants.
     
+    .. attribute:: accessibilityDescription
+        
+        *String*. The string that is spoken out by Voice Over when the view is selected. Equivalent
+        to the "Description" field in "Accessibility Identity" in XCode's IB.
+    
     .. method:: bind(name, target, keyPath[, valueTransformer])
     
         :param name: *String*

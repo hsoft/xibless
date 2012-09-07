@@ -3,7 +3,7 @@ from __future__ import division
 from collections import namedtuple, defaultdict
 
 from .base import GeneratedItem, const
-from .types import Flags
+from .types import Flags, convertValueToObjc
 
 class Pack(object):
     # Corners
@@ -115,6 +115,7 @@ class View(GeneratedItem):
         self.x = 0
         self.y = 0
         self.anchor = Anchor(Pack.UpperLeft, False, False)
+        self.accessibilityDescription = None
         # a mapping PackingSide: {views} which is used in fill() to know how much we can fill
         self.neighbors = defaultdict(set)
         
@@ -360,7 +361,7 @@ class View(GeneratedItem):
     #--- Generate
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
-        tmpl.setup = "$viewsetup$\n$addtoparent$\n"
+        tmpl.setup = "$viewsetup$\n$accessibility$\n$addtoparent$\n"
         tmpl.initmethod = "initWithFrame:$rect$"
         x, y, w, h = self.frameRect()
         tmpl.rect = Rect(x, y, w, h).objcValue()
@@ -388,6 +389,9 @@ class View(GeneratedItem):
             if anchor.corner in {Pack.UpperLeft, Pack.UpperRight, Pack.Above, Pack.Left, Pack.Right, Pack.Middle}:
                 resizeMask |= const.NSViewMinYMargin
         self.properties['autoresizingMask'] = resizeMask
+        if self.accessibilityDescription:
+            tmpl.accessibility = "setAccessibilityDescription($varname$, {});\n".format(
+                convertValueToObjc(self.accessibilityDescription))
         if self.parent is not None:
             tmpl.addtoparent = self.generateAddToParent()
         return tmpl

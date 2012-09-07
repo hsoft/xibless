@@ -7,6 +7,7 @@ class Segment(object):
         self.label = label
         self.width = width
         self.image = None
+        self.accessibilityDescription = None
     
 
 class SegmentedControl(Control):
@@ -48,11 +49,14 @@ class SegmentedControl(Control):
         tmpl = Control.generateInit(self)
         tmpl.setup += self.accessor._callMethod('setSegmentCount', len(self.segments))
         for index, segment in enumerate(self.segments):
-            tmpl.setup += '[$varname$ setLabel:{} forSegment:{}];'.format(
+            tmpl.setup += '[$varname$ setLabel:{} forSegment:{}];\n'.format(
                 convertValueToObjc(segment.label), convertValueToObjc(index))
-            tmpl.setup += '[$varname$ setWidth:{} forSegment:{}];'.format(
+            tmpl.setup += '[$varname$ setWidth:{} forSegment:{}];\n'.format(
                 convertValueToObjc(segment.width), convertValueToObjc(index))
             if segment.image:
-                tmpl.setup += '[$varname$ setImage:[NSImage imageNamed:{}] forSegment:{}];'.format(
+                tmpl.setup += '[$varname$ setImage:[NSImage imageNamed:{}] forSegment:{}];\n'.format(
                 convertValueToObjc(segment.image), convertValueToObjc(index))
+            if segment.accessibilityDescription:
+                tmpl.setup += 'setAccessibilityDescriptionOfChild($varname$, {}, {});\n'.format(
+                    convertValueToObjc(index), convertValueToObjc(segment.accessibilityDescription))
         return tmpl
