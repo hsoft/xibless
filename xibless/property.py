@@ -60,7 +60,12 @@ class KeyShortcutProperty(Property):
     def _setProperty(self, target, value):
         if not value:
             return
-        elements = set(value.lower().split('+'))
+        if value.endswith('++'):
+            # We have a shortcut with a + sign in it, which messes with our parsing. Make a special
+            # case.
+            elements = set(value[:-2].lower().split('+')) | {'+', }
+        else:
+            elements = set(value.lower().split('+'))
         flags = Flags()
         for ident, flag in SHORTCUT_FLAGS:
             if ident in elements:
