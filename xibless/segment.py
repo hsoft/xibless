@@ -1,5 +1,6 @@
 from .control import Control, ControlHeights
 from .base import const, convertValueToObjc
+from .types import NLSTR
 from .property import Property
 
 class Segment(object):
@@ -55,7 +56,7 @@ class SegmentedControl(Control):
                 convertValueToObjc(segment.width), convertValueToObjc(index))
             if segment.image:
                 tmpl.setup += '[$varname$ setImage:[NSImage imageNamed:{}] forSegment:{}];\n'.format(
-                convertValueToObjc(segment.image), convertValueToObjc(index))
+                convertValueToObjc(NLSTR(segment.image)), convertValueToObjc(index))
             if segment.accessibilityDescription:
                 tmpl.setup += 'setAccessibilityDescriptionOfChild($varname$, {}, {});\n'.format(
                     convertValueToObjc(index), convertValueToObjc(segment.accessibilityDescription))
