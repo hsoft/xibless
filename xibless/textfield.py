@@ -1,4 +1,3 @@
-from .base import const
 from .property import Property
 from .control import Control, ControlHeights
 from .font import Font, FontFamily, FontSize
@@ -9,6 +8,7 @@ class TextField(Control):
     PROPERTIES = Control.PROPERTIES + [
         Property('text', 'stringValue'), 'textColor', 
         Property('placeholder', 'cell.placeholderString'),
+        Property('usesSingleLineMode', 'cell.usesSingleLineMode')
     ]
     
     def __init__(self, parent, text=None):
@@ -24,6 +24,11 @@ class TextField(Control):
         tmpl = Control.generateInit(self)
         self.properties['editable'] = True
         self.properties['selectable'] = True
+        # By default in IB, a textfield is scrollable. This allows a smooth overflow management.
+        # If it's false, as soon as you type a character that overflows the field, the whole line
+        # disappears and is replaced by the new character. With scrollable to True, the text scrolls
+        # and makes editing smoother.
+        self.properties['cell.scrollable'] = True
         return tmpl
     
 

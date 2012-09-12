@@ -21,6 +21,11 @@ The ``Textfield`` is a :class:`Control` subclass that represents Cocoa's ``NSTex
         
         :class:`Color`. Color of the text within the field. Equivalent to ``[self textColor]``.
     
+    .. attribute:: usesSingleLineMode
+        
+        *Boolean*. Whether the text field is allowed to have more than one line. Same as
+        "Uses Single Line Mode" in XCode's IB.
+    
 
 Label
 -----
