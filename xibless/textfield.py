@@ -16,6 +16,7 @@ class TextField(Control):
         self.text = text
         self.font = Font(FontFamily.Label, FontSize.RegularControl)
         self.textColor = None
+        self.usesSingleLineMode = False
     
     def dependencies(self):
         return Control.dependencies(self) + [self.textColor]
@@ -28,7 +29,13 @@ class TextField(Control):
         # If it's false, as soon as you type a character that overflows the field, the whole line
         # disappears and is replaced by the new character. With scrollable to True, the text scrolls
         # and makes editing smoother.
-        self.properties['cell.scrollable'] = True
+        # In xibless, we differ a bit from XCode's default behavior in that by default, a textfield
+        # wraps (in XCode, it scrolls by default and you have to explicitly tell it to wrap). We
+        # want most textfields (particularly labels) to wrap.
+        # However, if usesSingleLineMode is True, we scroll because that's the behavior that makes
+        # the most sense.
+        if self.usesSingleLineMode:
+            self.properties['cell.scrollable'] = True
         return tmpl
     
 
