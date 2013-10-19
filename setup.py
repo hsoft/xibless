@@ -13,7 +13,7 @@ CLASSIFIERS = [
     'Topic :: Software Development :: Code Generators',
 ]
 
-LONG_DESC = open('README', 'rt').read() + '\n\n' + open('CHANGES', 'rt').read()
+LONG_DESC = open('README.rst', 'rt').read() + '\n\n' + open('CHANGES.rst', 'rt').read()
 
 setup(
     name='xibless',
@@ -21,7 +21,7 @@ setup(
     author='Virgil Dupras',
     author_email='hsoft@hardcoded.net',
     packages=['xibless'],
-    url='http://hg.hardcoded.net/xibless/',
+    url='https://github.com/hsoft/xibless/',
     license='BSD',
     description="Generate Objective-C code that builds Cocoa UIs. Replaces XCode's XIBs",
     long_description=LONG_DESC,
