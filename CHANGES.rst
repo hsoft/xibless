@@ -4,6 +4,8 @@ Changes
 Version 0.5.1 -- 2013/11/10
 ---------------------------
 
+* Fixed a crash with UI scripts containing non-ascii text
+
 Version 0.5.0 -- 2012/10/08
 ---------------------------
 
