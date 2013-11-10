@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 
 from .gen import generate, runUI
 
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 
 def main():
     parser = ArgumentParser()
