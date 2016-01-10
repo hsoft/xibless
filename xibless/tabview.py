@@ -27,8 +27,9 @@ class TabViewItem(GeneratedItem):
     
     def generateInit(self):
         tmpl = GeneratedItem.generateInit(self)
-        tmpl.initmethod = "initWithIdentifier:$identifier$"
-        tmpl.identifier = convertValueToObjc(self.identifier)
+        if self.identifier is not None:
+            tmpl.initmethod = "initWithIdentifier:$identifier$"
+            tmpl.identifier = convertValueToObjc(self.identifier)
         self.properties['label'] = self.label
         self.properties['view'] = self.view
         return tmpl
