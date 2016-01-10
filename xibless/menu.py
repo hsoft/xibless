@@ -54,6 +54,7 @@ class Menu(GeneratedItem):
         return menu
     
     def removeItem(self, index):
+        self.items[index].unregister()
         del self.items[index]
     
     def generateInit(self, menuname=None):

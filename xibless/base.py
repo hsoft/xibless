@@ -130,6 +130,9 @@ class GeneratedItem(object):
     def objcValue(self):
         return self.varname
     
+    def unregister(self):
+        globalvars.globalGenerationCounter.unregister(self)
+
     def generateAssignments(self):
         if self not in KeyValueId.VALUE2KEYS:
             return ""
@@ -184,6 +187,9 @@ class GenerationCounter(object):
     def register(self, item):
         self.createdItems.append(item)
     
+    def unregister(self, item):
+        self.createdItems.remove(item)
+
     def varnameToken(self):
         result = self.varnameTokenCounter
         self.varnameTokenCounter += 1
