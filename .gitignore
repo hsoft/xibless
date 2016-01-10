@@ -6,4 +6,5 @@ __pycache__
 .lock-waf*
 *.egg-info
 /demos/*/autogen
+/demos/*/build
 /docs/_build
