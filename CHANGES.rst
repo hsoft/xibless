@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 0.5.2 -- 2016/01/09
+---------------------------
+
+* Fix ``Menu.removeItem()`` bug resulting in un-compilable code generation.
+* Fix compilation warnings with identifier-less ``TabViewItem``.
+
 Version 0.5.1 -- 2013/11/10
 ---------------------------
 
